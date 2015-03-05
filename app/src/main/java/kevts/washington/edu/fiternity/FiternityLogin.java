@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -53,9 +54,8 @@ public class FiternityLogin extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fiternity_login);
-
         if (savedInstanceState == null) {
-            facebookFragment = new FacebookFragment();
+            facebookFragment = new FacebookFragment().newInstance();
             getFragmentManager()
                     .beginTransaction()
                     .add(android.R.id.content, facebookFragment)
