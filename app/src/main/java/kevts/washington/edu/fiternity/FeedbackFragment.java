@@ -3,6 +3,7 @@ package kevts.washington.edu.fiternity;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -40,6 +41,7 @@ public class FeedbackFragment extends Fragment {
         ImageButton positiveBtn = (ImageButton) rootView.findViewById(R.id.feedback_positive_btn);
         ImageButton negativeBtn = (ImageButton) rootView.findViewById(R.id.feedback_negative_btn);
 
+        //positive button will go to share feedback fragment
         positiveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -52,6 +54,15 @@ public class FeedbackFragment extends Fragment {
                     .replace(R.id.feedback_fragment, feedbackShareFragment)
                     .addToBackStack("")
                     .commit();
+            }
+        });
+
+        //negative button will go to negative activity
+        negativeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent negativeActivity = new Intent(getActivity(), FeedbackNegativeActivity.class);
+                startActivity(negativeActivity);
             }
         });
         return rootView;
