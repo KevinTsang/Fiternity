@@ -22,12 +22,25 @@ public class FeedbackActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feedback);
         if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.feedback_fragment, new FeedbackFragment())
-                    .commit();
+            FeedbackFragment feedbackFragment = FeedbackFragment.newInstance();
+            FragmentManager fragmentManager = this.getFragmentManager();
+            fragmentManager.beginTransaction()
+                .setCustomAnimations(R.animator.slide_in_right, R.animator.slide_out_left
+                        , R.animator.slide_in_left, R.animator.slide_out_right)
+                .add(R.id.feedback_fragment, feedbackFragment)
+                .commit();
         }
     }
 
+    @Override
+    public void onBackPressed(){
+        FragmentManager fm = getFragmentManager();
+        if (fm.getBackStackEntryCount() > 0) {
+            fm.popBackStack();
+        } else {
+            super.onBackPressed();
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -49,44 +62,5 @@ public class FeedbackActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class FeedbackFragment extends Fragment {
-
-        public static FeedbackShareFragment newInstance() {
-            FeedbackShareFragment fragment = new FeedbackShareFragment();
-            Bundle args = new Bundle();
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        public FeedbackFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            // Inflate the layout for this fragment
-            View rootView = inflater.inflate(R.layout.fragment_feedback, container, false);
-            ImageButton positiveBtn = (ImageButton) rootView.findViewById(R.id.feedback_positive_btn);
-            ImageButton negativeBtn = (ImageButton) rootView.findViewById(R.id.feedback_negative_btn);
-
-            positiveBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    FeedbackShareFragment feedbackShareFragment =
-                            FeedbackShareFragment.newInstance();
-                    FragmentManager fragmentManager = getActivity().getFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.setCustomAnimations(R.animator.slide_in_right, R.animator.slide_out_left);
-                    fragmentTransaction.replace(R.id.feedback_fragment, feedbackShareFragment);
-                    fragmentTransaction.commit();
-                }
-            });
-            return rootView;
-        }
     }
 }
