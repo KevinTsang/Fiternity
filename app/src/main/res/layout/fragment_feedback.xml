@@ -8,7 +8,7 @@
 
     <LinearLayout
         android:orientation="vertical"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="fill_parent"
         android:weightSum="1">
 
@@ -19,7 +19,8 @@
             android:text="How was ______ with ______?"
             android:id="@+id/feedback_question"
             android:layout_weight="0.5"
-            android:gravity="center" />
+            android:gravity="center"
+            android:layout_marginBottom="@dimen/activity_vertical_margin" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -44,9 +45,9 @@
                 android:minHeight="150dp"
                 android:minWidth="150dp"
                 android:src="@drawable/happy_face"
-                android:layout_below="@+id/feedback_question"
-                android:layout_toRightOf="@+id/feedback_negative_btn"
-                android:layout_toEndOf="@+id/feedback_negative_btn" />
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true" />
         </RelativeLayout>
 
     </LinearLayout>

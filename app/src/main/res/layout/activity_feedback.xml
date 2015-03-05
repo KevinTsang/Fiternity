@@ -5,7 +5,7 @@
 
     <LinearLayout
         android:orientation="vertical"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="fill_parent"
         android:weightSum="1">
 
@@ -16,7 +16,8 @@
             android:layout_gravity="center_horizontal|top"
             android:minHeight="150dp"
             android:minWidth="150dp"
-            android:src="@drawable/com_facebook_profile_picture_blank_square" />
+            android:src="@drawable/com_facebook_profile_picture_blank_square"
+            android:layout_weight="0" />
 
         <fragment
             android:layout_width="match_parent"
