@@ -56,13 +56,13 @@ public class FiternityLogin extends FragmentActivity {
         setContentView(R.layout.activity_fiternity_login);
         if (savedInstanceState == null) {
             facebookFragment = new FacebookFragment().newInstance();
-            getFragmentManager()
+            getSupportFragmentManager()
                     .beginTransaction()
-                    .add(android.R.id.content, facebookFragment)
+                    .add(R.id.content, facebookFragment)
                     .commit();
         } else {
-            facebookFragment = (FacebookFragment) getFragmentManager()
-                    .findFragmentById(android.R.id.content);
+            facebookFragment = (FacebookFragment) getSupportFragmentManager()
+                    .findFragmentById(R.id.content);
         }
         LoginButton authButton = (LoginButton)findViewById(R.id.authButton);
         authButton.setReadPermissions(Arrays.asList("public_profile"));
