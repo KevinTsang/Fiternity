@@ -65,28 +65,33 @@ public class FiternityLogin extends FragmentActivity {
                     .findFragmentById(R.id.content);
         }
         LoginButton authButton = (LoginButton)findViewById(R.id.authButton);
-        authButton.setReadPermissions(Arrays.asList("public_profile"));
+        authButton.setReadPermissions(Arrays.asList("public_profile", "email", "user_friends"));
+        authButton.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Session session = Session.getActiveSession();
+                if (!session.isOpened() && !session.isClosed()) {
+                    session.openForRead(new Session.OpenRequest(FiternityLogin.this)
+                            .setPermissions(Arrays.asList("public_profile"))
+                            .setCallback(statusCallback));
+                } else {
+                    Session.openActiveSession(FiternityLogin.this, true, statusCallback);
+                    // might possibly need to add a permissions list?
+                }
+            }
+        });
     }
-//    private Session.StatusCallback statusCallback =
-//            new SessionStatusCallback();
-//
-//    private void onClickLogin() {
-//        Session session = Session.getActiveSession();
-//        if (!session.isOpened() && !session.isClosed()) {
-//            session.openForRead(new Session.OpenRequest(this)
-//                    .setPermissions(Arrays.asList("public_profile"))
-//                    .setCallback(statusCallback));
-//        } else {
-//            Session.openActiveSession(getActivity(), this, true, statusCallback);
-//        }
-//    }
-//
-//    private class SessionStatusCallback implements Session.StatusCallback {
-//        @Override
-//        public void call(Session session, SessionState state, Exception exception) {
-//            // Respond to session state changes, ex: updating the view
-//        }
-//    }
+
+    private Session.StatusCallback statusCallback =
+            new SessionStatusCallback();
+
+    private class SessionStatusCallback implements Session.StatusCallback {
+        @Override
+        public void call(Session session, SessionState state, Exception exception) {
+            // Respond to session state changes, ex: updating the view
+        }
+    }
 
     @Override
     protected void onResume() {

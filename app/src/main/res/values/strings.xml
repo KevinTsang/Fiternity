@@ -11,7 +11,7 @@
     <string name="action_sign_in_short"></string>
     <string name="action_sign_in">Sign In</string>
     <string name="title_activity_feedback_negative">FeedbackNegativeActivity</string>
-
+    <string name="get_started">To get started, log in using Facebook</string>
     <string name="hello_world">Hello world!</string>
 
 </resources>
