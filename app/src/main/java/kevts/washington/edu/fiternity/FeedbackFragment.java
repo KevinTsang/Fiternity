@@ -62,7 +62,7 @@ public class FeedbackFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent negativeActivity = new Intent(getActivity(), FeedbackNegativeActivity.class);
-                startActivity(negativeActivity);
+                getActivity().startActivityForResult(negativeActivity, 2);
             }
         });
         return rootView;
