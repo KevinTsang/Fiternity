@@ -10,14 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link FeedbackShareFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link FeedbackShareFragment#newInstance} factory method to
- * create an instance of this fragment.
- */public class FeedbackShareFragment extends Fragment {
+ public class FeedbackShareFragment extends Fragment {
 
     public static FeedbackShareFragment newInstance() {
         FeedbackShareFragment fragment = new FeedbackShareFragment();
