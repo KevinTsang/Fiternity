@@ -41,7 +41,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Done"
-                android:id="@+id/feedback_done_btn"
+                android:id="@+id/feedback_negative_done_btn"
                 android:layout_gravity="center_horizontal"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true" />

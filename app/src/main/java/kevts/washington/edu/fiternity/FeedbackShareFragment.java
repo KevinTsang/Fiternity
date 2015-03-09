@@ -7,6 +7,7 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 
 
@@ -33,6 +34,14 @@ import android.widget.ImageButton;
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_feedback_share, container, false);
+        Button doneButton = (Button) rootView.findViewById(R.id.feedback_positive_done_btn);
+        doneButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FeedbackActivity feedbackActivity = (FeedbackActivity) getActivity();
+                feedbackActivity.finish();
+            }
+        });
         return rootView;
     }
 
