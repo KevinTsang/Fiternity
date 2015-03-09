@@ -7,6 +7,7 @@ import android.annotation.TargetApi;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.ContentResolver;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
@@ -39,15 +40,6 @@ import java.util.Arrays;
 
 public class FiternityLogin extends FragmentActivity {
 
-    /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
-    };
-
-
     private FacebookFragment facebookFragment;
 
     @Override
@@ -79,6 +71,14 @@ public class FiternityLogin extends FragmentActivity {
                     Session.openActiveSession(FiternityLogin.this, true, statusCallback);
                     // might possibly need to add a permissions list?
                 }
+            }
+        });
+        Button tempLogin = (Button)findViewById(R.id.email_sign_in_button);
+        tempLogin.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(FiternityLogin.this, CalendarActivity.class);
+                startActivity(intent);
             }
         });
     }
