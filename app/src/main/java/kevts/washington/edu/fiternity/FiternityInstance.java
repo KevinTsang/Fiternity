@@ -13,6 +13,7 @@ import android.util.Log;
 
 import com.parse.Parse;
 import com.parse.ParseException;
+import com.parse.ParseFacebookUtils;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
@@ -33,6 +34,8 @@ public class FiternityInstance extends Application /*implements UserDocInterface
     };
 
     private static final String TAG = "FiternityInstance";
+    private static String PARSE_APPLICATION_ID;
+    private static String PARSE_CLIENT_KEY;
     private static FiternityInstance instance;
     private ParseUser user;
     private ParseUser otherUser; // take this out later.
@@ -54,7 +57,9 @@ public class FiternityInstance extends Application /*implements UserDocInterface
         super.onCreate();
         ParseObject.registerSubclass(ParseUser.class);
         ParseObject.registerSubclass(Feedback.class);
-        Parse.initialize(this, "vdyKL0gcEtfovrPj4WIoLZFaIHa3PLlND8wTblJ6", "K6KtiuCuW5tmZjz6uehRdG7Lc9Sec1ddPvSWi4s2");
+        PARSE_APPLICATION_ID = getString(R.string.parse_application_id);
+        PARSE_CLIENT_KEY = getString(R.string.parse_client_key);
+        Parse.initialize(this, PARSE_APPLICATION_ID, PARSE_CLIENT_KEY);
         // WARNING: THIS IS MOST LIKELY A PRIVATE KEY.
         // TAKE THIS OUT LATER, POTENTIALLY.
         user = FakeData.createAnnie().userToParseUser();

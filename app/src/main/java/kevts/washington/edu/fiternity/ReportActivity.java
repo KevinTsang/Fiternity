@@ -45,7 +45,7 @@ public class ReportActivity extends ActionBarActivity {
         ParseUser otherUser = FiternityInstance.instance().getOtherUser();
 
         //set the objectID for the current user
-        ParseQuery<ParseUser> queryFrom = ParseQuery.getQuery("_User");
+        ParseQuery<ParseUser> queryFrom = ParseUser.getQuery();
         queryFrom.whereEqualTo("username", curUser.getUsername());
         queryFrom.findInBackground(new FindCallback<ParseUser>() {
             @Override
@@ -61,7 +61,7 @@ public class ReportActivity extends ActionBarActivity {
         });
 
         //set the objectID for the other user
-        ParseQuery<ParseUser> queryTo = ParseQuery.getQuery("_User");
+        ParseQuery<ParseUser> queryTo = ParseUser.getQuery();
         queryTo.whereEqualTo("username", otherUser.getUsername());
         queryTo.findInBackground(new FindCallback<ParseUser>() {
             @Override

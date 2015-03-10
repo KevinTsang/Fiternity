@@ -4,6 +4,8 @@ import com.parse.Parse;
 import com.parse.ParseUser;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by kevin on 3/7/15.
@@ -17,7 +19,9 @@ public class User implements Serializable {
     private String email;
     private String phoneNumber;
     private int zipCode;
+    private List<Exercise> exerciseList;
     public User() {
+        exerciseList = new ArrayList<Exercise>();
         // construct using Facebook's information
         // once I figure out how to pull from there
     }
@@ -85,6 +89,14 @@ public class User implements Serializable {
         this.zipCode = zipCode;
     }
 
+    public void addExercise(Exercise exercise) {
+        exerciseList.add(exercise);
+    }
+
+    public void removeExercise(Exercise exercise) {
+        exerciseList.remove(exercise);
+    }
+
     public ParseUser userToParseUser() {
         ParseUser parseUser = new ParseUser();
         parseUser.put("id", getUserId());
@@ -100,6 +112,7 @@ public class User implements Serializable {
     public User parseUserToUser() {
         User user = new User();
         ParseUser parseUser = new ParseUser();
+        /*
         user.setUserId((int)parseUser.get("id"));
         user.setName((String)parseUser.getString("name"));
         user.setAge((int)parseUser.get("age"));
@@ -107,6 +120,7 @@ public class User implements Serializable {
         user.setSameGenderPreference((boolean)parseUser.get("genderpreference"));
         user.setPhoneNumber((String)parseUser.getString("phonenumber"));
         user.setZipCode((int)parseUser.get("zipcode"));
+        */
         return user;
     }
 
