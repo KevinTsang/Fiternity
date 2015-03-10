@@ -9,9 +9,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+
+import java.util.List;
 
 
 public class ReportActivity extends ActionBarActivity {
@@ -35,10 +39,38 @@ public class ReportActivity extends ActionBarActivity {
     }
 
     private void handleReport(EditText reportText) {
-        Feedback feedback = new Feedback();
+        final Feedback feedback = new Feedback();
         String feedbackText = reportText.getText().toString();
         ParseUser curUser = FiternityInstance.instance().getUser();
         ParseUser otherUser = FiternityInstance.instance().getOtherUser();
+
+        //set the objectID for the current user
+        ParseQuery<ParseUser> queryFrom = ParseQuery.getQuery("ParseUser");
+        queryFrom.whereEqualTo("username", curUser.getUsername());
+        queryFrom.findInBackground(new FindCallback<ParseUser>() {
+            @Override
+            public void done(List<ParseUser> parseUsers, ParseException e) {
+                if (e == null) {
+                    feedback.setUserFromId((String) parseUsers.get(0).getObjectId());
+                } else {
+                    Log.d("users retrieved", " Error: " + e.getMessage());
+                }
+            }
+        });
+
+        //set the objectID for the other user
+        ParseQuery<ParseUser> queryTo = ParseQuery.getQuery("_User");
+        queryTo.whereEqualTo("username", otherUser.getUsername());
+        queryTo.findInBackground(new FindCallback<ParseUser>() {
+            @Override
+            public void done(List<ParseUser> parseUsers, ParseException e) {
+                if (e == null) {
+                    feedback.setUserToId((String) parseUsers.get(0).getObjectId());
+                } else {
+                    Log.d("users retrieved", " Error: " + e.getMessage());
+                }
+            }
+        });
 
         feedback.setFeedbackText(feedbackText);
         feedback.setRating(1);
@@ -47,8 +79,8 @@ public class ReportActivity extends ActionBarActivity {
          * otherUser.getObjectID() should replace Jenny
          *
          */
-        feedback.setUserFromId("Annie");
-        feedback.setUserToId("Jenny");
+//        feedback.setUserFromId("Annie");
+//        feedback.setUserToId("Jenny");
         feedback.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
