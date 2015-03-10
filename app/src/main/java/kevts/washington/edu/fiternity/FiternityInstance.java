@@ -35,7 +35,7 @@ public class FiternityInstance extends Application /*implements UserDocInterface
     private static final String TAG = "FiternityInstance";
     private static FiternityInstance instance;
     private ParseUser user;
-    private ParseUser otherUser;
+    private ParseUser otherUser; // take this out later.
 
     public FiternityInstance() {
         if (instance == null) {
