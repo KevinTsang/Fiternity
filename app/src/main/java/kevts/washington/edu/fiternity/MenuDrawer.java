@@ -37,21 +37,28 @@ public class MenuDrawer extends Activity {
                 switch(position) {
                     // Profile
                     case 0:
+                        startActivity(intent);
                         break;
+
                     // Calendar
                     case 1:
                         break;
+
                     // Activities
                     case 2:
+                        startActivity(intent);
                         break;
+
                     // Matches
                     case 3:
+                        startActivity(intent);
                         break;
+
                     // Feedback
                     case 4:
+                        startActivity(intent);
                         break;
                 }
-                startActivity(intent);
             }
         });
     }
