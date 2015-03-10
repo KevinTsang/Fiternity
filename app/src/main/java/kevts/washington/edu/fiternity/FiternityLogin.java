@@ -34,6 +34,10 @@ import com.facebook.AppEventsLogger;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.widget.LoginButton;
+import com.parse.LogInCallback;
+import com.parse.ParseException;
+import com.parse.ParseFacebookUtils;
+import com.parse.ParseUser;
 
 import java.util.Arrays;
 
@@ -41,11 +45,13 @@ import java.util.Arrays;
 public class FiternityLogin extends FragmentActivity {
 
     private FacebookFragment facebookFragment;
+    private static final String TAG = "FiternityLogin";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fiternity_login);
+        final FiternityInstance instance = (FiternityInstance)getApplication();
         if (savedInstanceState == null) {
             facebookFragment = new FacebookFragment().newInstance();
             getSupportFragmentManager()
@@ -57,27 +63,52 @@ public class FiternityLogin extends FragmentActivity {
                     .findFragmentById(R.id.content);
         }
         LoginButton authButton = (LoginButton)findViewById(R.id.authButton);
-        authButton.setReadPermissions(Arrays.asList("public_profile", "email", "user_friends"));
         authButton.setOnClickListener(new OnClickListener() {
-
             @Override
             public void onClick(View v) {
-                Session session = Session.getActiveSession();
-                if (!session.isOpened() && !session.isClosed()) {
-                    session.openForRead(new Session.OpenRequest(FiternityLogin.this)
-                            .setPermissions(Arrays.asList("public_profile"))
-                            .setCallback(statusCallback));
-                } else {
-                    Session.openActiveSession(FiternityLogin.this, true, statusCallback);
-                    // might possibly need to add a permissions list?
-                }
+                ParseFacebookUtils.logIn(FiternityLogin.this, new LogInCallback() {
+                    @Override
+                    public void done(ParseUser parseUser, ParseException e) {
+                        if (parseUser == null) {
+                            Log.d(TAG, "User canceled Facebook Login");
+                        } else if (parseUser.isNew()) {
+                            Log.d(TAG, "User registered and logged in through Facebook!");
+                            instance.setUser(parseUser);
+                            // Set user here
+                            // put them through start up processes
+                            // fire intent to profile screen
+                        } else {
+                            Log.d(TAG, "User logged in through Facebook!");
+                            instance.setUser(parseUser);
+                            // Set user here
+                            // fire intent to matches screen
+                        }
+                    }
+                });
             }
         });
+//        authButton.setReadPermissions(Arrays.asList("public_profile", "email", "user_friends"));
+//        authButton.setOnClickListener(new OnClickListener() {
+//
+//            @Override
+//            public void onClick(View v) {
+//                Session session = Session.getActiveSession();
+//                if (!session.isOpened() && !session.isClosed()) {
+//                    session.openForRead(new Session.OpenRequest(FiternityLogin.this)
+//                            .setPermissions(Arrays.asList("public_profile"))
+//                            .setCallback(statusCallback));
+//                } else {
+//                    Session.openActiveSession(FiternityLogin.this, true, statusCallback);
+//                    // might possibly need to add a permissions list?
+//                }
+//            }
+//        });
         Button tempLogin = (Button)findViewById(R.id.email_sign_in_button);
         tempLogin.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(FiternityLogin.this, Matches.class);
+                // replace this with Cvetan's profile activity
+                Intent intent = new Intent(FiternityLogin.this, CalendarActivity.class);
                 startActivity(intent);
             }
         });
@@ -107,6 +138,12 @@ public class FiternityLogin extends FragmentActivity {
 
         //Logs 'app deactivate' AppEvent
         AppEventsLogger.deactivateApp(this);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        ParseFacebookUtils.finishAuthentication(requestCode, resultCode,data);
     }
 }
 
