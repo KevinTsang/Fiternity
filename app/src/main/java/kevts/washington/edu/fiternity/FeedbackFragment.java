@@ -35,7 +35,7 @@ public class FeedbackFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setFriendUser();
+        //setFriendUser();
     }
 
     @Override
@@ -82,7 +82,7 @@ public class FeedbackFragment extends Fragment {
 
     private void setQuestion(TextView tv) {
         String activityName = "Swimming";
-        String friendName = friendUser.getString("name");
+        String friendName = "Jenny";
         tv.setText("How was " + activityName + " with " + friendName + "?");
     }
 }

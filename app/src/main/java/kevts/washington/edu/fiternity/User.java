@@ -90,7 +90,7 @@ public class User implements Serializable {
         parseUser.put("id", getUserId());
         parseUser.put("name", getName());
         parseUser.put("age", getAge());
-        parseUser.put("gender", getGender());
+        parseUser.put("gender", getGender() + "");
         parseUser.put("genderpreference", getGenderPreference());
         parseUser.put("phonenumber", getPhoneNumber());
         parseUser.put("zipcode", getZipCode());
