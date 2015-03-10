@@ -21,20 +21,12 @@ public class Feedback extends ParseObject implements Serializable {
     }
 
     public void setUserToId(String user) {
-        if (user != null) {
-            this.put("userToId", user);
-            userToId = user;
-        } else {
-            throw new IllegalArgumentException("UserTo cannot be null");
-        }
+        put("userToId", (String) user);
+        userToId = user;
     }
     public void setUserFromId(String user) {
-        if (user != null) {
-            this.put("userFromId", user);
-            userFromId = user;
-        } else {
-            throw new IllegalArgumentException("UserFrom cannot be null");
-        }
+        put("userFromId", (String) user);
+        userFromId = user;
     }
     public void setRating(int rating) {
         put("rating", rating);

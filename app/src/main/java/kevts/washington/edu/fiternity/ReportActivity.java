@@ -45,13 +45,15 @@ public class ReportActivity extends ActionBarActivity {
         ParseUser otherUser = FiternityInstance.instance().getOtherUser();
 
         //set the objectID for the current user
-        ParseQuery<ParseUser> queryFrom = ParseQuery.getQuery("ParseUser");
+        ParseQuery<ParseUser> queryFrom = ParseQuery.getQuery("_User");
         queryFrom.whereEqualTo("username", curUser.getUsername());
         queryFrom.findInBackground(new FindCallback<ParseUser>() {
             @Override
             public void done(List<ParseUser> parseUsers, ParseException e) {
                 if (e == null) {
-                    feedback.setUserFromId((String) parseUsers.get(0).getObjectId());
+                    String fromUserID = (String) parseUsers.get(0).getObjectId();
+                    Log.d("fromUser ID: ", fromUserID);
+                    feedback.setUserFromId(fromUserID);
                 } else {
                     Log.d("users retrieved", " Error: " + e.getMessage());
                 }
@@ -65,7 +67,9 @@ public class ReportActivity extends ActionBarActivity {
             @Override
             public void done(List<ParseUser> parseUsers, ParseException e) {
                 if (e == null) {
-                    feedback.setUserToId((String) parseUsers.get(0).getObjectId());
+                    String toUserID = (String) parseUsers.get(0).getObjectId();
+                    Log.d("toUser ID: ", toUserID);
+                    feedback.setUserToId(toUserID);
                 } else {
                     Log.d("users retrieved", " Error: " + e.getMessage());
                 }
