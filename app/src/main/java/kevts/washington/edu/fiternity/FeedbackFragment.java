@@ -40,6 +40,9 @@ public class FeedbackFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_feedback, container, false);
         ImageButton positiveBtn = (ImageButton) rootView.findViewById(R.id.feedback_positive_btn);
         ImageButton negativeBtn = (ImageButton) rootView.findViewById(R.id.feedback_negative_btn);
+        TextView questionText = (TextView) rootView.findViewById(R.id.feedback_question);
+
+        setQuestion(questionText);
 
         //positive button will go to share feedback fragment
         positiveBtn.setOnClickListener(new View.OnClickListener() {
@@ -66,5 +69,11 @@ public class FeedbackFragment extends Fragment {
             }
         });
         return rootView;
+    }
+
+    private void setQuestion(TextView tv) {
+        String activityName = "Swimming";
+        String friendName = "John";
+        tv.setText("How was " + activityName + " with " + friendName + "?");
     }
 }
