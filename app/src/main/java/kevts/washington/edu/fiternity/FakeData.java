@@ -11,6 +11,7 @@ public class FakeData {
         jenny.setGender('F');
         jenny.setSameGenderPreference(true);
         jenny.setUserId(0);
+        jenny.setPhoneNumber("5555555555");
         jenny.setZipCode(98105);
         return jenny;
     }
@@ -22,6 +23,7 @@ public class FakeData {
         michael.setGender('M');
         michael.setSameGenderPreference(false);
         michael.setUserId(1);
+        michael.setPhoneNumber("4265134689");
         michael.setZipCode(98006);
         return michael;
     }
@@ -33,6 +35,7 @@ public class FakeData {
         annie.setGender('F');
         annie.setSameGenderPreference(false);
         annie.setUserId(2);
+        annie.setPhoneNumber("8796431654");
         annie.setZipCode(98195);
         return annie;
     }
@@ -44,6 +47,7 @@ public class FakeData {
         marshall.setGender('M');
         marshall.setSameGenderPreference(true);
         marshall.setUserId(3);
+        marshall.setPhoneNumber("1326487984");
         marshall.setZipCode(98195);
         return marshall;
     }

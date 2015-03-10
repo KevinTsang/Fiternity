@@ -13,6 +13,7 @@ import android.util.Log;
 
 import com.parse.Parse;
 import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
@@ -49,14 +50,15 @@ public class FiternityInstance extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        ParseObject.registerSubclass(ParseUser.class);
         Parse.initialize(this, "vdyKL0gcEtfovrPj4WIoLZFaIHa3PLlND8wTblJ6", "K6KtiuCuW5tmZjz6uehRdG7Lc9Sec1ddPvSWi4s2");
         // WARNING: THIS IS MOST LIKELY A PRIVATE KEY.
         // TAKE THIS OUT LATER, POTENTIALLY.
         user = FakeData.createAnnie().userToParseUser();
-//        user = new ParseUser();
-//        user.setUsername("test");
-//        user.setPassword("password");
-//        user.setEmail("conscientiaexnihilo@mailinator.com");
+        Log.d("User created:", "yes, annie");
+        user.setUsername("test");
+        user.setPassword("password");
+        user.setEmail("conscientiaexnihilo@mailinator.com");
         user.signUpInBackground(new SignUpCallback() {
             @Override
             public void done(ParseException e) {
