@@ -77,7 +77,7 @@ public class FiternityLogin extends FragmentActivity {
         tempLogin.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(FiternityLogin.this, CalendarActivity.class);
+                Intent intent = new Intent(FiternityLogin.this, Matches.class);
                 startActivity(intent);
             }
         });

@@ -48,6 +48,10 @@
             android:name=".MenuDrawer"
             android:label="@string/title_activity_menu_drawer" >
         </activity>
+        <activity
+            android:name=".Matches"
+            android:label="@string/title_activity_matches" >
+        </activity>
     </application>
 
 </manifest>

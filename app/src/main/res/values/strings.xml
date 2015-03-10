@@ -25,5 +25,6 @@
     <string name="title_activity_report">ReportActivity</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_menu_drawer">MenuDrawer</string>
+    <string name="title_activity_matches">Matches</string>
 
 </resources>
