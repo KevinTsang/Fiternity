@@ -13,10 +13,14 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.parse.ParseUser;
+
 /**
  * A placeholder fragment containing a simple view.
  */
 public class FeedbackFragment extends Fragment {
+
+    private ParseUser friendUser;
 
     public static FeedbackFragment newInstance() {
         FeedbackFragment fragment = new FeedbackFragment();
@@ -31,6 +35,7 @@ public class FeedbackFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setFriendUser();
     }
 
     @Override
@@ -71,9 +76,13 @@ public class FeedbackFragment extends Fragment {
         return rootView;
     }
 
+    private void setFriendUser() {
+        friendUser = FakeData.createJenny().userToParseUser();
+    }
+
     private void setQuestion(TextView tv) {
         String activityName = "Swimming";
-        String friendName = "John";
+        String friendName = friendUser.getString("name");
         tv.setText("How was " + activityName + " with " + friendName + "?");
     }
 }
