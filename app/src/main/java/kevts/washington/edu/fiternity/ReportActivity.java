@@ -33,16 +33,16 @@ public class ReportActivity extends ActionBarActivity {
             public void onClick(View v) {
                 handleReport(reportText);
                 setResult(2);
-//                finish();
+                finish();
             }
         });
     }
 
     private void handleReport(EditText reportText) {
         final Feedback feedback = new Feedback();
-        String feedbackText = reportText.getText().toString();
+        final String feedbackText = reportText.getText().toString();
         ParseUser curUser = FiternityInstance.instance().getUser();
-        ParseUser otherUser = FiternityInstance.instance().getOtherUser();
+        final ParseUser otherUser = FiternityInstance.instance().getOtherUser();
 
         //set the objectID for the current user
         ParseQuery<ParseUser> queryFrom = ParseUser.getQuery();
@@ -51,43 +51,39 @@ public class ReportActivity extends ActionBarActivity {
             @Override
             public void done(List<ParseUser> parseUsers, ParseException e) {
                 if (e == null) {
-                    feedback.setUserFromId((String) parseUsers.get(0).getObjectId());
+                    String fromUserID = (String) parseUsers.get(0).getObjectId();
+                    Log.d("fromUser ID: ", fromUserID);
+                    feedback.setUserFromId(fromUserID);
+                    //set the objectID for the other user
+                    ParseQuery<ParseUser> queryTo = ParseUser.getQuery();
+                    queryTo.whereEqualTo("username", otherUser.getUsername());
+                    queryTo.findInBackground(new FindCallback<ParseUser>() {
+                        @Override
+                        public void done(List<ParseUser> parseUsers, ParseException e) {
+                            if (e == null) {
+                                String toUserID = (String) parseUsers.get(0).getObjectId();
+                                Log.d("toUser ID: ", toUserID);
+                                feedback.setUserToId(toUserID);
+                                //saves feedback into server
+                                feedback.setFeedbackText(feedbackText);
+                                feedback.setRating(1);
+                                feedback.saveInBackground(new SaveCallback() {
+                                    @Override
+                                    public void done(ParseException e) {
+                                        if (e == null) {
+                                            Log.d("feedback saved:", " success");
+                                        } else {
+                                            Log.d("feedback saved:", " error");
+                                        }
+                                    }
+                                });
+                            } else {
+                                Log.d("users retrieved", " Error: " + e.getMessage());
+                            }
+                        }
+                    });
                 } else {
                     Log.d("users retrieved", " Error: " + e.getMessage());
-                }
-            }
-        });
-
-        //set the objectID for the other user
-        ParseQuery<ParseUser> queryTo = ParseQuery.getQuery("_User");
-        queryTo.whereEqualTo("username", otherUser.getUsername());
-        queryTo.findInBackground(new FindCallback<ParseUser>() {
-            @Override
-            public void done(List<ParseUser> parseUsers, ParseException e) {
-                if (e == null) {
-                    feedback.setUserToId((String) parseUsers.get(0).getObjectId());
-                } else {
-                    Log.d("users retrieved", " Error: " + e.getMessage());
-                }
-            }
-        });
-
-        feedback.setFeedbackText(feedbackText);
-        feedback.setRating(1);
-        /********************************
-         * I want to do curUser.getObjectID() and replace Annie with it
-         * otherUser.getObjectID() should replace Jenny
-         *
-         */
-//        feedback.setUserFromId("Annie");
-//        feedback.setUserToId("Jenny");
-        feedback.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                if (e == null) {
-
-                } else {
-
                 }
             }
         });
