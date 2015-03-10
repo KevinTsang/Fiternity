@@ -112,6 +112,7 @@ public class User implements Serializable {
     public User parseUserToUser() {
         User user = new User();
         ParseUser parseUser = new ParseUser();
+        /*
         user.setUserId((int)parseUser.get("id"));
         user.setName((String)parseUser.getString("name"));
         user.setAge((int)parseUser.get("age"));
@@ -119,6 +120,7 @@ public class User implements Serializable {
         user.setSameGenderPreference((boolean)parseUser.get("genderpreference"));
         user.setPhoneNumber((String)parseUser.getString("phonenumber"));
         user.setZipCode((int)parseUser.get("zipcode"));
+        */
         return user;
     }
 

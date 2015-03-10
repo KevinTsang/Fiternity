@@ -54,6 +54,22 @@
             android:name=".MenuDrawer"
             android:label="@string/title_activity_menu_drawer" >
         </activity>
+        <activity
+            android:name=".Matches"
+            android:label="@string/title_activity_matches" >
+        </activity>
+        <activity
+            android:name=".matchesMain"
+            android:label="@string/title_activity_matches_main" >
+        </activity>
+        <activity
+            android:name=".UserProfile"
+            android:label="@string/title_activity_user_profile" >
+        </activity>
+        <activity
+            android:name=".SetupProfile"
+            android:label="@string/title_activity_setup_profile" >
+        </activity>
     </application>
 
 </manifest>
