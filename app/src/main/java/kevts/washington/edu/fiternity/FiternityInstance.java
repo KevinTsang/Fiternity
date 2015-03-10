@@ -68,6 +68,7 @@ public class FiternityInstance extends Application /*implements UserDocInterface
                 } else {
                     // push the user to login screen
                     Intent signInIntent = new Intent(getApplicationContext(), FiternityLogin.class);
+                    signInIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(signInIntent);
                 }
             }
