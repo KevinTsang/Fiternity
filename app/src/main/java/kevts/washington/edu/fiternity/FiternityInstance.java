@@ -35,6 +35,7 @@ public class FiternityInstance extends Application /*implements UserDocInterface
     private static final String TAG = "FiternityInstance";
     private static FiternityInstance instance;
     private ParseUser user;
+    private ParseUser otherUser;
 
     public FiternityInstance() {
         if (instance == null) {
@@ -52,11 +53,12 @@ public class FiternityInstance extends Application /*implements UserDocInterface
     public void onCreate() {
         super.onCreate();
         ParseObject.registerSubclass(ParseUser.class);
+        ParseObject.registerSubclass(Feedback.class);
         Parse.initialize(this, "vdyKL0gcEtfovrPj4WIoLZFaIHa3PLlND8wTblJ6", "K6KtiuCuW5tmZjz6uehRdG7Lc9Sec1ddPvSWi4s2");
         // WARNING: THIS IS MOST LIKELY A PRIVATE KEY.
         // TAKE THIS OUT LATER, POTENTIALLY.
         user = FakeData.createAnnie().userToParseUser();
-        Log.d("User created:", "yes, annie");
+        Log.d("User created:", user.get("name").toString());
         user.setUsername("test");
         user.setPassword("password");
         user.setEmail("conscientiaexnihilo@mailinator.com");
@@ -78,6 +80,12 @@ public class FiternityInstance extends Application /*implements UserDocInterface
 
     public ParseUser getUser() {
         return user;
+    }
+    public ParseUser getOtherUser() {
+        return otherUser;
+    }
+    public void setOtherUser(ParseUser u) {
+        otherUser = u;
     }
 
     public void setUser(ParseUser parseUser) {
