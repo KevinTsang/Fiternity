@@ -66,7 +66,7 @@ public class FiternityInstance extends Application {
 //        cv.put(Calendars.ACCOUNT_NAME, user.getUsername());
 //        cv.put(Calendars.NAME, R.string.app_name);
 //        cv.put(Calendars.CALENDAR_DISPLAY_NAME, "Fiternity Calendar");
-//        cv.put(Calendars.CALENDAR_COLOR, "#FFFF00"); // REPLACE WITH REAL COLOR
+//        cv.put(Calendars.CALENDAR_COLOR, "#2095F2"); // REPLACE WITH REAL COLOR
 //        cv.put(Calendars.CALENDAR_ACCESS_LEVEL, Calendars.CAL_ACCESS_OWNER);
 //        cv.put(Calendars.OWNER_ACCOUNT, true);
 //        cv.put(Calendars.VISIBLE, 1);

@@ -9,7 +9,7 @@ public class User implements Serializable {
     private int userId;
     private String name;
     private int age;
-    private String gender;
+    private char gender;
     private boolean genderPreference;
     private String email;
     private String phoneNumber;
@@ -42,11 +42,11 @@ public class User implements Serializable {
         this.age = age;
     }
 
-    public String getGender() {
+    public char getGender() {
         return gender;
     }
 
-    public void setGender(String gender) {
+    public void setGender(char gender) {
         this.gender = gender;
     }
 
