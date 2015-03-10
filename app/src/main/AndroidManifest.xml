@@ -43,6 +43,10 @@
             android:name=".ReportActivity"
             android:label="@string/title_activity_report" >
         </activity>
+        <activity
+            android:name=".MenuDrawer"
+            android:label="@string/title_activity_menu_drawer" >
+        </activity>
     </application>
 
 </manifest>

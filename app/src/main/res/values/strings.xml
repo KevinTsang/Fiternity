@@ -15,8 +15,6 @@
     <string name="title_activity_login">FiternityLoginActivity</string>
     <string name="title_activity_calendar">CalendarActivity</string>
     <string name="title_facebook_login">FacebookLoginActivity</string>
-
-
     <string name="monday">Monday</string>
     <string name="tuesday">Tuesday</string>
     <string name="wednesday">Wednesday</string>
@@ -25,7 +23,7 @@
     <string name="saturday">Saturday</string>
     <string name="sunday">Sunday</string>
     <string name="title_activity_report">ReportActivity</string>
-
     <string name="hello_world">Hello world!</string>
+    <string name="title_activity_menu_drawer">MenuDrawer</string>
 
 </resources>
