@@ -1,5 +1,7 @@
 package kevts.washington.edu.fiternity;
 
+import android.text.format.Time;
+
 /**
  * Created by kevin on 3/7/15.
  */
@@ -14,6 +16,10 @@ public class Exercise {
     }
 
     public Exercise(String exerciseName) {
+        this.exerciseName = exerciseName;
+    }
+
+    public Exercise(String exerciseName, User initiator){
         this.exerciseName = exerciseName;
     }
 

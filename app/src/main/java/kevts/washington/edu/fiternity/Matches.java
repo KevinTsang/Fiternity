@@ -1,37 +1,46 @@
 package kevts.washington.edu.fiternity;
 
-import android.app.ActionBar;
-import android.app.Activity;
-import android.app.Fragment;
+//import android.app.Fragment;
+import android.app.Notification;
 import android.app.TabActivity;
 import android.content.Intent;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.internal.app.WindowDecorActionBar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
+import android.widget.ListView;
 import android.widget.TabHost;
 
 
-public class Matches extends Activity {
+public class Matches extends ActionBarActivity {
 
-    private ActionBar.Tab allTab, recentTab;
+    private WindowDecorActionBar.Tab allTab, recentTab;
     private Fragment allFragmentTab = new allMatches();
     private Fragment recentFragmentTab = new recentlyContacted();
 
-    private User[] users;
+    private Exercise[] exercises;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_matches);
 
-        users = new User[]{
-                FakeData.createAnnie(),
-                FakeData.createJenny(),
-                FakeData.createMarshall(),
-                FakeData.createMichael()
-        };
+        //sets up the tabs
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
+        allTab = actionBar.newTab().setText("All");
+        recentTab = actionBar.newTab().setText("Recently Contacted");
+
+        allTab.setTabListener(new MyTabListener(allFragmentTab));
+        recentTab.setTabListener(new MyTabListener(recentFragmentTab));
+
+        actionBar.addTab(allTab);
+        actionBar.addTab(recentTab);
 
     }
 
@@ -57,4 +66,6 @@ public class Matches extends Activity {
 
         return super.onOptionsItemSelected(item);
     }
+
+
 }

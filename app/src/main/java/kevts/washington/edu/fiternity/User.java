@@ -20,6 +20,8 @@ public class User implements Serializable {
     private String phoneNumber;
     private int zipCode;
     private List<Exercise> exerciseList;
+    private int icon;
+
     public User() {
         exerciseList = new ArrayList<Exercise>();
         // construct using Facebook's information
@@ -95,6 +97,10 @@ public class User implements Serializable {
 
     public void removeExercise(Exercise exercise) {
         exerciseList.remove(exercise);
+    }
+
+    public int getIcon(){
+        return icon;
     }
 
     public ParseUser userToParseUser() {
