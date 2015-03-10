@@ -69,9 +69,9 @@ public class FiternityInstance extends Application /*implements UserDocInterface
                     // allow them to go directly to matches
                 } else {
                     // push the user to login screen
-                    Intent signInIntent = new Intent(getApplicationContext(), FiternityLogin.class);
-                    signInIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(signInIntent);
+//                    Intent signInIntent = new Intent(getApplicationContext(), FiternityLogin.class);
+//                    signInIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                    startActivity(signInIntent);
                 }
             }
         });

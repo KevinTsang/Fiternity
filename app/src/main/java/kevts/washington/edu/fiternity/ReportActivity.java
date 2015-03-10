@@ -2,11 +2,16 @@ package kevts.washington.edu.fiternity;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
+import com.parse.ParseException;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 
 public class ReportActivity extends ActionBarActivity {
@@ -24,7 +29,7 @@ public class ReportActivity extends ActionBarActivity {
             public void onClick(View v) {
                 handleReport(reportText);
                 setResult(2);
-                finish();
+//                finish();
             }
         });
     }
@@ -32,10 +37,28 @@ public class ReportActivity extends ActionBarActivity {
     private void handleReport(EditText reportText) {
         Feedback feedback = new Feedback();
         String feedbackText = reportText.getText().toString();
+        ParseUser curUser = FiternityInstance.instance().getUser();
+        ParseUser otherUser = FiternityInstance.instance().getOtherUser();
+
         feedback.setFeedbackText(feedbackText);
         feedback.setRating(1);
-        feedback.setUserFrom(FiternityInstance.instance().getUser());
-        feedback.setUserTo(FiternityInstance.instance().getOtherUser());
+        /********************************
+         * I want to do curUser.getObjectID() and replace Annie with it
+         * otherUser.getObjectID() should replace Jenny
+         *
+         */
+        feedback.setUserFromId("Annie");
+        feedback.setUserToId("Jenny");
+        feedback.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+
+                } else {
+
+                }
+            }
+        });
     }
 
 
