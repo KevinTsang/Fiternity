@@ -31,19 +31,32 @@ public class FiternityInstance extends Application {
     };
 
     private static final String TAG = "FiternityInstance";
-
+    private static FiternityInstance instance;
     private ParseUser user;
 
+    public FiternityInstance() {
+        if (instance == null) {
+            instance = this;
+        } else {
+            throw new RuntimeException("Error with singleton");
+        }
+    }
+
+    public static FiternityInstance instance() {
+        return instance;
+    }
+    
     @Override
     public void onCreate() {
         super.onCreate();
         Parse.initialize(this, "vdyKL0gcEtfovrPj4WIoLZFaIHa3PLlND8wTblJ6", "K6KtiuCuW5tmZjz6uehRdG7Lc9Sec1ddPvSWi4s2");
         // WARNING: THIS IS MOST LIKELY A PRIVATE KEY.
         // TAKE THIS OUT LATER, POTENTIALLY.
-        user = new ParseUser();
-        user.setUsername("test");
-        user.setPassword("password");
-        user.setEmail("conscientiaexnihilo@mailinator.com");
+        user = FakeData.createAnnie().userToParseUser();
+//        user = new ParseUser();
+//        user.setUsername("test");
+//        user.setPassword("password");
+//        user.setEmail("conscientiaexnihilo@mailinator.com");
         user.signUpInBackground(new SignUpCallback() {
             @Override
             public void done(ParseException e) {
@@ -57,6 +70,10 @@ public class FiternityInstance extends Application {
             }
         });
         createCalendar();
+    }
+
+    public ParseUser getUser() {
+        return user;
     }
 
     public void createCalendar() {
