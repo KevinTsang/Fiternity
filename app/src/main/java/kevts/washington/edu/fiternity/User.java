@@ -1,5 +1,8 @@
 package kevts.washington.edu.fiternity;
 
+import com.parse.Parse;
+import com.parse.ParseUser;
+
 import java.io.Serializable;
 
 /**
@@ -80,6 +83,31 @@ public class User implements Serializable {
 
     public void setZipCode(int zipCode) {
         this.zipCode = zipCode;
+    }
+
+    public ParseUser userToParseUser() {
+        ParseUser parseUser = new ParseUser();
+        parseUser.put("id", getUserId());
+        parseUser.put("name", getName());
+        parseUser.put("age", getAge());
+        parseUser.put("gender", getGender());
+        parseUser.put("genderpreference", getGenderPreference());
+        parseUser.put("phonenumber", getPhoneNumber());
+        parseUser.put("zipcode", getZipCode());
+        return parseUser;
+    }
+
+    public User parseUserToUser() {
+        User user = new User();
+        ParseUser parseUser = new ParseUser();
+        user.setUserId((int)parseUser.get("id"));
+        user.setName((String)parseUser.getString("name"));
+        user.setAge((int)parseUser.get("age"));
+        user.setGender((char)parseUser.get("gender"));
+        user.setSameGenderPreference((boolean)parseUser.get("genderpreference"));
+        user.setPhoneNumber((String)parseUser.getString("phonenumber"));
+        user.setZipCode((int)parseUser.get("zipcode"));
+        return user;
     }
 
 }
