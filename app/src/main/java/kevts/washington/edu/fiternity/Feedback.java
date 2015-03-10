@@ -43,7 +43,8 @@ public class Feedback extends ParseObject implements Serializable {
         return (ParseUser) get("userFrom");
     }
     public int getRating() {
-        return (int) get("rating");
+        //return (int) get("rating");
+        return 0;
     }
     public String getFeedbackText() {
         return (String) get("feedbackText");

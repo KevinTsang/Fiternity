@@ -26,5 +26,11 @@
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_menu_drawer">MenuDrawer</string>
     <string name="title_activity_matches">Matches</string>
+    <string name="title_activity_matches_main">matchesMain</string>
+    <string name="title_section1">Section 1</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
+    <string name="title_activity_user_profile">UserProfile</string>
+    <string name="title_activity_setup_profile">SetupProfile</string>
 
 </resources>

@@ -108,7 +108,7 @@ public class FiternityLogin extends FragmentActivity {
             @Override
             public void onClick(View v) {
                 // replace this with Cvetan's profile activity
-                Intent intent = new Intent(FiternityLogin.this, CalendarActivity.class);
+                Intent intent = new Intent(FiternityLogin.this, Matches.class);
                 startActivity(intent);
             }
         });

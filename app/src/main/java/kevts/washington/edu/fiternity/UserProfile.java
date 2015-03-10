@@ -1,45 +1,24 @@
 package kevts.washington.edu.fiternity;
 
-import android.app.ActionBar;
-import android.app.Activity;
-import android.app.Fragment;
-import android.app.TabActivity;
-import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TabHost;
 
 
-public class Matches extends Activity {
-
-    private ActionBar.Tab allTab, recentTab;
-    private Fragment allFragmentTab = new allMatches();
-    private Fragment recentFragmentTab = new recentlyContacted();
-
-    private User[] users;
+public class UserProfile extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_matches);
-
-        users = new User[]{
-                FakeData.createAnnie(),
-                FakeData.createJenny(),
-                FakeData.createMarshall(),
-                FakeData.createMichael()
-        };
-
-
+        setContentView(R.layout.activity_user_profile);
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_matches, menu);
+        getMenuInflater().inflate(R.menu.menu_user_profile, menu);
         return true;
     }
 
