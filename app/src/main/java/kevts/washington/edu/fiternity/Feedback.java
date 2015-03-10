@@ -22,7 +22,7 @@ public class Feedback extends ParseObject implements Serializable {
 
     public void setUserToId(String user) {
         if (user != null) {
-            this.put("userToId", user);
+            put("userToId", (String)user);
             userToId = user;
         } else {
             throw new IllegalArgumentException("UserTo cannot be null");
@@ -30,7 +30,7 @@ public class Feedback extends ParseObject implements Serializable {
     }
     public void setUserFromId(String user) {
         if (user != null) {
-            this.put("userFromId", user);
+            put("userFromId", (String)user);
             userFromId = user;
         } else {
             throw new IllegalArgumentException("UserFrom cannot be null");

@@ -13,7 +13,7 @@ import android.widget.ListView;
 
 
 public class MenuDrawer extends Activity {
-    private String[] mPlanetTitles;
+    private String[] mTitles;
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
 
@@ -22,42 +22,50 @@ public class MenuDrawer extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_drawer);
 
-        mPlanetTitles = new String[]{"Profile", "Calendar", "Activities", "Matches", "Feedback"};
+        mTitles = new String[]{"Profile", "Calendar", "Activities", "Matches", "Feedback"};
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
         mDrawerList.setAdapter(new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, android.R.id.text1, mPlanetTitles));
+                android.R.layout.simple_list_item_1, android.R.id.text1, mTitles));
 
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                Intent intent = new Intent();
                 /* Create intents with classes, add/delete cases as needed */
+                Intent intent;
                 switch(position) {
                     // Profile
                     case 0:
+                        intent = new Intent();//MenuDrawer.this, ProfileActivity.class);
+                        mDrawerLayout.closeDrawer(mDrawerList);
                         startActivity(intent);
                         break;
 
                     // Calendar
                     case 1:
+                        mDrawerLayout.closeDrawer(mDrawerList);
                         FiternityInstance.instance().viewCalendar();
                         break;
 
                     // Activities
                     case 2:
+                        intent = new Intent();//MenuDrawer.this, ActivitiesActivity.class);
+                        mDrawerLayout.closeDrawer(mDrawerList);
                         startActivity(intent);
                         break;
 
                     // Matches
                     case 3:
+                        intent = new Intent();//MenuDrawer.this, MatchesActivity.class);
+                        mDrawerLayout.closeDrawer(mDrawerList);
                         startActivity(intent);
                         break;
 
                     // Feedback
                     case 4:
                         intent = new Intent(MenuDrawer.this, FeedbackActivity.class);
+                        mDrawerLayout.closeDrawer(mDrawerList);
                         startActivity(intent);
                         break;
                 }
