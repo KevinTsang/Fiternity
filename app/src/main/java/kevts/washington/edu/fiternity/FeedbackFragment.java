@@ -13,7 +13,9 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.parse.ParseException;
 import com.parse.ParseUser;
+import com.parse.SignUpCallback;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -78,6 +80,19 @@ public class FeedbackFragment extends Fragment {
 
     private void setFriendUser() {
         friendUser = FakeData.createJenny().userToParseUser();
+        friendUser.setUsername("jennyTest");
+        friendUser.setPassword("password");
+        friendUser.setEmail("conscientiaexnihilo132@mailinator.com");
+        friendUser.signUpInBackground(new SignUpCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+
+                } else {
+
+                }
+            }
+        });
         FiternityInstance.instance().setOtherUser(friendUser);
     }
 

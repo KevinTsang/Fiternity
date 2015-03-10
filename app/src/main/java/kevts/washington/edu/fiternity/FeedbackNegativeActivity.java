@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 
 public class FeedbackNegativeActivity extends ActionBarActivity {
@@ -15,6 +16,10 @@ public class FeedbackNegativeActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feedback_negative);
+
+        String friendName = FiternityInstance.instance().getOtherUser().get("name").toString();
+        TextView negativeText = (TextView) findViewById(R.id.feedback_negative_text);
+        negativeText.setText("OK \n We will not match " + friendName + " \n with you anymore.");
 
         Button doneButton = (Button) findViewById(R.id.feedback_negative_done_btn);
         doneButton.setOnClickListener(new View.OnClickListener() {

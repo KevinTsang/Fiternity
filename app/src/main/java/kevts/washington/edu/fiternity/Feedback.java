@@ -11,8 +11,8 @@ import java.io.Serializable;
  */
 @ParseClassName("Feedback")
 public class Feedback extends ParseObject implements Serializable {
-    private ParseUser userTo;
-    private ParseUser userFrom;
+    private String userToId;
+    private String userFromId;
     private int rating;
     private String feedbackText;
 
@@ -20,13 +20,21 @@ public class Feedback extends ParseObject implements Serializable {
 
     }
 
-    public void setUserTo(ParseUser user) {
-        put("userTo", user);
-        userTo = user;
+    public void setUserToId(String user) {
+        if (user != null) {
+            put("userToId", (String)user);
+            userToId = user;
+        } else {
+            throw new IllegalArgumentException("UserTo cannot be null");
+        }
     }
-    public void setUserFrom(ParseUser user) {
-        put("userFrom", user);
-        userFrom = user;
+    public void setUserFromId(String user) {
+        if (user != null) {
+            put("userFromId", (String)user);
+            userFromId = user;
+        } else {
+            throw new IllegalArgumentException("UserFrom cannot be null");
+        }
     }
     public void setRating(int rating) {
         put("rating", rating);
@@ -36,11 +44,11 @@ public class Feedback extends ParseObject implements Serializable {
         put("feedbackText", text);
         feedbackText = text;
     }
-    public ParseUser getUserTo() {
-        return (ParseUser) get("userTo");
+    public String getUserTo() {
+        return (String) get("userToId");
     }
-    public ParseUser getUserFrom() {
-        return (ParseUser) get("userFrom");
+    public String getUserFrom() {
+        return (String) get("userFromId");
     }
     public int getRating() {
         //return (int) get("rating");

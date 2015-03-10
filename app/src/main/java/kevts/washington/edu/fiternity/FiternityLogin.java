@@ -4,7 +4,9 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 
+import android.app.Dialog;
 import android.app.LoaderManager.LoaderCallbacks;
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.CursorLoader;
 import android.content.Intent;
@@ -31,14 +33,17 @@ import android.widget.TextView;
 
 import com.facebook.AppEventsLogger;
 
+import com.facebook.LoginActivity;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.widget.LoginButton;
 import com.parse.LogInCallback;
+import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseUser;
 
+import java.security.Permission;
 import java.util.Arrays;
 
 
@@ -46,45 +51,60 @@ public class FiternityLogin extends FragmentActivity {
 
     private FacebookFragment facebookFragment;
     private static final String TAG = "FiternityLogin";
+    private Dialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fiternity_login);
         final FiternityInstance instance = (FiternityInstance)getApplication();
-        if (savedInstanceState == null) {
-            facebookFragment = new FacebookFragment().newInstance();
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .add(R.id.content, facebookFragment)
-                    .commit();
-        } else {
-            facebookFragment = (FacebookFragment) getSupportFragmentManager()
-                    .findFragmentById(R.id.content);
+        ParseFacebookUtils.initialize(getString(R.string.facebook_app_id));
+//        if (savedInstanceState == null) {
+//            facebookFragment = new FacebookFragment();
+//            getSupportFragmentManager().beginTransaction()
+//                    .add(android.R.id.content, facebookFragment)
+//                    .commit();
+//        } else {
+//            facebookFragment = (FacebookFragment)getSupportFragmentManager()
+//                    .findFragmentById(android.R.id.content);
+//        }
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        if (currentUser != null && ParseFacebookUtils.isLinked(currentUser)) {
+            Intent intent = new Intent(FiternityLogin.this, FeedbackActivity.class);
+            startActivity(intent);
         }
+
         LoginButton authButton = (LoginButton)findViewById(R.id.authButton);
         authButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                ParseFacebookUtils.logIn(FiternityLogin.this, new LogInCallback() {
-                    @Override
-                    public void done(ParseUser parseUser, ParseException e) {
-                        if (parseUser == null) {
-                            Log.d(TAG, "User canceled Facebook Login");
-                        } else if (parseUser.isNew()) {
-                            Log.d(TAG, "User registered and logged in through Facebook!");
-                            instance.setUser(parseUser);
-                            // Set user here
-                            // put them through start up processes
-                            // fire intent to profile screen
-                        } else {
-                            Log.d(TAG, "User logged in through Facebook!");
-                            instance.setUser(parseUser);
-                            // Set user here
-                            // fire intent to matches screen
-                        }
-                    }
-                });
+                progressDialog = ProgressDialog.show(FiternityLogin.this, "", "Logging in...", true);
+
+                ParseFacebookUtils.logIn(Arrays.asList("public_profile"),
+                        FiternityLogin.this, new LogInCallback() {
+                            @Override
+                            public void done(ParseUser parseUser, ParseException e) {
+                                progressDialog.dismiss();
+                                if (parseUser == null) {
+                                    Log.d(TAG, "User canceled Facebook Login");
+                                } else if (parseUser.isNew()) {
+                                    Log.d(TAG, "User registered and logged in through Facebook!");
+                                    instance.setUser(parseUser);
+                                    Intent intent = new Intent(FiternityLogin.this, FeedbackActivity.class);
+                                    startActivity(intent);
+                                    // Set user here
+                                    // put them through start up processes
+                                    // fire intent to profile screen
+                                } else {
+                                    Log.d(TAG, "User logged in through Facebook!");
+                                    instance.setUser(parseUser);
+                                    Intent intent = new Intent(FiternityLogin.this, FeedbackActivity.class);
+                                    startActivity(intent);
+                                    // Set user here
+                                    // fire intent to matches screen
+                                }
+                            }
+                        });
             }
         });
 //        authButton.setReadPermissions(Arrays.asList("public_profile", "email", "user_friends"));
@@ -108,21 +128,21 @@ public class FiternityLogin extends FragmentActivity {
             @Override
             public void onClick(View v) {
                 // replace this with Cvetan's profile activity
-                Intent intent = new Intent(FiternityLogin.this, Matches.class);
+                Intent intent = new Intent(FiternityLogin.this, FeedbackActivity.class);
                 startActivity(intent);
             }
         });
     }
 
-    private Session.StatusCallback statusCallback =
-            new SessionStatusCallback();
-
-    private class SessionStatusCallback implements Session.StatusCallback {
-        @Override
-        public void call(Session session, SessionState state, Exception exception) {
-            // Respond to session state changes, ex: updating the view
-        }
-    }
+//    private Session.StatusCallback statusCallback =
+//            new SessionStatusCallback();
+//
+//    private class SessionStatusCallback implements Session.StatusCallback {
+//        @Override
+//        public void call(Session session, SessionState state, Exception exception) {
+//            // Respond to session state changes, ex: updating the view
+//        }
+//    }
 
     @Override
     protected void onResume() {
@@ -143,7 +163,7 @@ public class FiternityLogin extends FragmentActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        ParseFacebookUtils.finishAuthentication(requestCode, resultCode,data);
+        ParseFacebookUtils.finishAuthentication(requestCode, resultCode, data);
     }
 }
 
