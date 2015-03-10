@@ -78,13 +78,8 @@ public class ReportActivity extends ActionBarActivity {
 
         feedback.setFeedbackText(feedbackText);
         feedback.setRating(1);
-        /********************************
-         * I want to do curUser.getObjectID() and replace Annie with it
-         * otherUser.getObjectID() should replace Jenny
-         *
-         */
-//        feedback.setUserFromId("Annie");
-//        feedback.setUserToId("Jenny");
+        feedback.setUserFromId("Annie");
+        feedback.setUserToId("Jenny");
         feedback.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {

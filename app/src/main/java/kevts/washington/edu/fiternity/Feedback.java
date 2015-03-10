@@ -21,14 +21,6 @@ public class Feedback extends ParseObject implements Serializable {
     }
 
     public void setUserToId(String user) {
-<<<<<<< HEAD
-        put("userToId", (String) user);
-        userToId = user;
-    }
-    public void setUserFromId(String user) {
-        put("userFromId", (String) user);
-        userFromId = user;
-=======
         if (user != null) {
             put("userToId", (String)user);
             userToId = user;
@@ -43,7 +35,6 @@ public class Feedback extends ParseObject implements Serializable {
         } else {
             throw new IllegalArgumentException("UserFrom cannot be null");
         }
->>>>>>> origin/master
     }
     public void setRating(int rating) {
         put("rating", rating);
