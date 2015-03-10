@@ -42,6 +42,7 @@ public class MenuDrawer extends Activity {
 
                     // Calendar
                     case 1:
+                        FiternityInstance.instance().viewCalendar();
                         break;
 
                     // Activities
@@ -56,6 +57,7 @@ public class MenuDrawer extends Activity {
 
                     // Feedback
                     case 4:
+                        intent = new Intent(MenuDrawer.this, FeedbackActivity.class);
                         startActivity(intent);
                         break;
                 }
