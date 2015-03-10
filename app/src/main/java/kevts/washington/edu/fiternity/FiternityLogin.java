@@ -73,12 +73,15 @@ public class FiternityLogin extends FragmentActivity {
                             Log.d(TAG, "User canceled Facebook Login");
                         } else if (parseUser.isNew()) {
                             Log.d(TAG, "User registered and logged in through Facebook!");
+                            instance.setUser(parseUser);
                             // Set user here
                             // put them through start up processes
+                            // fire intent to profile screen
                         } else {
                             Log.d(TAG, "User logged in through Facebook!");
                             instance.setUser(parseUser);
                             // Set user here
+                            // fire intent to matches screen
                         }
                     }
                 });
@@ -104,6 +107,7 @@ public class FiternityLogin extends FragmentActivity {
         tempLogin.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                // replace this with Cvetan's profile activity
                 Intent intent = new Intent(FiternityLogin.this, CalendarActivity.class);
                 startActivity(intent);
             }
