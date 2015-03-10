@@ -30,7 +30,12 @@ public class ReportActivity extends ActionBarActivity {
     }
 
     private void handleReport(EditText reportText) {
-        System.out.println(reportText.getText());
+        Feedback feedback = new Feedback();
+        String feedbackText = reportText.getText().toString();
+        feedback.setFeedbackText(feedbackText);
+        feedback.setRating(1);
+        feedback.setUserFrom(FiternityInstance.instance().getUser());
+        feedback.setUserTo(FiternityInstance.instance().getOtherUser());
     }
 
 
