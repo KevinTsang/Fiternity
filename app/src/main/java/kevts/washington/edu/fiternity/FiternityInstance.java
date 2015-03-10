@@ -17,12 +17,13 @@ import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 /**
  * Created by kevin on 3/7/15.
  */
-public class FiternityInstance extends Application {
+public class FiternityInstance extends Application /*implements UserDocInterface*/ {
 
     private static final String[] projection = new String[] {
             CalendarContract.Calendars._ID,
@@ -68,9 +69,9 @@ public class FiternityInstance extends Application {
                     // allow them to go directly to matches
                 } else {
                     // push the user to login screen
-//                    Intent signInIntent = new Intent(getApplicationContext(), FiternityLogin.class);
-//                    signInIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                    startActivity(signInIntent);
+                    Intent signInIntent = new Intent(getApplicationContext(), FiternityLogin.class);
+                    signInIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(signInIntent);
                 }
             }
         });
@@ -85,6 +86,10 @@ public class FiternityInstance extends Application {
     }
     public void setOtherUser(ParseUser u) {
         otherUser = u;
+    }
+
+    public void setUser(ParseUser parseUser) {
+        user = parseUser;
     }
 
     public void createCalendar() {
@@ -124,6 +129,7 @@ public class FiternityInstance extends Application {
     public void createEvent() {
         Intent intent = new Intent(Intent.ACTION_INSERT)
                 .setData(Events.CONTENT_URI)
+                .putExtra(Events.TITLE, "Fiternity")
                 .putExtra(Events.AVAILABILITY, Events.AVAILABILITY_BUSY)
                 .putExtra(Intent.EXTRA_EMAIL, user.getEmail());
         startActivity(intent);
@@ -132,7 +138,7 @@ public class FiternityInstance extends Application {
     public void editEvent() {
         long eventId = 1; // find a way to get the event ID they want to edit and put it here
         Uri uri = ContentUris.withAppendedId(Events.CONTENT_URI, eventId);
-        Intent intent = new Intent(Intent.ACTION_EDIT).setData(uri);
+        Intent intent = new Intent(Intent.ACTION_EDIT).setData(uri).putExtra(Events.TITLE, "Fiternity");
         startActivity(intent);
     }
 
@@ -144,4 +150,62 @@ public class FiternityInstance extends Application {
         Intent intent = new Intent(Intent.ACTION_VIEW).setData(builder.build());
         startActivity(intent);
     }
+
+    /*
+    public int getUserId() {
+
+    }
+
+    public void setUserId(int userId) {
+
+    }
+    public String getName() {
+
+    }
+    public void setName(String name) {
+
+    }
+    public int getAge() {
+
+    }
+    public void setAge(int age) {
+
+    }
+    public String getGender() {
+
+    }
+    public void setGender(String gender) {
+
+    }
+    public boolean getGenderPreference() {
+
+    }
+    public void setSameGenderPreference(boolean preference) {
+
+    }
+    public String getEmail() {
+
+    }
+    public void setEmail(String email) {
+
+    }
+    public String getPhoneNumber() {
+
+    }
+    public void setPhoneNumber(String phoneNumber) {
+
+    }
+    public int getZipCode() {
+
+    }
+    public void setZipCode(int zipCode) {
+
+    }
+    public ArrayList<Exercise> getActivities() {
+
+    }
+
+    public void addActivity() {
+
+    }*/
 }
