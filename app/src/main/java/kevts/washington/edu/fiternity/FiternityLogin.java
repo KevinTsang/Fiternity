@@ -49,7 +49,7 @@ import java.util.Arrays;
 
 public class FiternityLogin extends FragmentActivity {
 
-    private FacebookFragment facebookFragment;
+//    private FacebookFragment facebookFragment;
     private static final String TAG = "FiternityLogin";
     private Dialog progressDialog;
 
@@ -59,15 +59,7 @@ public class FiternityLogin extends FragmentActivity {
         setContentView(R.layout.activity_fiternity_login);
         final FiternityInstance instance = (FiternityInstance)getApplication();
         ParseFacebookUtils.initialize(getString(R.string.facebook_app_id));
-//        if (savedInstanceState == null) {
-//            facebookFragment = new FacebookFragment();
-//            getSupportFragmentManager().beginTransaction()
-//                    .add(android.R.id.content, facebookFragment)
-//                    .commit();
-//        } else {
-//            facebookFragment = (FacebookFragment)getSupportFragmentManager()
-//                    .findFragmentById(android.R.id.content);
-//        }
+
         ParseUser currentUser = ParseUser.getCurrentUser();
         if (currentUser != null && ParseFacebookUtils.isLinked(currentUser)) {
             Intent intent = new Intent(FiternityLogin.this, FeedbackActivity.class);
@@ -90,7 +82,7 @@ public class FiternityLogin extends FragmentActivity {
                                 } else if (parseUser.isNew()) {
                                     Log.d(TAG, "User registered and logged in through Facebook!");
                                     instance.setUser(parseUser);
-                                    Intent intent = new Intent(FiternityLogin.this, FeedbackActivity.class);
+                                    Intent intent = new Intent(FiternityLogin.this, SetupProfile.class);
                                     startActivity(intent);
                                     // Set user here
                                     // put them through start up processes
@@ -98,7 +90,7 @@ public class FiternityLogin extends FragmentActivity {
                                 } else {
                                     Log.d(TAG, "User logged in through Facebook!");
                                     instance.setUser(parseUser);
-                                    Intent intent = new Intent(FiternityLogin.this, FeedbackActivity.class);
+                                    Intent intent = new Intent(FiternityLogin.this, Matches.class);
                                     startActivity(intent);
                                     // Set user here
                                     // fire intent to matches screen
@@ -107,22 +99,7 @@ public class FiternityLogin extends FragmentActivity {
                         });
             }
         });
-//        authButton.setReadPermissions(Arrays.asList("public_profile", "email", "user_friends"));
-//        authButton.setOnClickListener(new OnClickListener() {
-//
-//            @Override
-//            public void onClick(View v) {
-//                Session session = Session.getActiveSession();
-//                if (!session.isOpened() && !session.isClosed()) {
-//                    session.openForRead(new Session.OpenRequest(FiternityLogin.this)
-//                            .setPermissions(Arrays.asList("public_profile"))
-//                            .setCallback(statusCallback));
-//                } else {
-//                    Session.openActiveSession(FiternityLogin.this, true, statusCallback);
-//                    // might possibly need to add a permissions list?
-//                }
-//            }
-//        });
+
         Button tempLogin = (Button)findViewById(R.id.email_sign_in_button);
         tempLogin.setOnClickListener(new OnClickListener() {
             @Override
@@ -133,16 +110,6 @@ public class FiternityLogin extends FragmentActivity {
             }
         });
     }
-
-//    private Session.StatusCallback statusCallback =
-//            new SessionStatusCallback();
-//
-//    private class SessionStatusCallback implements Session.StatusCallback {
-//        @Override
-//        public void call(Session session, SessionState state, Exception exception) {
-//            // Respond to session state changes, ex: updating the view
-//        }
-//    }
 
     @Override
     protected void onResume() {
