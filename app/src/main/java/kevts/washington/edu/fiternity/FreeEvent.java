@@ -1,12 +1,13 @@
 package kevts.washington.edu.fiternity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
 /**
  * Created by cvetand on 3/10/15.
  */
-public class FreeEvent {
+public class FreeEvent implements Serializable {
     private ArrayList<User> users;
     private Date startTime;
     private Date endTime;

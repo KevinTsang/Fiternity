@@ -22,7 +22,7 @@ public class Matches extends ActionBarActivity {
     private Fragment allFragmentTab = new allMatches();
     private Fragment recentFragmentTab = new recentlyContacted();
 
-    private Exercise[] exercises;
+    private FreeEvent[] exercises;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

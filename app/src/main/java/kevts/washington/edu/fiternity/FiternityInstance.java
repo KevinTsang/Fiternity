@@ -20,6 +20,7 @@ import com.parse.SignUpCallback;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 /**
  * Created by kevin on 3/7/15.
@@ -39,6 +40,7 @@ public class FiternityInstance extends Application /*implements UserDocInterface
     private static FiternityInstance instance;
     private ParseUser user;
     private ParseUser otherUser; // take this out later.
+    private List<User> contacted;
 
     public FiternityInstance() {
         if (instance == null) {
@@ -155,6 +157,8 @@ public class FiternityInstance extends Application /*implements UserDocInterface
         Intent intent = new Intent(Intent.ACTION_VIEW).setData(builder.build());
         startActivity(intent);
     }
+
+    public void addContacted(User user){}
 
     /*
     public int getUserId() {

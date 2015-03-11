@@ -20,6 +20,7 @@ public class User implements Serializable {
     private String phoneNumber;
     private int zipCode;
     private List<Exercise> exerciseList;
+    private List<FreeEvent> freeTimes;
     private int icon;
 
     public User() {
@@ -101,6 +102,12 @@ public class User implements Serializable {
 
     public int getIcon(){
         return icon;
+    }
+
+    public List<FreeEvent> getFreeTimes(){ return freeTimes;}
+
+    public void setFreeTimes(List<FreeEvent> freeTimes){
+        this.freeTimes = freeTimes;
     }
 
     public ParseUser userToParseUser() {
