@@ -37,5 +37,6 @@
     <string name="drawer_open">Menu</string>
     <string name="drawer_close">Fiternity</string>
     <string name="title_activity_exercise">ExerciseActivity</string>
+    <string name="title_activity_profile">ProfileActivity</string>
 
 </resources>

@@ -1,8 +1,11 @@
 package kevts.washington.edu.fiternity;
 
 
+import android.content.ContentUris;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.net.Uri;
+import android.provider.CalendarContract;
 import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -13,6 +16,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+
+import java.util.Calendar;
 
 
 public class MenuDrawer extends ActionBarActivity {
@@ -43,7 +48,7 @@ public class MenuDrawer extends ActionBarActivity {
                 switch(position) {
                     // Profile
                     case 0:
-                        intent = new Intent();//MenuDrawer.this, ProfileActivity.class);
+                        intent = new Intent(MenuDrawer.this, ProfileActivity.class);
                         mDrawerLayout.closeDrawer(mDrawerList);
                         startActivity(intent);
                         break;
@@ -51,19 +56,24 @@ public class MenuDrawer extends ActionBarActivity {
                     // Calendar
                     case 1:
                         mDrawerLayout.closeDrawer(mDrawerList);
-                        FiternityInstance.instance().viewCalendar();
+                        long startMillis = Calendar.getInstance().getTimeInMillis();
+                        Uri.Builder builder = CalendarContract.CONTENT_URI.buildUpon();
+                        builder.appendPath("time");
+                        ContentUris.appendId(builder, startMillis);
+                        intent = new Intent(Intent.ACTION_VIEW).setData(builder.build());
+                        startActivity(intent);
                         break;
 
                     // Activities
                     case 2:
-                        intent = new Intent();//MenuDrawer.this, ActivitiesActivity.class);
+                        intent = new Intent(MenuDrawer.this, ExerciseActivity.class);
                         mDrawerLayout.closeDrawer(mDrawerList);
                         startActivity(intent);
                         break;
 
                     // Matches
                     case 3:
-                        intent = new Intent();//MenuDrawer.this, MatchesActivity.class);
+                        intent = new Intent(MenuDrawer.this, Matches.class);
                         mDrawerLayout.closeDrawer(mDrawerList);
                         startActivity(intent);
                         break;

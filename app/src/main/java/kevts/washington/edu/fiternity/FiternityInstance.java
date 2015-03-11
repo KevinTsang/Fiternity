@@ -141,7 +141,7 @@ public class FiternityInstance extends Application /*implements UserDocInterface
                 .putExtra(Events.AVAILABILITY, Events.AVAILABILITY_BUSY)
                 .putExtra(Intent.EXTRA_EMAIL, user.getEmail());
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
+        startActivity(intent);  // replace with startActivityForResult
     }
 
     public void editEvent() {
@@ -149,9 +149,10 @@ public class FiternityInstance extends Application /*implements UserDocInterface
         Uri uri = ContentUris.withAppendedId(Events.CONTENT_URI, eventId);
         Intent intent = new Intent(Intent.ACTION_EDIT).setData(uri).putExtra(Events.TITLE, "Fiternity");
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
+        startActivity(intent); // replace with startActivityForResult
     }
 
+    // NEED TO COPY AND PASTE THIS CODE INTO EVERYWHERE THAT USES IT RATHER THAN CALLING IT HERE
     public void viewCalendar() {
         long startMillis = Calendar.getInstance().getTimeInMillis();
         Uri.Builder builder = CalendarContract.CONTENT_URI.buildUpon();
@@ -159,7 +160,7 @@ public class FiternityInstance extends Application /*implements UserDocInterface
         ContentUris.appendId(builder, startMillis);
         Intent intent = new Intent(Intent.ACTION_VIEW).setData(builder.build());
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
+        startActivity(intent); // replace with startActivityForResult
     }
 
     public void addRequestedFreeEvent(FreeEvent freeEvent){

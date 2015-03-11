@@ -1,8 +1,11 @@
 package kevts.washington.edu.fiternity;
 
 import android.app.AlertDialog;
+import android.content.ContentUris;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
+import android.provider.CalendarContract;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -18,8 +21,12 @@ import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.Calendar;
+
 
 public class ExerciseActivity extends ActionBarActivity {
+
+    static final int CALENDAR_ACCESSED = 21;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,10 +49,24 @@ public class ExerciseActivity extends ActionBarActivity {
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FiternityInstance instance = (FiternityInstance)getApplication();
-                instance.viewCalendar();
+                long startMillis = Calendar.getInstance().getTimeInMillis();
+                Uri.Builder builder = CalendarContract.CONTENT_URI.buildUpon();
+                builder.appendPath("time");
+                ContentUris.appendId(builder, startMillis);
+                Intent intent = new Intent(Intent.ACTION_VIEW).setData(builder.build());
+                startActivityForResult(intent, CALENDAR_ACCESSED);
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == CALENDAR_ACCESSED) {
+            if (resultCode == RESULT_OK) {
+                // read all Fiternity events here
+                startActivity(new Intent(this, Matches.class));
+            }
+        }
     }
 
     private void createDialog(String exercise) {
