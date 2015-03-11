@@ -11,6 +11,12 @@ public class FreeEvent {
     private Date startTime;
     private Date endTime;
 
+    public FreeEvent(User user, Date startTime, Date endTime){
+        this.users = new ArrayList<User>();
+        this.users.add(user);
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
     public Date getStartTime() {
         return startTime;
     }
@@ -30,6 +36,8 @@ public class FreeEvent {
     public ArrayList<User> getUsers() {
         return users;
     }
+
+    public User getUser(int index){return users.get(index);}
 
     public void setUsers(ArrayList<User> users) {
         this.users = users;

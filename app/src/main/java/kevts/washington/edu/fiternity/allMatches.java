@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import java.util.Date;
+
 public class allMatches extends Fragment {
     //private OnFragmentInteractionListener mListener;
 
@@ -41,11 +43,12 @@ public class allMatches extends Fragment {
         View view = inflater.inflate(R.layout.fragment_all_matches, container, false);
 
         //populates exercises
-        Exercise[] exercises = new Exercise[]{
-                new Exercise("Swimming", FakeData.createAnnie()),
-                new Exercise("Weight Lifting", FakeData.createJenny()),
-                new Exercise("Running", FakeData.createMarshall()),
-                new Exercise("Hiking", FakeData.createMichael()),
+        Date now = new Date();
+        FreeEvent[] exercises = new FreeEvent[]{
+                new FreeEvent(FakeData.createAnnie(), now, now),
+                new FreeEvent(FakeData.createJenny(), now, now),
+                new FreeEvent(FakeData.createMarshall(), now, now),
+                new FreeEvent(FakeData.createMichael(), now, now),
         };
         MatchesArrayAdapter adapter = new MatchesArrayAdapter(hostActivity.getApplicationContext(), R.layout.listview_match_row, exercises);
 
