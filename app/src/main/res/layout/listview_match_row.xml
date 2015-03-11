@@ -28,7 +28,8 @@ android:padding="10dp">
             android:layout_alignParentTop="true"
             android:layout_alignParentBottom="true"
             android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp" />
+            android:layout_marginBottom="5dp"
+            android:textColor="#ff000000"/>
 
         <TextView android:id="@+id/match_start_time"
             android:layout_width="fill_parent"
@@ -37,7 +38,8 @@ android:padding="10dp">
             android:layout_alignParentTop="true"
             android:layout_alignParentBottom="true"
             android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp" />
+            android:layout_marginBottom="5dp"
+            android:textColor="#ff000000"/>
 
         <TextView android:id="@+id/match_end_time"
             android:layout_width="fill_parent"
@@ -46,7 +48,8 @@ android:padding="10dp">
             android:layout_alignParentTop="true"
             android:layout_alignParentBottom="true"
             android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp" />
+            android:layout_marginBottom="5dp"
+            android:textColor="#ff000000"/>
     </LinearLayout>
 
 </LinearLayout>

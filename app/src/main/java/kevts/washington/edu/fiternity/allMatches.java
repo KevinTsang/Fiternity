@@ -1,13 +1,16 @@
 package kevts.washington.edu.fiternity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 //import android.app.Fragment;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.Date;
@@ -44,7 +47,7 @@ public class allMatches extends Fragment {
 
         //populates exercises
         Date now = new Date();
-        FreeEvent[] exercises = new FreeEvent[]{
+        final FreeEvent[] exercises = new FreeEvent[]{
                 new FreeEvent(FakeData.createAnnie(), now, now),
                 new FreeEvent(FakeData.createJenny(), now, now),
                 new FreeEvent(FakeData.createMarshall(), now, now),
@@ -54,8 +57,26 @@ public class allMatches extends Fragment {
 
         ListView matchList = (ListView)view.findViewById(R.id.allMatchesList);
         matchList.setAdapter(adapter);
+        matchList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                User userClicked = exercises[position].getUser(0);
+                String userClickedName = userClicked.getName();
+                Log.i("allMatches", userClickedName);
+                Intent intent = new Intent(hostActivity, UserProfile.class);
+                intent.putExtra("userClicked", userClicked);
+                startActivity(intent);
+
+            }
+        });
 
         return view;
+    }
+
+    private void goToProfile(User user){
+        Log.i("goToProfile", "listener works");
+        Intent intent = new Intent(hostActivity.getApplicationContext(), UserProfile.class);
+        this.startActivity(intent);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
