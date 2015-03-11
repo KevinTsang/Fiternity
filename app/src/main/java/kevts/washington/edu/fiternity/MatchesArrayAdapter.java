@@ -44,9 +44,9 @@ public class MatchesArrayAdapter extends ArrayAdapter<Exercise> {
         }
 
         Exercise exercise = exerciseArr[position];
-        holder.icon.setImageResource(exercise.getInitiator().getIcon());
-
-        holder.name.setText(exercise.getInitiator().getName());
+//        holder.icon.setImageResource(exercise.getInitiator().getIcon());
+//
+//        holder.name.setText(exercise.getInitiator().getName());
         holder.excercise.setText(exercise.getExerciseName());
         holder.time.setText("Placeholder for actual time");
 
