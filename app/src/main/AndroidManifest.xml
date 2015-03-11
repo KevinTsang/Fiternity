@@ -74,6 +74,10 @@
             android:name=".ExerciseActivity"
             android:label="@string/title_activity_exercise" >
         </activity>
+        <activity
+            android:name=".ProfileActivity"
+            android:label="@string/title_activity_profile" >
+        </activity>
     </application>
 
 </manifest>
