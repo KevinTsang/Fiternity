@@ -29,5 +29,10 @@
             android:layout_height="wrap_content"
             android:text="User Age"
             android:id="@+id/userAge" />
+
+        <ListView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/matchProfileList" />
     </LinearLayout>
 </RelativeLayout>

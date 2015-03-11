@@ -13,11 +13,14 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 public class allMatches extends Fragment {
     //private OnFragmentInteractionListener mListener;
-
+    FiternityInstance fi;
     private Matches hostActivity;
 
     /*
@@ -45,25 +48,36 @@ public class allMatches extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_all_matches, container, false);
 
+        //FiternityInstance fi = (FiternityInstance) hostActivity.getApplicationContext();
+
         //populates exercises
         Date now = new Date();
-        final FreeEvent[] exercises = new FreeEvent[]{
+
+
+        final FreeEvent[] freeEvents = new FreeEvent[]{
                 new FreeEvent(FakeData.createAnnie(), now, now),
                 new FreeEvent(FakeData.createJenny(), now, now),
                 new FreeEvent(FakeData.createMarshall(), now, now),
                 new FreeEvent(FakeData.createMichael(), now, now),
         };
-        MatchesArrayAdapter adapter = new MatchesArrayAdapter(hostActivity.getApplicationContext(), R.layout.listview_match_row, exercises);
+
+        //adds the events to users' freeTimes
+        for(int i = 0; i<freeEvents.length; i++){
+            List<FreeEvent> freeTime = new ArrayList<FreeEvent>(Arrays.asList(freeEvents[i]));
+            freeEvents[i].getUser(0).setFreeTimes(freeTime);
+        }
+
+        MatchesArrayAdapter adapter = new MatchesArrayAdapter(hostActivity.getApplicationContext(), R.layout.listview_match_row, freeEvents);
 
         ListView matchList = (ListView)view.findViewById(R.id.allMatchesList);
         matchList.setAdapter(adapter);
         matchList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                User userClicked = exercises[position].getUser(0);
+                User userClicked = freeEvents[position].getUser(0);
                 String userClickedName = userClicked.getName();
                 Log.i("allMatches", userClickedName);
-                Intent intent = new Intent(hostActivity, UserProfile.class);
+                Intent intent = new Intent(hostActivity, MatchProfile.class);
                 intent.putExtra("userClicked", userClicked);
                 startActivity(intent);
 
@@ -75,7 +89,7 @@ public class allMatches extends Fragment {
 
     private void goToProfile(User user){
         Log.i("goToProfile", "listener works");
-        Intent intent = new Intent(hostActivity.getApplicationContext(), UserProfile.class);
+        Intent intent = new Intent(hostActivity.getApplicationContext(), MatchProfile.class);
         this.startActivity(intent);
     }
 

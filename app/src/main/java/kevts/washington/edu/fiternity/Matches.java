@@ -15,14 +15,16 @@ import android.view.Window;
 import android.widget.ListView;
 import android.widget.TabHost;
 
+import java.util.List;
+
 
 public class Matches extends ActionBarActivity {
 
     private WindowDecorActionBar.Tab allTab, recentTab;
     private Fragment allFragmentTab = new allMatches();
     private Fragment recentFragmentTab = new recentlyContacted();
-
-    private Exercise[] exercises;
+    private FiternityInstance fiternityInstance;
+    private FreeEvent[] exercises;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,8 +44,14 @@ public class Matches extends ActionBarActivity {
         actionBar.addTab(allTab);
         actionBar.addTab(recentTab);
 
+        fiternityInstance = (FiternityInstance) getApplicationContext();
+
+
     }
 
+    public List<FreeEvent> getRecentEvents(){
+        return fiternityInstance.getRequestedFreeEvents();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
