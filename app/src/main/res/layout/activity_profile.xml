@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/user_name"
         android:layout_toRightOf="@+id/age_text"
-        android:layout_above="@id/gender_text"
+        android:layout_above="@+id/gender_text"
         android:id="@+id/user_age" />
     <TextView
         android:layout_width="wrap_content"
@@ -36,7 +36,7 @@
     <Spinner android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/user_age"
-        android:layout_above="@id/user_email"
+        android:layout_above="@+id/user_email"
         android:layout_toRightOf="@id/gender_text"
         android:id="@+id/user_gender_selector" />
     <EditText android:layout_width="fill_parent"
@@ -47,7 +47,7 @@
     <EditText
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/user_email"
+        android:layout_below="@+id/user_email"
         android:id="@+id/user_phone_number"
         android:hint="Phone Number" />
     <EditText
@@ -59,7 +59,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/user_zip_code"
+        android:layout_below="@+id/user_zip_code"
         android:id="@+id/same_gender_preference_text"
         android:text="Prefer to exercise with the same gender?"/>
     <ToggleButton
