@@ -82,7 +82,7 @@ public class FiternityLogin extends FragmentActivity {
                                 } else if (parseUser.isNew()) {
                                     Log.d(TAG, "User registered and logged in through Facebook!");
                                     instance.setUser(parseUser);
-                                    Intent intent = new Intent(FiternityLogin.this, SetupProfile.class);
+                                    Intent intent = new Intent(FiternityLogin.this, ProfileActivity.class);
                                     startActivity(intent);
                                     // Set user here
                                     // put them through start up processes
