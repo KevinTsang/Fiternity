@@ -7,5 +7,27 @@
     tools:context="kevts.washington.edu.fiternity.UserProfile">
 
 
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
 
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="User Name"
+            android:id="@+id/userName" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="User Gender"
+            android:id="@+id/userGender" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="User Age"
+            android:id="@+id/userAge" />
+    </LinearLayout>
 </RelativeLayout>

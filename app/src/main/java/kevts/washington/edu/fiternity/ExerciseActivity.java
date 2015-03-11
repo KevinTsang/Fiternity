@@ -2,8 +2,10 @@ package kevts.washington.edu.fiternity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -32,38 +35,60 @@ public class ExerciseActivity extends ActionBarActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String exercise = searchBox.getAdapter().getItem(position).toString();
                 searchBox.setText(exercise);
-                AlertDialog.Builder builder = new AlertDialog.Builder(ExerciseActivity.this);
-                builder.setTitle(exercise);
-                //builder.setView();
-                builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        final GridLayout exercises = (GridLayout)findViewById(R.id.exercises);
-                        final LinearLayout ll = new LinearLayout(ExerciseActivity.this);
-                        ll.setOrientation(LinearLayout.HORIZONTAL);
-                        TextView exercise = new TextView(ExerciseActivity.this);
-                        ll.addView(exercise);
-                        Button button = new Button(ExerciseActivity.this);
-                        button.setText("x");
-                        button.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                exercises.removeView(ll);
-                            }
-                        });
-                        ll.addView(button);
-                        exercises.addView(ll);
-                    }
-                });
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                });
-                builder.show();
+                createDialog(exercise);
             }
         });
+        Button nextButton = (Button)findViewById(R.id.toCalendarButton);
+        nextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FiternityInstance instance = (FiternityInstance)getApplication();
+                instance.viewCalendar();
+            }
+        });
+    }
+
+    private void createDialog(String exercise) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(exercise);
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogLayout = inflater.inflate(R.layout.exp_level_setter_fragment, null);
+        builder.setView(dialogLayout);
+        builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                final GridLayout exercises = (GridLayout)findViewById(R.id.exercises);
+                final LinearLayout ll = new LinearLayout(ExerciseActivity.this);
+                ll.setOrientation(LinearLayout.HORIZONTAL);
+                TextView exercise = new TextView(ExerciseActivity.this);
+                exercise.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String exerciseName = ((TextView)v).getText().toString();
+                        createDialog(exerciseName);
+                    }
+                });
+                ll.addView(exercise);
+                Button button = new Button(ExerciseActivity.this);
+                button.setText("x");
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        exercises.removeView(ll);
+                    }
+                });
+                ll.addView(button);
+                exercises.addView(ll);
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        builder.create();
+        builder.show();
     }
 
 

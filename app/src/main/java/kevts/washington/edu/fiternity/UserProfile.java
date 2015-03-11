@@ -1,9 +1,12 @@
 package kevts.washington.edu.fiternity;
 
+import android.content.Context;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 
 public class UserProfile extends ActionBarActivity {
@@ -12,6 +15,25 @@ public class UserProfile extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
+        User user = (User) getIntent().getSerializableExtra("userClicked");
+        Log.i("UserProfile", user.getName());
+
+        TextView name, gender, age;
+        name = (TextView) this.findViewById(R.id.userName);
+        gender = (TextView) this.findViewById(R.id.userGender);
+        age = (TextView) this.findViewById(R.id.userAge);
+
+        name.setText(user.getName());
+        switch (user.getGender()){
+            case 'M':
+                gender.setText("Male");
+                break;
+            case 'F':
+                gender.setText("Female");
+                break;
+        }
+
+        age.setText(""+user.getAge());
     }
 
 

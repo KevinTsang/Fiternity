@@ -1,14 +1,19 @@
 package kevts.washington.edu.fiternity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 //import android.app.Fragment;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
+
+import java.util.Date;
 
 public class allMatches extends Fragment {
     //private OnFragmentInteractionListener mListener;
@@ -41,18 +46,37 @@ public class allMatches extends Fragment {
         View view = inflater.inflate(R.layout.fragment_all_matches, container, false);
 
         //populates exercises
-        Exercise[] exercises = new Exercise[]{
-                new Exercise("Swimming", FakeData.createAnnie()),
-                new Exercise("Weight Lifting", FakeData.createJenny()),
-                new Exercise("Running", FakeData.createMarshall()),
-                new Exercise("Hiking", FakeData.createMichael()),
+        Date now = new Date();
+        final FreeEvent[] exercises = new FreeEvent[]{
+                new FreeEvent(FakeData.createAnnie(), now, now),
+                new FreeEvent(FakeData.createJenny(), now, now),
+                new FreeEvent(FakeData.createMarshall(), now, now),
+                new FreeEvent(FakeData.createMichael(), now, now),
         };
         MatchesArrayAdapter adapter = new MatchesArrayAdapter(hostActivity.getApplicationContext(), R.layout.listview_match_row, exercises);
 
         ListView matchList = (ListView)view.findViewById(R.id.allMatchesList);
         matchList.setAdapter(adapter);
+        matchList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                User userClicked = exercises[position].getUser(0);
+                String userClickedName = userClicked.getName();
+                Log.i("allMatches", userClickedName);
+                Intent intent = new Intent(hostActivity, UserProfile.class);
+                intent.putExtra("userClicked", userClicked);
+                startActivity(intent);
+
+            }
+        });
 
         return view;
+    }
+
+    private void goToProfile(User user){
+        Log.i("goToProfile", "listener works");
+        Intent intent = new Intent(hostActivity.getApplicationContext(), UserProfile.class);
+        this.startActivity(intent);
     }
 
     // TODO: Rename method, update argument and hook method into UI event

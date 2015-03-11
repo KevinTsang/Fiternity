@@ -137,6 +137,7 @@ public class FiternityInstance extends Application /*implements UserDocInterface
                 .putExtra(Events.TITLE, "Fiternity")
                 .putExtra(Events.AVAILABILITY, Events.AVAILABILITY_BUSY)
                 .putExtra(Intent.EXTRA_EMAIL, user.getEmail());
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
 
@@ -144,6 +145,7 @@ public class FiternityInstance extends Application /*implements UserDocInterface
         long eventId = 1; // find a way to get the event ID they want to edit and put it here
         Uri uri = ContentUris.withAppendedId(Events.CONTENT_URI, eventId);
         Intent intent = new Intent(Intent.ACTION_EDIT).setData(uri).putExtra(Events.TITLE, "Fiternity");
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
 
@@ -153,6 +155,7 @@ public class FiternityInstance extends Application /*implements UserDocInterface
         builder.appendPath("time");
         ContentUris.appendId(builder, startMillis);
         Intent intent = new Intent(Intent.ACTION_VIEW).setData(builder.build());
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
 
