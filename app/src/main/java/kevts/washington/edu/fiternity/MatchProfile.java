@@ -17,6 +17,8 @@ import java.util.List;
 
 
 public class MatchProfile extends ActionBarActivity {
+    private FiternityInstance fiternityInstance;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +26,8 @@ public class MatchProfile extends ActionBarActivity {
         setContentView(R.layout.activity_matches_profile);
         User user = (User) getIntent().getSerializableExtra("userClicked");
         Log.i("UserProfile", user.getName());
+        fiternityInstance = (FiternityInstance) getApplicationContext();
+
 
         TextView name, gender, age;
         name = (TextView) this.findViewById(R.id.userName);
@@ -62,6 +66,23 @@ public class MatchProfile extends ActionBarActivity {
         matchList.setAdapter(adapter);
     }
 
+    public void addEventToSingleton(FreeEvent event){
+        fiternityInstance.addRequestedFreeEvent(event);
+        Log.i("addEventToSingleton", "Added "+event.getUser(0).getName()+"'s event");
+    }
+
+    public boolean isEventRequested(FreeEvent event){
+        List<FreeEvent> events = fiternityInstance.getRequestedFreeEvents();
+        if(events.size() == 0){
+            Log.i("Requested events", "no events");
+        }else {
+            for (int i = 0; i < events.size(); i++) {
+                Log.i("Requested events", events.get(i).toString());
+            }
+        }
+        Log.i("Requested events", event.toString());
+        return fiternityInstance.getRequestedFreeEvents().contains(event);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

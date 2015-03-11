@@ -40,7 +40,7 @@ public class FiternityInstance extends Application /*implements UserDocInterface
     private static FiternityInstance instance;
     private ParseUser user;
     private ParseUser otherUser; // take this out later.
-    private List<User> contacted;
+    private List<FreeEvent> requestedFreeEvents;
 
     public FiternityInstance() {
         if (instance == null) {
@@ -82,6 +82,7 @@ public class FiternityInstance extends Application /*implements UserDocInterface
                 }
             }
         });
+        requestedFreeEvents = new ArrayList<FreeEvent>();
         createCalendar();
     }
 
@@ -161,7 +162,11 @@ public class FiternityInstance extends Application /*implements UserDocInterface
         startActivity(intent);
     }
 
-    public void addContacted(User user){}
+    public void addRequestedFreeEvent(FreeEvent freeEvent){
+        this.requestedFreeEvents.add(freeEvent);
+    }
+
+    public List<FreeEvent> getRequestedFreeEvents(){ return this.requestedFreeEvents;}
 
     /*
     public int getUserId() {

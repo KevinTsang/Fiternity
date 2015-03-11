@@ -1,6 +1,7 @@
 package kevts.washington.edu.fiternity;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,9 +27,10 @@ public class MatchProfileArrayAdapter extends ArrayAdapter<FreeEvent> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         View row = convertView;
         MatchHolder holder = null;
+        final MatchProfile parentContext = (MatchProfile) parent.getContext();
 
         if(row == null){
             LayoutInflater inflater = (LayoutInflater)context.getSystemService
@@ -39,12 +41,17 @@ public class MatchProfileArrayAdapter extends ArrayAdapter<FreeEvent> {
             holder.startTime = (TextView)row.findViewById(R.id.match_start_time);
             holder.endTime = (TextView)row.findViewById(R.id.match_end_time);
             holder.requestButton = (Button)row.findViewById(R.id.requestButton);
+            Log.i("MatchProfileAdapter", Boolean.toString(parentContext.isEventRequested(eventArr[position])));
+            if(parentContext.isEventRequested(eventArr[position])){
+                holder.requestButton.setText("Cancel");
+            }
             holder.requestButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     MatchHolder mh = (MatchHolder) v.getTag();
                     if(mh.requestButton.getText().equals("Request")){
                         mh.requestButton.setText("Cancel");
+                        parentContext.addEventToSingleton(eventArr[position]);
                     }else{
                         mh.requestButton.setText("Request");
                     }

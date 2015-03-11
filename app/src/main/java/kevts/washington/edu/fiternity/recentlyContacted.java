@@ -1,13 +1,19 @@
 package kevts.washington.edu.fiternity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 //import android.app.Fragment;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ListView;
+
+import java.util.List;
 
 
 /**
@@ -19,7 +25,7 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class recentlyContacted extends Fragment {
-
+    private Matches hostActivity;
 
     //private OnFragmentInteractionListener mListener;
 
@@ -57,7 +63,31 @@ public class recentlyContacted extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_recently_contacted, container, false);
+        View view = inflater.inflate(R.layout.fragment_all_matches, container, false);
+
+        List<FreeEvent> recent = hostActivity.getRecentEvents();
+        if(recent.size()>0) {
+            final FreeEvent[] freeEvents = new FreeEvent[recent.size()];
+            recent.toArray(freeEvents);
+
+            MatchesArrayAdapter adapter = new MatchesArrayAdapter(hostActivity.getApplicationContext(), R.layout.listview_match_row, freeEvents);
+
+            ListView matchList = (ListView) view.findViewById(R.id.allMatchesList);
+            matchList.setAdapter(adapter);
+            matchList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    User userClicked = freeEvents[position].getUser(0);
+                    String userClickedName = userClicked.getName();
+                    Log.i("allMatches", userClickedName);
+                    Intent intent = new Intent(hostActivity, MatchProfile.class);
+                    intent.putExtra("userClicked", userClicked);
+                    startActivity(intent);
+
+                }
+            });
+        }
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -70,6 +100,8 @@ public class recentlyContacted extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        this.hostActivity = (Matches) activity;
+
         try {
             //mListener = (OnFragmentInteractionListener) activity;
         } catch (ClassCastException e) {

@@ -45,4 +45,5 @@ public class FreeEvent implements Serializable {
     }
 
     public void addUser(User user){ this.users.add(user);}
+
 }
