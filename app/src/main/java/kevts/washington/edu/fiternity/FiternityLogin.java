@@ -105,14 +105,17 @@ public class FiternityLogin extends FragmentActivity {
             }
         });
 
-        EditText emailText = (EditText) findViewById(R.id.email);
-        EditText passwordText = (EditText) findViewById(R.id.password);
-        final String email = emailText.getText().toString();
-        final String password = passwordText.getText().toString();
+        final AutoCompleteTextView emailText = (AutoCompleteTextView) findViewById(R.id.email);
+        final EditText passwordText = (EditText) findViewById(R.id.password);
+
         Button tempLogin = (Button)findViewById(R.id.email_sign_in_button);
         tempLogin.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                final String email = emailText.getText().toString();
+                Log.d("email: ", email);
+                final String password = passwordText.getText().toString();
+
                 ParseQuery<ParseUser> queryEmail = ParseUser.getQuery();
                 queryEmail.whereEqualTo("email", email);
                 queryEmail.getFirstInBackground(new GetCallback<ParseUser>() {
@@ -120,10 +123,10 @@ public class FiternityLogin extends FragmentActivity {
                     public void done(ParseUser parseUser, ParseException e) {
                         if (e == null) {
                             String username = parseUser.getUsername();
-                            setUser(parseUser);
+                            setUser(parseUser, email);
                             Intent intent = new Intent(FiternityLogin.this, Matches.class);
                             startActivity(intent);
-
+                            finish();
                         } else {
                             Toast.makeText(FiternityLogin.this, "Welcome!", Toast.LENGTH_SHORT).show();
                             Log.d("DEBUG", e.toString());
@@ -138,11 +141,11 @@ public class FiternityLogin extends FragmentActivity {
         });
     }
 
-    private void setUser(ParseUser parseUser) {
+    private void setUser(ParseUser parseUser, String email) {
         User newUser = new User();
         newUser.setPhoneNumber(parseUser.getString("phonenumber"));
         newUser.setSameGenderPreference(parseUser.getBoolean("genderpreference"));
-        newUser.setEmail(parseUser.getEmail());
+        newUser.setEmail(email);
         newUser.setGender(parseUser.getString("gender").charAt(0));
         newUser.setName(parseUser.getString("name"));
         newUser.setZipCode(parseUser.getInt("zipcode"));
