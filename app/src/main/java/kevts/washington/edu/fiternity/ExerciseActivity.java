@@ -20,6 +20,7 @@ import android.widget.FrameLayout;
 import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -40,9 +41,6 @@ public class ExerciseActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exercise);
-
-        seekTop = (SeekBar) findViewById(R.id.user_exp_level);
-        seekBottom = (SeekBar) findViewById(R.id.partner_exp_level);
 
         User user = ((FiternityInstance)getApplication()).getUser();
         if (user.getExercises().size() == 0) {
@@ -116,30 +114,6 @@ public class ExerciseActivity extends ActionBarActivity {
         LayoutInflater inflater = getLayoutInflater();
         View dialogLayout = inflater.inflate(R.layout.exp_level_setter_fragment, null);
         builder.setView(dialogLayout);
-
-        seekTop.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                user_level = progress;
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) { }
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) { }
-        });
-        seekBottom.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                partner_level = progress;
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) { }
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) { }
-        });
-
         builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -175,8 +149,33 @@ public class ExerciseActivity extends ActionBarActivity {
 
             }
         });
+
         builder.create();
         builder.show();
+        seekTop = (SeekBar) dialogLayout.findViewById(R.id.user_exp_level);
+        seekBottom = (SeekBar) dialogLayout.findViewById(R.id.partner_exp_level);
+        seekTop.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekTop, int progress, boolean fromUser) {
+                user_level = progress;
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekTop) { }
+            @Override
+            public void onStopTrackingTouch(SeekBar seekTop) { }
+        });
+        seekBottom.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBottom, int progress, boolean fromUser) {
+                partner_level = progress;
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBottom) { }
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBottom) { }
+        });
     }
 
 
