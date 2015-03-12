@@ -167,6 +167,10 @@ public class FiternityInstance extends Application /*implements UserDocInterface
         this.requestedFreeEvents.add(freeEvent);
     }
 
+    public void removeRequestedFreeEvent(FreeEvent freeEvent){
+        this.requestedFreeEvents.remove(freeEvent);
+    }
+
     public List<FreeEvent> getRequestedFreeEvents(){ return this.requestedFreeEvents;}
 
     /*
