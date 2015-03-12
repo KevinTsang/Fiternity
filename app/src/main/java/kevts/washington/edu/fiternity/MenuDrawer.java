@@ -10,6 +10,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -40,14 +41,18 @@ public class MenuDrawer extends ActionBarActivity {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
-        mDrawerList.setAdapter(new ArrayAdapter<String>(this,
-                R.layout.drawer_list_item, mTitles));
+        mDrawerList.setAdapter(new ArrayAdapter<>(this, R.layout.drawer_list_item, mTitles));
+
+        int first = mDrawerList.getFirstVisiblePosition();
+        int last = mDrawerList.getLastVisiblePosition();
+        Log.i("info", "First: " + first + ", last: " + last);
 
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                /* Create intents with classes, add/delete cases as needed */
+            public void onItemClick(AdapterView parent, View v, int position, long id) {
+                /* Create intents with classes */
                 Intent intent;
+                Log.i("info", "Holy shit, the click registered");
                 switch(position) {
                     // Profile
                     case 0:
@@ -90,6 +95,7 @@ public class MenuDrawer extends ActionBarActivity {
                 }
             }
         });
+
         mDrawerToggle = new ActionBarDrawerToggle(
                 this,                  /* host Activity */
                 mDrawerLayout,         /* DrawerLayout object */
@@ -98,12 +104,16 @@ public class MenuDrawer extends ActionBarActivity {
         ) {
             /** Called when a drawer has settled in a completely closed state. */
             public void onDrawerClosed(View view) {
-                getActionBar().setTitle(mTitle);
+                super.onDrawerClosed(view);
+                getActionBar().setTitle("Fiternity");
             }
 
             /** Called when a drawer has settled in a completely open state. */
             public void onDrawerOpened(View drawerView) {
-                getActionBar().setTitle(mTitle);
+                Log.i("info", "Holy shit, the drawer is about to open");
+                super.onDrawerOpened(drawerView);
+                getActionBar().setTitle("Menu");
+                Log.i("info", "Holy shit, the drawer opened");
             }
         };
 
