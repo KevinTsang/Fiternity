@@ -40,16 +40,16 @@ public class ProfileActivity extends Activity {
             @Override
             public void onClick(View v) {
                 // Save profile here
-                if (validInput()) {
+//                if (validInput()) {
                     Log.d("valid input", " true");
                     User user = instance.getUser();
                     setUser(user);
                     Intent intent = new Intent(ProfileActivity.this, ExerciseActivity.class);
                     startActivity(intent);
-                } else {
-                    Toast.makeText(ProfileActivity.this, "Please fill out the forms correctly", Toast.LENGTH_SHORT).show();
-                    Log.d("valid input", " false");
-                }
+//                } else {
+//                    Toast.makeText(ProfileActivity.this, "Please fill out the forms correctly", Toast.LENGTH_SHORT).show();
+//                    Log.d("valid input", " false");
+//                }
             }
         });
     }
@@ -78,7 +78,7 @@ public class ProfileActivity extends Activity {
         user.setName(userName.getText().toString());
         user.setEmail(userEmail.getText().toString());
         user.setPhoneNumber(userPhone.getText().toString());
-        user.setZipCode(Integer.parseInt(userZip.getText().toString()));
+//        user.setZipCode(Integer.parseInt(userZip.getText().toString()));
         user.setAge(agePicker.getValue());
         user.setGender(genderSpinner.getSelectedItem().toString().charAt(0));
         user.setSameGenderPreference(genderPreference.isChecked());

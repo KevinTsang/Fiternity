@@ -41,7 +41,8 @@ public class MenuDrawer extends ActionBarActivity {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
-        //mDrawerList.setAdapter(new ArrayAdapter<>(this, R.layout.drawer_list_item, mTitles));
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.drawer_list_item, mTitles);
+        mDrawerList.setAdapter(adapter);
 
         int first = mDrawerList.getFirstVisiblePosition();
         int last = mDrawerList.getLastVisiblePosition();
@@ -69,6 +70,7 @@ public class MenuDrawer extends ActionBarActivity {
                         builder.appendPath("time");
                         ContentUris.appendId(builder, startMillis);
                         intent = new Intent(Intent.ACTION_VIEW).setData(builder.build());
+                        // Prepopulate user events if they don't exist?
                         startActivityForResult(intent, CALENDAR_ACCESSED);
                         break;
 
@@ -105,14 +107,14 @@ public class MenuDrawer extends ActionBarActivity {
             /** Called when a drawer has settled in a completely closed state. */
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
-                getActionBar().setTitle("Fiternity");
+                getSupportActionBar().setTitle("Fiternity");
             }
 
             /** Called when a drawer has settled in a completely open state. */
             public void onDrawerOpened(View drawerView) {
                 Log.i("info", "Holy shit, the drawer is about to open");
                 super.onDrawerOpened(drawerView);
-                getActionBar().setTitle("Menu");
+                getSupportActionBar().setTitle("Menu");
                 Log.i("info", "Holy shit, the drawer opened");
             }
         };

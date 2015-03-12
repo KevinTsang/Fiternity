@@ -16,14 +16,6 @@ import android.widget.ListView;
 import java.util.List;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link recentlyContacted.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link recentlyContacted#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class recentlyContacted extends Fragment {
     private Matches hostActivity;
 

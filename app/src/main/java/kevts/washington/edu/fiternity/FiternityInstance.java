@@ -207,10 +207,10 @@ public class FiternityInstance extends Application /*implements UserDocInterface
 
     public void removeRequestedFreeEvent(FreeEvent freeEvent){
 
-        Log.i("removeRequestedFreeEvent", "before size ="+this.requestedFreeEvents.size());
+        Log.i("rmReqFreeEvent", "before size ="+this.requestedFreeEvents.size());
 
         this.requestedFreeEvents.remove(freeEvent);
-        Log.i("removeRequestedFreeEvent", "after size ="+this.requestedFreeEvents.size());
+        Log.i("rmReqFreeEvent", "after size ="+this.requestedFreeEvents.size());
 
     }
 

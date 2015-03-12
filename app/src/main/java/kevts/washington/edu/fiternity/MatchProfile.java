@@ -73,7 +73,7 @@ public class MatchProfile extends ActionBarActivity {
 
     public void removeEventFromSingleton(FreeEvent event){
         fiternityInstance.removeRequestedFreeEvent(event);
-        Log.i("removeEventFromSingleton", "Removed "+event.getUser(0).getName()+"'s event");
+        Log.i("rmEventFromSingleton", "Removed "+event.getUser(0).getName()+"'s event");
     }
 
 
