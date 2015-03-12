@@ -11,7 +11,9 @@ import android.os.Bundle;
 import android.support.v7.internal.app.WindowDecorActionBar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TabHost;
 
@@ -29,6 +31,14 @@ public class Matches extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_matches);
+        Button menuButton = (Button)findViewById(R.id.matches_menu_button);
+        menuButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent toMenu = new Intent(Matches.this, MenuDrawer.class);
+                startActivity(toMenu);
+            }
+        });
 
         //sets up the tabs
         ActionBar actionBar = getSupportActionBar();

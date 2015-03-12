@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -24,6 +25,14 @@ public class MatchProfile extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_matches_profile);
+        Button menuButton = (Button)findViewById(R.id.matchprofile_menu_button);
+        menuButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent toMenu = new Intent(MatchProfile.this, MenuDrawer.class);
+                startActivity(toMenu);
+            }
+        });
         User user = (User) getIntent().getSerializableExtra("userClicked");
         Log.i("UserProfile", user.getName());
         fiternityInstance = (FiternityInstance) getApplicationContext();

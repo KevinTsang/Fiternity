@@ -7,5 +7,9 @@
     android:theme="@android:style/Theme.WithActionBar"
     android:id="@+id/FragContainer"
     tools:context="kevts.washington.edu.fiternity.Matches">
-
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/matches_menu_button"
+        android:text="menu"/>
 </RelativeLayout>

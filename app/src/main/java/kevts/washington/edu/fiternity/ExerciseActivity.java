@@ -42,7 +42,14 @@ public class ExerciseActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exercise);
-
+        Button menuButton = (Button)findViewById(R.id.exercise_menu_button);
+        menuButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent toMenu = new Intent(ExerciseActivity.this, MenuDrawer.class);
+                startActivity(toMenu);
+            }
+        });
         User user = ((FiternityInstance)getApplication()).getUser();
         if (user.getExercises().size() == 0) {
             exerciseArrayList = new ArrayList<Exercise>();

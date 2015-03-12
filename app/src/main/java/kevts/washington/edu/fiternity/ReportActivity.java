@@ -1,5 +1,6 @@
 package kevts.washington.edu.fiternity;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,6 +25,14 @@ public class ReportActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report);
+        Button menuButton = (Button)findViewById(R.id.report_menu_button);
+        menuButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent toMenu = new Intent(ReportActivity.this, MenuDrawer.class);
+                startActivity(toMenu);
+            }
+        });
 
         final EditText reportText = (EditText) findViewById(R.id.feedback_report_edit_text);
 
