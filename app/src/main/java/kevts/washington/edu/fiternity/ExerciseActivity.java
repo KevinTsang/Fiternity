@@ -56,6 +56,30 @@ public class ExerciseActivity extends ActionBarActivity {
         } else {
             // todo initialize existing exercises when user comes back to activity based on
             // saved exercises
+            for (final Exercise e : user.getExercises()) {
+                final GridLayout exercises = (GridLayout) findViewById(R.id.exercises);
+                final LinearLayout ll = new LinearLayout(ExerciseActivity.this);
+                ll.setOrientation(LinearLayout.HORIZONTAL);
+                exerciseArrayList.add(e);
+                TextView exercise = new TextView(ExerciseActivity.this);
+                exercise.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        createDialog(e.getExerciseName());
+                    }
+                });
+                ll.addView(exercise);
+                Button button = new Button(ExerciseActivity.this);
+                button.setText("(x)  " + e.getExerciseName());
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        exercises.removeView(ll);
+                    }
+                });
+                ll.addView(button);
+                exercises.addView(ll);
+            }
         }
         exerciseArrayList = new ArrayList<Exercise>();
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
