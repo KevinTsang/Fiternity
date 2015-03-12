@@ -40,7 +40,7 @@ public class MenuDrawer extends ActionBarActivity {
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
         mDrawerList.setAdapter(new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, android.R.id.text1, mTitles));
+                R.layout.drawer_list_item, mTitles));
 
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
