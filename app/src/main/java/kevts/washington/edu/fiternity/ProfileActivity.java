@@ -3,11 +3,13 @@ package kevts.washington.edu.fiternity;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
 
@@ -24,8 +26,13 @@ public class ProfileActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 // Save profile here
-                Intent intent = new Intent(ProfileActivity.this, ExerciseActivity.class);
-                startActivity(intent);
+                if (validInput()) {
+                    Log.d("valid input", " true");
+                    Intent intent = new Intent(ProfileActivity.this, ExerciseActivity.class);
+                    startActivity(intent);
+                } else {
+                    Log.d("valid input", " false");
+                }
             }
         });
     }
@@ -40,6 +47,20 @@ public class ProfileActivity extends ActionBarActivity {
                 android.R.layout.simple_spinner_item, new String[] {"M", "F"});
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         genderSpinner.setAdapter(adapter);
+    }
+
+    private boolean validInput() {
+        boolean valid = true;
+        NumberPicker agePicker = (NumberPicker)findViewById(R.id.user_age);
+        Spinner genderSpinner = (Spinner)findViewById(R.id.user_gender_selector);
+        EditText userName = (EditText) findViewById(R.id.user_name);
+        EditText userEmail = (EditText) findViewById(R.id.user_email);
+        EditText userPhone = (EditText) findViewById(R.id.user_phone_number);
+        EditText userZip = (EditText) findViewById(R.id.user_zip_code);
+//        if (agePicker.getValue()) {
+//
+//        }
+        return valid;
     }
 
     @Override
