@@ -22,7 +22,7 @@ import com.parse.SignUpCallback;
  */
 public class FeedbackFragment extends Fragment {
 
-    private ParseUser friendUser;
+    private User friendUser;
 
     public static FeedbackFragment newInstance() {
         FeedbackFragment fragment = new FeedbackFragment();
@@ -79,7 +79,7 @@ public class FeedbackFragment extends Fragment {
     }
 
     private void setFriendUser() {
-        friendUser = FakeData.createJenny().userToParseUser();
+        friendUser = FakeData.createJenny();
         friendUser.setUsername("jennyTest");
         friendUser.setPassword("password");
         friendUser.setEmail("conscientiaexnihilo132@mailinator.com");

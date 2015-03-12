@@ -44,7 +44,7 @@ public class Matches extends ActionBarActivity {
         actionBar.addTab(allTab);
         actionBar.addTab(recentTab);
 
-        fiternityInstance = (FiternityInstance) getApplicationContext();
+        fiternityInstance = (FiternityInstance) getApplication();
 
 
     }

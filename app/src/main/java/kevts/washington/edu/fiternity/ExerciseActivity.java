@@ -28,12 +28,21 @@ import java.util.Calendar;
 public class ExerciseActivity extends ActionBarActivity {
 
     static final int CALENDAR_ACCESSED = 21;
+    private ArrayAdapter<String> adapter;
+    private ArrayList<Exercise> exerciseArrayList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exercise);
-
+        User user = ((FiternityInstance)getApplication()).getUser();
+        if (user.getExercises().size() == 0) {
+            exerciseArrayList = new ArrayList<Exercise>();
+        } else {
+            // todo initialize existing exercises when user comes back to activity based on
+            // saved exercises
+        }
+        exerciseArrayList = new ArrayList<Exercise>();
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_dropdown_item_1line, getExercises());
         final AutoCompleteTextView searchBox = (AutoCompleteTextView)findViewById(R.id.searchBox);
@@ -42,7 +51,7 @@ public class ExerciseActivity extends ActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String exercise = searchBox.getAdapter().getItem(position).toString();
-                searchBox.setText(exercise);
+                searchBox.setText("");
                 createDialog(exercise);
             }
         });
@@ -50,14 +59,12 @@ public class ExerciseActivity extends ActionBarActivity {
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Max, please save all user profile data here
-                // call addExercise on the user gotten from the instance
                 long startMillis = Calendar.getInstance().getTimeInMillis();
                 Uri.Builder builder = CalendarContract.CONTENT_URI.buildUpon();
                 builder.appendPath("time");
                 ContentUris.appendId(builder, startMillis);
+                saveExercises();
                 Intent intent = new Intent(Intent.ACTION_VIEW).setData(builder.build());
-
                 startActivityForResult(intent, CALENDAR_ACCESSED);
             }
         });
@@ -76,8 +83,24 @@ public class ExerciseActivity extends ActionBarActivity {
         }
     }
 
+    private void saveExercises() {
+        FiternityInstance instance = (FiternityInstance)getApplication();
+        User user = instance.getUser();
+        GridLayout exercisesHolderLayout = (GridLayout)findViewById(R.id.exercises);
+        // Max, you need to modify the createDialog method below to get data from
+        // the seekbars within exp_level_setter_fragment.xml and add them to the
+        // private arraylist variable up there by creating a new exercise and
+        // saving it when the user clicks the positive dialog button
+        user.getExercises().clear(); // clears all user exercises
+        // will come up with a way to compare diffs later, but for now this is fine
+        for (Exercise e : exerciseArrayList) {
+            user.addExercise(e);
+        }
+    }
+
     private void createDialog(String exercise) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final String exerciseName = exercise;
         builder.setTitle(exercise);
         LayoutInflater inflater = getLayoutInflater();
         View dialogLayout = inflater.inflate(R.layout.exp_level_setter_fragment, null);
@@ -92,21 +115,22 @@ public class ExerciseActivity extends ActionBarActivity {
                 exercise.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        String exerciseName = ((TextView)v).getText().toString();
                         createDialog(exerciseName);
                     }
                 });
                 ll.addView(exercise);
                 Button button = new Button(ExerciseActivity.this);
-                button.setText("x");
+                button.setText("(x)  " + exerciseName);
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         exercises.removeView(ll);
+                        adapter.add(exerciseName);
                     }
                 });
                 ll.addView(button);
                 exercises.addView(ll);
+                adapter.remove(exerciseName);
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -144,6 +168,6 @@ public class ExerciseActivity extends ActionBarActivity {
 
     public String[] getExercises() {
 
-        return new String[] {"swimming", "tennis", "baseball", "football", "soccer", "kendo", "karate"};
+        return new String[] {"swimming", "tennis", "baseball", "football", "soccer", "kendo", "karate", "aerobic", "cartwheels", "dancing"};
     }
 }
