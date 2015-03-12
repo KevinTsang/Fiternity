@@ -1,5 +1,6 @@
 package kevts.washington.edu.fiternity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.provider.ContactsContract;
 import android.support.v7.app.ActionBarActivity;
@@ -17,7 +18,7 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 
-public class ProfileActivity extends ActionBarActivity {
+public class ProfileActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
