@@ -1,6 +1,10 @@
 package kevts.washington.edu.fiternity;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.net.Uri;
+import android.provider.CalendarContract;
+import android.provider.CalendarContract.Events;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 /**
  * Created by cvetand on 3/10/15.
@@ -19,6 +24,7 @@ public class MatchProfileArrayAdapter extends ArrayAdapter<FreeEvent> {
     Context context;
     int layoutResourceId;
     private FreeEvent[] eventArr;
+    long eventId;
 
     public MatchProfileArrayAdapter(Context context, int layoutResourceId, FreeEvent[] eventArr) {
         super(context, layoutResourceId, eventArr);
@@ -52,9 +58,28 @@ public class MatchProfileArrayAdapter extends ArrayAdapter<FreeEvent> {
                 public void onClick(View v) {
                     MatchHolder mh = (MatchHolder) v.getTag();
                     if(mh.requestButton.getText().equals("Request")){
+                        /*FiternityInstance instance = (FiternityInstance)context.getApplicationContext();
+                        long calendarId = instance.getCalendarId();
+                        if (calendarId != -1) {
+                            Calendar calendar = Calendar.getInstance();
+                            FreeEvent event = eventArr[position];
+                            ContentValues values = new ContentValues();
+                            values.put(Events.DTSTART, event.getStartTime().getTime());
+                            values.put(Events.DTEND, event.getEndTime().getTime());
+                            values.put(Events.TITLE, "Fiternity");
+                            values.put(Events.DESCRIPTION, event.getDescription());
+                            Uri uri = context.getContentResolver().insert(Events.CONTENT_URI, values);
+                            eventId =  new Long(uri.getLastPathSegment());
+                        }*/
                         mh.requestButton.setText("Cancel");
                         parentContext.addEventToSingleton(eventArr[position]);
                     }else{
+                        /*if (eventId != 0) {
+                            String[] selArgs = new String[] { eventId + "" };
+                            int deleted = context.getContentResolver().delete(Events.CONTENT_URI,
+                                    Events._ID + " =? ",
+                                    selArgs);
+                        }*/
                         mh.requestButton.setText("Request");
                         parentContext.removeEventFromSingleton(eventArr[position]);
 

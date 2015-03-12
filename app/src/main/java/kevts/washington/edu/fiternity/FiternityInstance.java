@@ -127,13 +127,13 @@ public class FiternityInstance extends Application /*implements UserDocInterface
 //        Uri result = this.getContentResolver().insert(calUri, cv);
     }
 
-    private long getCalendarId() {
+    public long getCalendarId() {
         String[] selectParameters = new String[] {Calendars._ID};
         String selection = Calendars.ACCOUNT_NAME + " = ? " +
                 Calendars.ACCOUNT_TYPE + " = ? ";
-        String[] selArgs = new String[] { user.getUsername() };
+        String[] selArgs = new String[] { user.getUsername(), CalendarContract.ACCOUNT_TYPE_LOCAL };
         Cursor cursor = getContentResolver().query(Calendars.CONTENT_URI,
-                projection, selection, selArgs, null);
+                selectParameters, selection, selArgs, null);
         if (cursor.moveToFirst()) {
             return cursor.getLong(0);
         }

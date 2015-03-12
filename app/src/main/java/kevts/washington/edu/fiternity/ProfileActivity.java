@@ -40,16 +40,16 @@ public class ProfileActivity extends Activity {
             @Override
             public void onClick(View v) {
                 // Save profile here
-//                if (validInput()) {
+                if (validInput()) {
                     Log.d("valid input", " true");
                     User user = instance.getUser();
                     setUser(user);
                     Intent intent = new Intent(ProfileActivity.this, ExerciseActivity.class);
                     startActivity(intent);
-//                } else {
-//                    Toast.makeText(ProfileActivity.this, "Please fill out the forms correctly", Toast.LENGTH_SHORT).show();
-//                    Log.d("valid input", " false");
-//                }
+                } else {
+                    Toast.makeText(ProfileActivity.this, "Please fill out the forms correctly", Toast.LENGTH_SHORT).show();
+                    Log.d("valid input", " false");
+                }
             }
         });
     }
