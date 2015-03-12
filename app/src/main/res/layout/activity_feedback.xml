@@ -1,7 +1,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:id="@+id/container"
     android:layout_width="match_parent" android:layout_height="match_parent"
-    tools:context="kevts.washington.edu.fiternity.FeedbackActivity" tools:ignore="MergeRootFrame" >
+    tools:context="kevts.washington.edu.fiternity.FeedbackActivity" >
 
     <LinearLayout
         android:orientation="vertical"
@@ -26,14 +26,10 @@
             android:src="@drawable/com_facebook_profile_picture_blank_square"
             android:layout_weight="0" />
 
-        <fragment
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:name="kevts.washington.edu.fiternity.FacebookFragment"
-            android:id="@+id/feedback_fragment"
-            android:layout_gravity="center_horizontal"
-            tools:layout="@layout/fragment_facebook"
-            android:layout_weight="1" />
+            android:layout_height="fill_parent"
+            android:id="@+id/feedback_fragment"></FrameLayout>
 
     </LinearLayout>
 

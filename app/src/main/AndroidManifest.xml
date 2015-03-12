@@ -63,10 +63,6 @@
             android:label="@string/title_activity_match_profile" >
         </activity>
         <activity
-            android:name=".SetupProfile"
-            android:label="@string/title_activity_setup_profile" >
-        </activity>
-        <activity
             android:name=".ExerciseActivity"
             android:label="@string/title_activity_exercise" >
         </activity>
