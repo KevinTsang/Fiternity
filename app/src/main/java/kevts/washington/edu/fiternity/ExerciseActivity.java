@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.provider.CalendarContract;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -120,7 +121,9 @@ public class ExerciseActivity extends ActionBarActivity {
                 final GridLayout exercises = (GridLayout) findViewById(R.id.exercises);
                 final LinearLayout ll = new LinearLayout(ExerciseActivity.this);
                 ll.setOrientation(LinearLayout.HORIZONTAL);
+                Log.i("info", "layout set");
                 exerciseArrayList.add(new Exercise(exerciseName, user_level, partner_level));
+                Log.i("info", "exercise added");
                 TextView exercise = new TextView(ExerciseActivity.this);
                 exercise.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -128,6 +131,7 @@ public class ExerciseActivity extends ActionBarActivity {
                         createDialog(exerciseName);
                     }
                 });
+                Log.i("info", "text view with listener created");
                 ll.addView(exercise);
                 Button button = new Button(ExerciseActivity.this);
                 button.setText("(x)  " + exerciseName);
@@ -135,12 +139,11 @@ public class ExerciseActivity extends ActionBarActivity {
                     @Override
                     public void onClick(View v) {
                         exercises.removeView(ll);
-                        adapter.add(exerciseName);
                     }
                 });
+                Log.i("info", "button with listener created");
                 ll.addView(button);
                 exercises.addView(ll);
-                adapter.remove(exerciseName);
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
