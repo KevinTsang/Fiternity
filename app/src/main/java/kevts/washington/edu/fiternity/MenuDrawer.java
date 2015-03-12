@@ -27,6 +27,8 @@ public class MenuDrawer extends ActionBarActivity {
     private ActionBarDrawerToggle mDrawerToggle;
     private CharSequence mTitle;
 
+    static final int CALENDAR_ACCESSED = 21;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,7 +63,7 @@ public class MenuDrawer extends ActionBarActivity {
                         builder.appendPath("time");
                         ContentUris.appendId(builder, startMillis);
                         intent = new Intent(Intent.ACTION_VIEW).setData(builder.build());
-                        startActivity(intent);
+                        startActivityForResult(intent, CALENDAR_ACCESSED);
                         break;
 
                     // Activities
@@ -108,6 +110,18 @@ public class MenuDrawer extends ActionBarActivity {
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == CALENDAR_ACCESSED) {
+            if (resultCode == RESULT_CANCELED) {
+                // read all Fiternity events here
+                FiternityInstance instance = (FiternityInstance)getApplication();
+//                ArrayList<FreeEvent> events = instance.getEvents(this, instance.getUser());
+                startActivity(new Intent(this, Matches.class));
+            }
+        }
     }
 
     @Override

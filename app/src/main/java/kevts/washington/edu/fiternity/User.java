@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Created by kevin on 3/7/15.
  */
-public class User implements Serializable {
+public class User extends ParseUser implements Serializable {
     private int userId;
     private String name;
     private int age;
@@ -25,6 +25,7 @@ public class User implements Serializable {
 
     public User() {
         exerciseList = new ArrayList<Exercise>();
+        freeTimes = new ArrayList<FreeEvent>();
         // construct using Facebook's information
         // once I figure out how to pull from there
     }

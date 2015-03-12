@@ -3,6 +3,7 @@ package kevts.washington.edu.fiternity;
 import android.app.Application;
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -20,6 +21,7 @@ import com.parse.SignUpCallback;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -38,7 +40,7 @@ public class FiternityInstance extends Application /*implements UserDocInterface
     private static String PARSE_APPLICATION_ID;
     private static String PARSE_CLIENT_KEY;
     private static FiternityInstance instance;
-    private ParseUser user;
+    private User user;
     private ParseUser otherUser; // take this out later.
     private List<FreeEvent> requestedFreeEvents;
 
@@ -57,15 +59,14 @@ public class FiternityInstance extends Application /*implements UserDocInterface
     @Override
     public void onCreate() {
         super.onCreate();
-        ParseObject.registerSubclass(ParseUser.class);
+        ParseObject.registerSubclass(User.class);
         ParseObject.registerSubclass(Feedback.class);
         PARSE_APPLICATION_ID = getString(R.string.parse_application_id);
         PARSE_CLIENT_KEY = getString(R.string.parse_client_key);
         Parse.initialize(this, PARSE_APPLICATION_ID, PARSE_CLIENT_KEY);
         // WARNING: THIS IS MOST LIKELY A PRIVATE KEY.
         // TAKE THIS OUT LATER, POTENTIALLY.
-        user = FakeData.createAnnie().userToParseUser();
-        Log.d("User created:", user.get("name").toString());
+        user = FakeData.createAnnie();
         user.setUsername("test");
         user.setPassword("password");
         user.setEmail("conscientiaexnihilo@mailinator.com");
@@ -96,8 +97,8 @@ public class FiternityInstance extends Application /*implements UserDocInterface
         otherUser = u;
     }
 
-    public void setUser(ParseUser parseUser) {
-        user = parseUser;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public void createCalendar() {
@@ -161,6 +162,38 @@ public class FiternityInstance extends Application /*implements UserDocInterface
         Intent intent = new Intent(Intent.ACTION_VIEW).setData(builder.build());
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent); // replace with startActivityForResult
+    }
+
+    public ArrayList<FreeEvent> getEvents(Context context, User user) {
+        Cursor cursor = context.getContentResolver()
+                .query(
+                        Uri.parse("content://com.android.calendar/events"),
+                        new String[] { "calendar_id", "title", "description",
+                                "dtstart", "dtend", "eventLocation" }, "title",
+                        new String[] {"Fiternity"}, null);
+
+        // explanation: first String[] is the columns to return
+        // second argument (String) is filter by a column name
+        // third is what values they're supposed to have
+        // fourth is the order by clause
+        cursor.moveToFirst();
+        // fetching calendars name
+        String CNames[] = new String[cursor.getCount()];
+
+        // fetching calendars id
+        ArrayList<FreeEvent> eventsList = new ArrayList<FreeEvent>();
+        for (int i = 0; i < CNames.length; i++) {
+            long startMillis = Long.parseLong(cursor.getString(3));
+            long endMillis = Long.parseLong(cursor.getString(4));
+            Date startDate = new Date(startMillis);
+            Date endDate = new Date(endMillis);
+            FreeEvent freeEvent = new FreeEvent(user, startDate, endDate);
+            freeEvent.setDescription(cursor.getString(2));
+            CNames[i] = cursor.getString(1);
+            cursor.moveToNext();
+
+        }
+        return eventsList;
     }
 
     public void addRequestedFreeEvent(FreeEvent freeEvent){

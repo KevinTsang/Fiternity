@@ -12,6 +12,7 @@ public class FreeEvent implements Serializable {
     private ArrayList<User> users;
     private Date startTime;
     private Date endTime;
+    private String description;
 
     public FreeEvent(User user, Date startTime, Date endTime){
         this.users = new ArrayList<User>();
@@ -46,6 +47,14 @@ public class FreeEvent implements Serializable {
     }
 
     public void addUser(User user){ this.users.add(user);}
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     @Override
     public boolean equals(Object o) {

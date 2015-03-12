@@ -21,6 +21,7 @@ import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 
@@ -49,11 +50,14 @@ public class ExerciseActivity extends ActionBarActivity {
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Max, please save all user profile data here
+                // call addExercise on the user gotten from the instance
                 long startMillis = Calendar.getInstance().getTimeInMillis();
                 Uri.Builder builder = CalendarContract.CONTENT_URI.buildUpon();
                 builder.appendPath("time");
                 ContentUris.appendId(builder, startMillis);
                 Intent intent = new Intent(Intent.ACTION_VIEW).setData(builder.build());
+
                 startActivityForResult(intent, CALENDAR_ACCESSED);
             }
         });
@@ -62,8 +66,10 @@ public class ExerciseActivity extends ActionBarActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CALENDAR_ACCESSED) {
-            if (resultCode == RESULT_OK) {
+            if (resultCode == RESULT_CANCELED) {
                 // read all Fiternity events here
+                FiternityInstance instance = (FiternityInstance)getApplication();
+//                ArrayList<FreeEvent> events = instance.getEvents(this, instance.getUser());
                 startActivity(new Intent(this, Matches.class));
             }
         }
