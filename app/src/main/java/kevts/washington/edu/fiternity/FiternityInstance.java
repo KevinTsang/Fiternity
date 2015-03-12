@@ -41,7 +41,7 @@ public class FiternityInstance extends Application /*implements UserDocInterface
     private static String PARSE_CLIENT_KEY;
     private static FiternityInstance instance;
     private User user;
-    private ParseUser otherUser; // take this out later.
+    private User otherUser; // take this out later.
     private List<FreeEvent> requestedFreeEvents;
 
     public FiternityInstance() {
@@ -96,7 +96,7 @@ public class FiternityInstance extends Application /*implements UserDocInterface
     public ParseUser getOtherUser() {
         return otherUser;
     }
-    public void setOtherUser(ParseUser u) {
+    public void setOtherUser(User u) {
         otherUser = u;
     }
 
