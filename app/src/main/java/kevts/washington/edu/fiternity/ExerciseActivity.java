@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -56,29 +57,23 @@ public class ExerciseActivity extends ActionBarActivity {
         } else {
             // todo initialize existing exercises when user comes back to activity based on
             // saved exercises
-            for (final Exercise e : user.getExercises()) {
-                final GridLayout exercises = (GridLayout) findViewById(R.id.exercises);
-                final LinearLayout ll = new LinearLayout(ExerciseActivity.this);
+            exerciseArrayList = (ArrayList<Exercise>) user.getExercises();
+            for (Exercise e : exerciseArrayList) {
+                String exerciseName = e.getExerciseName();
+                GridLayout exercises = (GridLayout) findViewById(R.id.exercises);
+                LinearLayout ll = new LinearLayout(ExerciseActivity.this);
                 ll.setOrientation(LinearLayout.HORIZONTAL);
-                exerciseArrayList.add(e);
+                int exerciseIndex = exerciseArrayList.size() - 1;
                 TextView exercise = new TextView(ExerciseActivity.this);
-                exercise.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        createDialog(e.getExerciseName());
-                    }
-                });
+                exercise.setText(exerciseName);
+                exercise.setOnClickListener(createExerciseDialogListener(exerciseName));
                 ll.addView(exercise);
                 Button button = new Button(ExerciseActivity.this);
-                button.setText("(x)  " + e.getExerciseName());
-                button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        exercises.removeView(ll);
-                    }
-                });
+                button.setText("X");
+                button.setOnClickListener(removeExerciseListener(exerciseIndex, ll, exercises));
                 ll.addView(button);
                 exercises.addView(ll);
+
             }
         }
         exerciseArrayList = new ArrayList<Exercise>();
@@ -137,9 +132,8 @@ public class ExerciseActivity extends ActionBarActivity {
         }
     }
 
-    private void createDialog(String exercise) {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        final String exerciseName = exercise;
+    private void createDialog(final String exercise) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
         user_level = 0;
         partner_level = 0;
         builder.setTitle(exercise);
@@ -149,26 +143,18 @@ public class ExerciseActivity extends ActionBarActivity {
         builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                final GridLayout exercises = (GridLayout) findViewById(R.id.exercises);
-                final LinearLayout ll = new LinearLayout(ExerciseActivity.this);
+                GridLayout exercises = (GridLayout) findViewById(R.id.exercises);
+                LinearLayout ll = new LinearLayout(ExerciseActivity.this);
                 ll.setOrientation(LinearLayout.HORIZONTAL);
-                exerciseArrayList.add(new Exercise(exerciseName, user_level, partner_level));
-                TextView exercise = new TextView(ExerciseActivity.this);
-                exercise.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        createDialog(exerciseName);
-                    }
-                });
-                ll.addView(exercise);
+                exerciseArrayList.add(new Exercise(exercise, user_level, partner_level));
+                int exerciseIndex = exerciseArrayList.size() - 1;
+                TextView exerciseTextView = new TextView(ExerciseActivity.this);
+                exerciseTextView.setText(exercise);
+                exerciseTextView.setOnClickListener(createExerciseDialogListener(exercise));
+                ll.addView(exerciseTextView);
                 Button button = new Button(ExerciseActivity.this);
-                button.setText("(x)  " + exerciseName);
-                button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        exercises.removeView(ll);
-                    }
-                });
+                button.setText("X");
+                button.setOnClickListener(removeExerciseListener(exerciseIndex, ll, exercises));
                 ll.addView(button);
                 exercises.addView(ll);
             }
@@ -229,6 +215,27 @@ public class ExerciseActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private View.OnClickListener createExerciseDialogListener(final String exerciseName) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createDialog(exerciseName);
+            }
+        };
+    }
+
+    private View.OnClickListener removeExerciseListener(final int exerciseIndex, final LinearLayout ll, final GridLayout exercises) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                exerciseArrayList.remove(exerciseIndex);
+                ViewGroup parentView = (ViewGroup) v.getParent();
+                parentView.removeView(v);
+                exercises.removeView(ll);
+            }
+        };
     }
 
     public String[] getExercises() {
