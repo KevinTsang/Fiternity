@@ -50,7 +50,8 @@
                 android:layout_below="@+id/user_name"
                 android:layout_toRightOf="@+id/age_text"
                 android:layout_above="@+id/gender_text"
-                android:id="@+id/user_age" />
+                android:id="@+id/user_age"
+                android:baselineAligned="false" />
         </LinearLayout>
 
         <LinearLayout
