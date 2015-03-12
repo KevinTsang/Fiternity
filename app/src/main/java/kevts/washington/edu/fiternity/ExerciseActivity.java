@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.GridLayout;
 import android.widget.LinearLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -30,11 +31,19 @@ public class ExerciseActivity extends ActionBarActivity {
     static final int CALENDAR_ACCESSED = 21;
     private ArrayAdapter<String> adapter;
     private ArrayList<Exercise> exerciseArrayList;
+    private SeekBar seekTop;
+    private SeekBar seekBottom;
+    int user_level = 0;
+    int partner_level = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exercise);
+
+        seekTop = (SeekBar) findViewById(R.id.user_exp_level);
+        seekBottom = (SeekBar) findViewById(R.id.partner_exp_level);
+
         User user = ((FiternityInstance)getApplication()).getUser();
         if (user.getExercises().size() == 0) {
             exerciseArrayList = new ArrayList<Exercise>();
@@ -101,16 +110,43 @@ public class ExerciseActivity extends ActionBarActivity {
     private void createDialog(String exercise) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         final String exerciseName = exercise;
+        user_level = 0;
+        partner_level = 0;
         builder.setTitle(exercise);
         LayoutInflater inflater = getLayoutInflater();
         View dialogLayout = inflater.inflate(R.layout.exp_level_setter_fragment, null);
         builder.setView(dialogLayout);
+
+        seekTop.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                user_level = progress;
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) { }
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) { }
+        });
+        seekBottom.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                partner_level = progress;
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) { }
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) { }
+        });
+
         builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                final GridLayout exercises = (GridLayout)findViewById(R.id.exercises);
+                final GridLayout exercises = (GridLayout) findViewById(R.id.exercises);
                 final LinearLayout ll = new LinearLayout(ExerciseActivity.this);
                 ll.setOrientation(LinearLayout.HORIZONTAL);
+                exerciseArrayList.add(new Exercise(exerciseName, user_level, partner_level));
                 TextView exercise = new TextView(ExerciseActivity.this);
                 exercise.setOnClickListener(new View.OnClickListener() {
                     @Override
