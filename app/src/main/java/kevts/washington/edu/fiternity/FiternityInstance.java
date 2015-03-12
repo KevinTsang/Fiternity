@@ -87,7 +87,7 @@ public class FiternityInstance extends Application /*implements UserDocInterface
         createCalendar();
     }
 
-    public ParseUser getUser() {
+    public User getUser() {
         return user;
     }
     public ParseUser getOtherUser() {
@@ -169,7 +169,7 @@ public class FiternityInstance extends Application /*implements UserDocInterface
                 .query(
                         Uri.parse("content://com.android.calendar/events"),
                         new String[] { "calendar_id", "title", "description",
-                                "dtstart", "dtend", "eventLocation" }, "title",
+                                "dtstart", "dtend", "eventLocation" }, "title=?",
                         new String[] {"Fiternity"}, null);
 
         // explanation: first String[] is the columns to return

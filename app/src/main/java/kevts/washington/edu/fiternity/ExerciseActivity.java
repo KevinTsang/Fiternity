@@ -69,7 +69,8 @@ public class ExerciseActivity extends ActionBarActivity {
             if (resultCode == RESULT_CANCELED) {
                 // read all Fiternity events here
                 FiternityInstance instance = (FiternityInstance)getApplication();
-//                ArrayList<FreeEvent> events = instance.getEvents(this, instance.getUser());
+                ArrayList<FreeEvent> events = instance.getEvents(this, instance.getUser());
+                instance.getUser().setFreeTimes(events);
                 startActivity(new Intent(this, Matches.class));
             }
         }
