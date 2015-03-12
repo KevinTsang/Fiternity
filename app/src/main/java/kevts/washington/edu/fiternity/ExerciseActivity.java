@@ -121,9 +121,7 @@ public class ExerciseActivity extends ActionBarActivity {
                 final GridLayout exercises = (GridLayout) findViewById(R.id.exercises);
                 final LinearLayout ll = new LinearLayout(ExerciseActivity.this);
                 ll.setOrientation(LinearLayout.HORIZONTAL);
-                Log.i("info", "layout set");
                 exerciseArrayList.add(new Exercise(exerciseName, user_level, partner_level));
-                Log.i("info", "exercise added");
                 TextView exercise = new TextView(ExerciseActivity.this);
                 exercise.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -131,7 +129,6 @@ public class ExerciseActivity extends ActionBarActivity {
                         createDialog(exerciseName);
                     }
                 });
-                Log.i("info", "text view with listener created");
                 ll.addView(exercise);
                 Button button = new Button(ExerciseActivity.this);
                 button.setText("(x)  " + exerciseName);
@@ -141,7 +138,6 @@ public class ExerciseActivity extends ActionBarActivity {
                         exercises.removeView(ll);
                     }
                 });
-                Log.i("info", "button with listener created");
                 ll.addView(button);
                 exercises.addView(ll);
             }
