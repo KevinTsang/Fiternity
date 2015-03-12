@@ -93,6 +93,10 @@ public class User extends ParseUser implements Serializable {
         this.zipCode = zipCode;
     }
 
+    public List<Exercise> getExercises() {
+        return exerciseList;
+    } // potential deep copy needed here
+
     public void addExercise(Exercise exercise) {
         exerciseList.add(exercise);
     }

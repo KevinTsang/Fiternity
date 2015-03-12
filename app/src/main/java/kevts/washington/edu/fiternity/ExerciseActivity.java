@@ -28,12 +28,13 @@ import java.util.Calendar;
 public class ExerciseActivity extends ActionBarActivity {
 
     static final int CALENDAR_ACCESSED = 21;
+    private ArrayList<Exercise> exerciseArrayList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exercise);
-
+        exerciseArrayList = new ArrayList<Exercise>();
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_dropdown_item_1line, getExercises());
         final AutoCompleteTextView searchBox = (AutoCompleteTextView)findViewById(R.id.searchBox);
@@ -50,14 +51,12 @@ public class ExerciseActivity extends ActionBarActivity {
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Max, please save all user profile data here
-                // call addExercise on the user gotten from the instance
                 long startMillis = Calendar.getInstance().getTimeInMillis();
                 Uri.Builder builder = CalendarContract.CONTENT_URI.buildUpon();
                 builder.appendPath("time");
                 ContentUris.appendId(builder, startMillis);
+                saveExercises();
                 Intent intent = new Intent(Intent.ACTION_VIEW).setData(builder.build());
-
                 startActivityForResult(intent, CALENDAR_ACCESSED);
             }
         });
@@ -73,6 +72,21 @@ public class ExerciseActivity extends ActionBarActivity {
                 instance.getUser().setFreeTimes(events);
                 startActivity(new Intent(this, Matches.class));
             }
+        }
+    }
+
+    private void saveExercises() {
+        FiternityInstance instance = (FiternityInstance)getApplication();
+        User user = instance.getUser();
+        GridLayout exercisesHolderLayout = (GridLayout)findViewById(R.id.exercises);
+        // Max, you need to modify the createDialog method below to get data from
+        // the seekbars within exp_level_setter_fragment.xml and add them to the
+        // private arraylist variable up there by creating a new exercise and
+        // saving it when the user clicks the positive dialog button
+        user.getExercises().clear(); // clears all user exercises
+        // will come up with a way to compare diffs later, but for now this is fine
+        for (Exercise e : exerciseArrayList) {
+            user.addExercise(e);
         }
     }
 
