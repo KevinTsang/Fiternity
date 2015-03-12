@@ -34,7 +34,13 @@ public class ExerciseActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exercise);
-        exerciseArrayList = new ArrayList<Exercise>();
+        User user = ((FiternityInstance)getApplication()).getUser();
+        if (user.getExercises().size() == 0) {
+            exerciseArrayList = new ArrayList<Exercise>();
+        } else {
+            // todo initialize existing exercises when user comes back to activity based on
+            // saved exercises
+        }
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_dropdown_item_1line, getExercises());
         final AutoCompleteTextView searchBox = (AutoCompleteTextView)findViewById(R.id.searchBox);
