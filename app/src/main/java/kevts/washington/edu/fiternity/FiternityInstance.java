@@ -66,23 +66,25 @@ public class FiternityInstance extends Application /*implements UserDocInterface
         Parse.initialize(this, PARSE_APPLICATION_ID, PARSE_CLIENT_KEY);
         // WARNING: THIS IS MOST LIKELY A PRIVATE KEY.
         // TAKE THIS OUT LATER, POTENTIALLY.
-        user = FakeData.createAnnie();
-        user.setUsername("test");
-        user.setPassword("password");
-        user.setEmail("conscientiaexnihilo@mailinator.com");
-        user.signUpInBackground(new SignUpCallback() {
-            @Override
-            public void done(ParseException e) {
-                if (e == null) {
-                    // allow them to go directly to matches
-                } else {
-                    // push the user to login screen
-//                    Intent signInIntent = new Intent(getApplicationContext(), FiternityLogin.class);
-//                    signInIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                    startActivity(signInIntent);
+        if (user == null) {
+            user = FakeData.createMarshall();
+            user.setUsername("MarshallTest");
+            user.setPassword("password");
+            user.setEmail("fake@email.com");
+            user.signUpInBackground(new SignUpCallback() {
+                @Override
+                public void done(ParseException e) {
+                    if (e == null) {
+                        // allow them to go directly to matches
+                    } else {
+                        // push the user to login screen
+                        Intent signInIntent = new Intent(getApplicationContext(), FiternityLogin.class);
+                        signInIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(signInIntent);
+                    }
                 }
-            }
-        });
+            });
+        }
         requestedFreeEvents = new ArrayList<FreeEvent>();
         createCalendar();
     }

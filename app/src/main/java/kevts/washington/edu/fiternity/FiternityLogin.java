@@ -30,6 +30,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.AppEventsLogger;
 
@@ -37,14 +38,18 @@ import com.facebook.LoginActivity;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.widget.LoginButton;
+import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.LogInCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.security.Permission;
 import java.util.Arrays;
+import java.util.List;
 
 
 public class FiternityLogin extends FragmentActivity {
@@ -100,14 +105,49 @@ public class FiternityLogin extends FragmentActivity {
             }
         });
 
+        EditText emailText = (EditText) findViewById(R.id.email);
+        EditText passwordText = (EditText) findViewById(R.id.password);
+        final String email = emailText.getText().toString();
+        final String password = passwordText.getText().toString();
         Button tempLogin = (Button)findViewById(R.id.email_sign_in_button);
         tempLogin.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(FiternityLogin.this, ProfileActivity.class);
-                startActivity(intent);
+                ParseQuery<ParseUser> queryEmail = ParseUser.getQuery();
+                queryEmail.whereEqualTo("email", email);
+                queryEmail.getFirstInBackground(new GetCallback<ParseUser>() {
+                    @Override
+                    public void done(ParseUser parseUser, ParseException e) {
+                        if (e == null) {
+                            String username = parseUser.getUsername();
+                            setUser(parseUser);
+                            Intent intent = new Intent(FiternityLogin.this, Matches.class);
+                            startActivity(intent);
+
+                        } else {
+                            Toast.makeText(FiternityLogin.this, "Welcome!", Toast.LENGTH_SHORT).show();
+                            Log.d("DEBUG", e.toString());
+                            Intent intent = new Intent(FiternityLogin.this, ProfileActivity.class);
+                            startActivity(intent);
+                        }
+                    }
+                });
+
+
             }
         });
+    }
+
+    private void setUser(ParseUser parseUser) {
+        User newUser = new User();
+        newUser.setPhoneNumber(parseUser.getString("phonenumber"));
+        newUser.setSameGenderPreference(parseUser.getBoolean("genderpreference"));
+        newUser.setEmail(parseUser.getEmail());
+        newUser.setGender(parseUser.getString("gender").charAt(0));
+        newUser.setName(parseUser.getString("name"));
+        newUser.setZipCode(parseUser.getInt("zipcode"));
+        FiternityInstance instance = FiternityInstance.instance();
+        instance.setUser(newUser);
     }
 
     @Override
