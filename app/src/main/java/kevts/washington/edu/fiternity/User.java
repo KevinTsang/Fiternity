@@ -34,6 +34,7 @@ public class User extends ParseUser implements Serializable {
     }
 
     public void setUserId(int userId) {
+        put("userId", userId);
         this.userId = userId;
     }
 
@@ -42,6 +43,7 @@ public class User extends ParseUser implements Serializable {
     }
 
     public void setName(String name) {
+        put("name", name);
         this.name = name;
     }
 
@@ -50,6 +52,7 @@ public class User extends ParseUser implements Serializable {
     }
 
     public void setAge(int age) {
+        put("age", age);
         this.age = age;
     }
 
@@ -58,6 +61,7 @@ public class User extends ParseUser implements Serializable {
     }
 
     public void setGender(char gender) {
+        put("gender", gender + "");
         this.gender = gender;
     }
 
@@ -66,6 +70,7 @@ public class User extends ParseUser implements Serializable {
     }
 
     public void setSameGenderPreference(boolean preference) {
+        put("genderpreference", preference);
         this.genderPreference = preference;
     }
 
@@ -74,6 +79,7 @@ public class User extends ParseUser implements Serializable {
     }
 
     public void setEmail(String email) {
+        put("email", email);
         this.email = email;
     }
 
@@ -82,6 +88,7 @@ public class User extends ParseUser implements Serializable {
     }
 
     public void setPhoneNumber(String phoneNumber) {
+        put("phonenumber", phoneNumber);
         this.phoneNumber = phoneNumber;
     }
 
@@ -90,6 +97,7 @@ public class User extends ParseUser implements Serializable {
     }
 
     public void setZipCode(int zipCode) {
+        put("zipcode", zipCode);
         this.zipCode = zipCode;
     }
 

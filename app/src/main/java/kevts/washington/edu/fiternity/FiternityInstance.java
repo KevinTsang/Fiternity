@@ -90,6 +90,9 @@ public class FiternityInstance extends Application /*implements UserDocInterface
     public User getUser() {
         return user;
     }
+    public void setUser() {
+
+    }
     public ParseUser getOtherUser() {
         return otherUser;
     }

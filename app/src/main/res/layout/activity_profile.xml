@@ -94,7 +94,7 @@
             android:layout_below="@+id/user_phone_number"
             android:id="@+id/user_zip_code"
             android:hint="Zip Code"
-            android:inputType="textPostalAddress" />
+            android:inputType="number" />
 
         <LinearLayout
             android:orientation="horizontal"
