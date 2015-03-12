@@ -20,6 +20,14 @@ public class ProfileActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+        Button menuButton = (Button)findViewById(R.id.profile_menu_button);
+        menuButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent toMenu = new Intent(ProfileActivity.this, MenuDrawer.class);
+                startActivity(toMenu);
+            }
+        });
         populatePredefinedFields();
         Button button = (Button)findViewById(R.id.toExerciseButton);
         button.setOnClickListener(new View.OnClickListener() {
