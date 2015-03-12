@@ -41,7 +41,7 @@ public class MenuDrawer extends ActionBarActivity {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
-        mDrawerList.setAdapter(new ArrayAdapter<>(this, R.layout.drawer_list_item, mTitles));
+        //mDrawerList.setAdapter(new ArrayAdapter<>(this, R.layout.drawer_list_item, mTitles));
 
         int first = mDrawerList.getFirstVisiblePosition();
         int last = mDrawerList.getLastVisiblePosition();

@@ -200,11 +200,18 @@ public class FiternityInstance extends Application /*implements UserDocInterface
     }
 
     public void addRequestedFreeEvent(FreeEvent freeEvent){
-        this.requestedFreeEvents.add(freeEvent);
+        if(!this.requestedFreeEvents.contains(freeEvent)){
+            this.requestedFreeEvents.add(freeEvent);
+        }
     }
 
     public void removeRequestedFreeEvent(FreeEvent freeEvent){
+
+        Log.i("removeRequestedFreeEvent", "before size ="+this.requestedFreeEvents.size());
+
         this.requestedFreeEvents.remove(freeEvent);
+        Log.i("removeRequestedFreeEvent", "after size ="+this.requestedFreeEvents.size());
+
     }
 
     public List<FreeEvent> getRequestedFreeEvents(){ return this.requestedFreeEvents;}

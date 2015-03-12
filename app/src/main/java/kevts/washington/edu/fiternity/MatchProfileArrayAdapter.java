@@ -10,6 +10,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
+
 /**
  * Created by cvetand on 3/10/15.
  */
@@ -54,6 +56,8 @@ public class MatchProfileArrayAdapter extends ArrayAdapter<FreeEvent> {
                         parentContext.addEventToSingleton(eventArr[position]);
                     }else{
                         mh.requestButton.setText("Request");
+                        parentContext.removeEventFromSingleton(eventArr[position]);
+
                     }
                 }
             });
@@ -64,9 +68,12 @@ public class MatchProfileArrayAdapter extends ArrayAdapter<FreeEvent> {
         }
 
         FreeEvent freeEvent = eventArr[position];
+        SimpleDateFormat format = new SimpleDateFormat("h:mm a 'on' EEE, MMM d");
+        String start = "" + format.format(freeEvent.getStartTime());
+        String end = "" + format.format(freeEvent.getEndTime());
 
-        holder.startTime.setText(freeEvent.getStartTime().toString());
-        holder.endTime.setText(freeEvent.getEndTime().toString());
+        holder.startTime.setText(start);
+        holder.endTime.setText(end);
         holder.requestButton.setTag(holder);
 
         return row;
