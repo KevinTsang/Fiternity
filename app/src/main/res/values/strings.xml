@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Fiternity</string>
+    <string name="facebook_app_id">995043887192309</string>
+    <string name="parse_application_id">vdyKL0gcEtfovrPj4WIoLZFaIHa3PLlND8wTblJ6</string>
+    <string name="parse_client_key">K6KtiuCuW5tmZjz6uehRdG7Lc9Sec1ddPvSWi4s2</string>
+    <string name="action_settings">Settings</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in_short"></string>
+    <string name="action_sign_in">Sign In</string>
+
+    <string name="title_activity_main">MainActivity</string>
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
+</resources>
