@@ -3,15 +3,15 @@
     android:layout_height="match_parent"
     tools:context="kevts.washington.edu.fiternity.ExerciseFragment">
 
-    <Button
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/exercise_menu_button"
-        android:text="menu"/>
+        android:id="@+id/exercise_directions"
+        android:text="@string/exercise_directions"/>
     <AutoCompleteTextView android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/searchBox"
-        android:layout_below="@+id/exercise_menu_button"/>
+        android:layout_below="@+id/exercise_directions"/>
     <GridLayout
         android:layout_width="match_parent"
         android:layout_height="fill_parent"

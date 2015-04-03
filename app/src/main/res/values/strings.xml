@@ -12,4 +12,6 @@
     <string name="title_activity_main">MainActivity</string>
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
+
+    <string name="exercise_directions">Please enter activities you're interested in.</string>
 </resources>
