@@ -6,19 +6,13 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 
 import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
-import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
-import com.parse.FindCallback;
-import com.parse.GetCallback;
 import com.parse.LogInCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
@@ -34,13 +28,23 @@ public class FiternityLogin extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fiternity_login);
         callbackManager = CallbackManager.Factory.create();
+        Button emailSignInButton = (Button)findViewById(R.id.email_sign_in_button);
+        emailSignInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(FiternityLogin.this, UserProfileActivity.class);
+                startActivity(intent);
+            }
+        });
         loginButton = (LoginButton)findViewById(R.id.login_button);
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ArrayList<String> permissions = new ArrayList<String>();
+                permissions.add("public_profile");
+                permissions.add("user_friends");
                 // TODO add additional permissions required to the list here
-                ParseFacebookUtils.logInWithReadPermissionsInBackground(new MainActivity(),
+                ParseFacebookUtils.logInWithReadPermissionsInBackground(FiternityLogin.this,
                         permissions, new LogInCallback() {
                             @Override
                             public void done(ParseUser parseUser, ParseException e) {

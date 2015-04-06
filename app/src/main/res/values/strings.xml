@@ -13,5 +13,13 @@
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
 
-    <string name="exercise_directions">Please enter activities you're interested in.</string>
+    <string name="exercise_directions">Please enter activities you are interested in.</string>
+
+    <string name="title_activity_matches">MatchesActivity</string>
+
+
+    <string name="title_all_matches">All Matches</string>
+    <string name="title_recently_contacted">Recently Contacted</string>
+
+    <string name="title_activity_report">ReportActivity</string>
 </resources>

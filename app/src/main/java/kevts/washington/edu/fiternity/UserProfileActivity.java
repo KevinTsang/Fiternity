@@ -1,23 +1,26 @@
 package kevts.washington.edu.fiternity;
 
+import android.content.ContentUris;
+import android.content.Intent;
+import android.content.res.Configuration;
+import android.net.Uri;
+import android.provider.CalendarContract;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.os.Build;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import java.util.Calendar;
 
-public class MainActivity extends ActionBarActivity {
+
+public class UserProfileActivity extends ActionBarActivity {
 
     private String[] mActivityNames;
     private DrawerLayout mDrawerLayout;
@@ -28,7 +31,7 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_user);
         mTitle = "Fiternity";
         mActivityNames = new String[] {"Profile", "Matches", "Activities", "Schedule"};
         mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
@@ -45,21 +48,46 @@ public class MainActivity extends ActionBarActivity {
                                 .commit();
                         break;
                     case 1:
-                        getSupportFragmentManager().beginTransaction()
-                                .add(R.id.content_frame, new MatchesFragment())
-                                .commit();
+                        Intent matchesIntent = new Intent();
+                        startActivity(matchesIntent);
                         break;
                     case 2:
                         getSupportFragmentManager().beginTransaction()
                                 .add(R.id.content_frame, new ExerciseFragment())
                                 .commit();
                         break;
-                    case 3: // TODO implement switching to calendar activity
+                    case 3:
+                        long startMillis = Calendar.getInstance().getTimeInMillis();
+                        Uri.Builder builder = CalendarContract.CONTENT_URI.buildUpon();
+                        builder.appendPath("time");
+                        ContentUris.appendId(builder, startMillis);
+                        Intent calendarIntent = new Intent(Intent.ACTION_VIEW).setData(builder.build());
+                        startActivity(calendarIntent);
                         break;
                 }
 
             }
         });
+        mDrawerToggle = new ActionBarDrawerToggle(
+                this,                  /* host Activity */
+                mDrawerLayout,         /* DrawerLayout object */
+                R.string.drawer_open,  /* "open drawer" description */
+                R.string.drawer_close  /* "close drawer" description */
+        ) {
+            /** Called when a drawer has settled in a completely closed state. */
+            public void onDrawerClosed(View view) {
+                super.onDrawerClosed(view);
+                getSupportActionBar().setTitle("Fiternity");
+            }
+
+            /** Called when a drawer has settled in a completely open state. */
+            public void onDrawerOpened(View drawerView) {
+                Log.i("info", "Holy shit, the drawer is about to open");
+                super.onDrawerOpened(drawerView);
+                getSupportActionBar().setTitle("Menu");
+                Log.i("info", "Holy shit, the drawer opened");
+            }
+        };
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
@@ -70,7 +98,6 @@ public class MainActivity extends ActionBarActivity {
         }
 
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -94,19 +121,15 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mDrawerToggle.onConfigurationChanged(newConfig);
+    }
 
-        public PlaceholderFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_profile, container, false);
-            return rootView;
-        }
+    @Override
+    public void setTitle(CharSequence title) {
+        mTitle = title;
+        getSupportActionBar().setTitle(mTitle);
     }
 }
