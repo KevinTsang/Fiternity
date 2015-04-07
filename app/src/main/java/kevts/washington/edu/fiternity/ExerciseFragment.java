@@ -41,13 +41,13 @@ public class ExerciseFragment extends Fragment {
         // Required empty public constructor
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Initialize saved exercises here
         layoutInflater = inflater;
-        final AutoCompleteTextView searchBox = (AutoCompleteTextView)getActivity().findViewById(R.id.searchBox);
+        View rootView = inflater.inflate(R.layout.fragment_exercise, container, false);
+        final AutoCompleteTextView searchBox = (AutoCompleteTextView)rootView.findViewById(R.id.searchBox);
         searchBox.setAdapter(adapter);
         searchBox.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -58,7 +58,7 @@ public class ExerciseFragment extends Fragment {
             }
         });
 
-        Button nextButton = (Button)getActivity().findViewById(R.id.toCalendarButton);
+        Button nextButton = (Button)rootView.findViewById(R.id.toCalendarButton);
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,7 +72,7 @@ public class ExerciseFragment extends Fragment {
             }
         });
 
-        return layoutInflater.inflate(R.layout.fragment_exercise, container, false);
+        return rootView;
     }
 
     @Override
