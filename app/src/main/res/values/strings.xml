@@ -22,4 +22,10 @@
     <string name="title_recently_contacted">Recently Contacted</string>
 
     <string name="title_activity_report">ReportActivity</string>
+    <string name="title_activity_feedback">FeedbackActivity</string>
+    <string name="hello_world">Hello world!</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_feedback_negative">FeedbackNegativeActivity</string>
 </resources>

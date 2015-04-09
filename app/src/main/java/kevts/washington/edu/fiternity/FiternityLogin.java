@@ -3,11 +3,13 @@ package kevts.washington.edu.fiternity;
 import android.content.Intent;
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.login.widget.LoginButton;
 import com.parse.LogInCallback;
@@ -21,17 +23,17 @@ import java.util.ArrayList;
 public class FiternityLogin extends Activity {
 
     private LoginButton loginButton;
-    private CallbackManager callbackManager;
+    private static final String TAG = "FiternityLogin";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fiternity_login);
-        callbackManager = CallbackManager.Factory.create();
         Button emailSignInButton = (Button)findViewById(R.id.email_sign_in_button);
         emailSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent intent = new Intent(FiternityLogin.this, UserProfileActivity.class);
                 startActivity(intent);
             }
@@ -40,23 +42,41 @@ public class FiternityLogin extends Activity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ArrayList<String> permissions = new ArrayList<String>();
-                permissions.add("public_profile");
-                permissions.add("user_friends");
-                // TODO add additional permissions required to the list here
-                ParseFacebookUtils.logInWithReadPermissionsInBackground(FiternityLogin.this,
-                        permissions, new LogInCallback() {
-                            @Override
-                            public void done(ParseUser parseUser, ParseException e) {
-                                if (parseUser == null) {
-                                    // User canceled Facebook login
-                                } else if (parseUser.isNew()) {
-                                    // create new parse user in cloud
-                                } else {
-                                    // parse user successfully logged in
+                if (AccessToken.getCurrentAccessToken() == null) {
+                    ArrayList<String> permissions = new ArrayList<String>();
+                    permissions.add("public_profile");
+                    permissions.add("user_friends");
+                    permissions.add("email");
+//                    permissions.add("user_about_me");
+                    //permissions.add("user_actions.fitness"); MAY IMPLEMENT LATER
+                    //permissions.add("user_location"); ZIP CODE MAY BE SUFFICIENT
+                    ParseFacebookUtils.logInWithReadPermissionsInBackground(FiternityLogin.this,
+                            permissions, new LogInCallback() {
+                                @Override
+                                public void done(ParseUser parseUser, ParseException e) {
+                                    if (parseUser == null) {
+                                        // User canceled Facebook login
+                                        Log.d(TAG, "User canceled Facebook login");
+                                    } else if (parseUser.isNew()) {
+                                        // create new parse user in cloud
+                                        Log.d(TAG, "User signed up and logged in through Facebook!");
+                                        FiternityApplication.getInstance().setParseUser(parseUser);
+                                        FiternityApplication.getInstance().signUpProcess();
+                                        Intent intent = new Intent(FiternityLogin.this, UserProfileActivity.class);
+                                        startActivity(intent);
+                                    } else {
+                                        // parse user successfully logged in
+                                        Log.d(TAG, "User logged in through Facebook!");
+                                        FiternityApplication.getInstance().setParseUser(ParseUser.getCurrentUser());
+                                        Intent intent = new Intent(FiternityLogin.this, MatchesActivity.class);
+                                        startActivity(intent);
+                                    }
                                 }
-                            }
-                        });
+                            });
+                } else {
+                    ParseUser user = FiternityApplication.getInstance().getParseUser();
+                    user.logOutInBackground();
+                }
             }
         });
     }
