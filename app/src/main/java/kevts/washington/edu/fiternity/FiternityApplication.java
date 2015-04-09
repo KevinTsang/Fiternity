@@ -23,7 +23,6 @@ public class FiternityApplication extends Application {
     private static final String TAG = "FiternityApplication";
     private ParseUser parseUser;
     private static FiternityApplication instance;
-    private static AccessToken accessToken;
 
     public FiternityApplication() {
         if (instance == null)
@@ -37,7 +36,6 @@ public class FiternityApplication extends Application {
         FacebookSdk.sdkInitialize(getApplicationContext());
         Parse.initialize(this);
         ParseFacebookUtils.initialize(this);
-        accessToken = AccessToken.getCurrentAccessToken();
     }
 
     public static FiternityApplication getInstance() {
@@ -55,7 +53,8 @@ public class FiternityApplication extends Application {
     public void signUpProcess() {
         // TODO Implement grabbing data from the Facebook login and filling it in here
         if (AccessToken.getCurrentAccessToken() != null) {
-            GraphRequest.newMeRequest(accessToken, new GraphRequest.GraphJSONObjectCallback() {
+            GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(),
+                    new GraphRequest.GraphJSONObjectCallback() {
                 @Override
                 public void onCompleted(JSONObject user, GraphResponse graphResponse) {
                     if (user != null) {

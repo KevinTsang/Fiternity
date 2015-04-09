@@ -18,12 +18,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.parse.ParseUser;
+
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class UserProfileFragment extends Fragment {
 
+    private ParseUser user = FiternityApplication.getInstance().getParseUser();
 
     public UserProfileFragment() {
         // Required empty public constructor
@@ -43,10 +46,11 @@ public class UserProfileFragment extends Fragment {
                 // Save profile here
                 if (validInput()) {
                     Log.d("valid input", " true");
-//                    User user = instance.getUser();
-//                    setUser(user);
-//                    Intent intent = new Intent(ProfileActivity.this, ExerciseActivity.class);
-//                    startActivity(intent);
+                    // Insert relevant text fields here
+                    user.saveInBackground();
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.content_frame, new ExerciseFragment())
+                            .commit();
                 } else {
                     Toast.makeText(getActivity(), "Please fill out the forms correctly", Toast.LENGTH_SHORT).show();
                     Log.d("valid input", " false");
@@ -65,8 +69,11 @@ public class UserProfileFragment extends Fragment {
         Spinner genderSpinner = (Spinner)rootView.findViewById(R.id.user_gender_selector);
         CheckBox genderPreference = (CheckBox)rootView.findViewById(R.id.same_gender_toggle_button);
 
-//        user.setName(userName.getText().toString());
-//        user.setEmail(userEmail.getText().toString());
+        if (user.get("first_name") != null && user.get("last_name") != null)
+            userName.setText(user.get("first_name") + " " + user.get("last_name"));
+        if (user.getEmail() != null)
+            userEmail.setText(user.getEmail());
+
 //        user.setPhoneNumber(userPhone.getText().toString());
 //        user.setZipCode(Integer.parseInt(userZip.getText().toString()));
 //        user.setAge(agePicker.getValue());

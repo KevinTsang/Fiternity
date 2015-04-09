@@ -48,6 +48,28 @@ public class ExerciseFragment extends Fragment {
         layoutInflater = inflater;
         View rootView = inflater.inflate(R.layout.fragment_exercise, container, false);
         final AutoCompleteTextView searchBox = (AutoCompleteTextView)rootView.findViewById(R.id.searchBox);
+        String[] allSports = new String[] {"aerobatics", "air racing", "ballooning", "hang gliding",
+        "parachuting", "BASE jumping", "skydiving", "paragliding", "archery", "badminton",
+        "tennis", "pickleball", "volleyball", "wallyball", "basketball", "baseball", "cricket",
+        "softball", "t-ball", "baton twirling", "skateboarding", "scootering", "longboarding",
+        "luging", "snowboarding", "skiing", "wakeboarding", "surfing", "dodgeball", "quidditch",
+        "handball", "rock climbing", "bouldering", "ice climbing", "mountaineering", "hiking",
+        "cycling", "mountain biking", "bmx biking", "unicycling", "aikido", "jujitsu", "judo",
+        "sumo", "wrestling", "boxing", "capoeira", "karate", "kenpo", "kickboxing", "muay thai",
+        "taekwondo", "wing chun", "pankration", "jeet kune do", "krav maga", "kendo", "fencing",
+        "iaido", "swordfighting", "airsoft", "laser tag", "paintball", "billiards", "pool",
+        "polo", "equestrian sports", "fishing", "ultimate frisbee", "football", "soccer",
+        "american football", "rugby", "kickball", "golf", "gymnastics", "acrobatics", "aerobics",
+        "trampolining", "water polo", "hunting", "broomball", "curling", "ice hockey", "skating",
+        "figure skating", "parasailing", "geocaching", "four square", "lacrosse", "racquetball",
+        "squash", "table tennis", "ping-pong", "running", "sailing", "shooting", "free running",
+        "parkour", "tag", "capture the flag", "hide and seek", "backpacking", "walking", "canoeing",
+        "kayaking", "rafting", "rowing", "swimming", "weightlifting", "lifting", "demolition derby",
+        "racing", "drag racing", "off-road racing", "monster truck", "motocross", "boat racing",
+        "cross-country", "pole vaulting", "long jumping", "speed skating", "roller blading",
+        "tetherball", "hacky sack"};
+
+        adapter = new ArrayAdapter<String>(getActivity(), R.layout.fragment_exercise, allSports);
         searchBox.setAdapter(adapter);
         searchBox.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
