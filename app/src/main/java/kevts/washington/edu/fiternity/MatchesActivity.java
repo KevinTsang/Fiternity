@@ -57,6 +57,7 @@ public class MatchesActivity extends ActionBarActivity implements ActionBar.TabL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_matches);
+        setTitle("Matches");
 
         // Set up the action bar.
         final ActionBar actionBar = getSupportActionBar();
@@ -91,7 +92,6 @@ public class MatchesActivity extends ActionBarActivity implements ActionBar.TabL
                             .setText(mSectionsPagerAdapter.getPageTitle(i))
                             .setTabListener(this));
         }
-        mTitle = "Menu";
         mActivityNames = new String[] {"Profile", "Matches", "Activities", "Schedule"};
         mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         mDrawerList = (ListView)findViewById(R.id.left_drawer);
@@ -101,14 +101,17 @@ public class MatchesActivity extends ActionBarActivity implements ActionBar.TabL
             @Override
             public void onItemClick(AdapterView parent, View view, int position, long id) {
                 Fragment fragment = null;
+                Intent intent = new Intent(MatchesActivity.this, UserProfileActivity.class);
                 switch (position) {
-                    case 0: fragment = new UserProfileFragment();
+                    case 0:
+                        intent.putExtra("loadUserProfileFragment", true);
+                        startActivity(intent);
                         break;
                     case 1:
-                        Intent matchesIntent = new Intent(MatchesActivity.this, MatchesActivity.class);
-                        startActivity(matchesIntent);
                         break;
-                    case 2: fragment = new ExerciseFragment();
+                    case 2:
+                        intent.putExtra("loadUserProfileFragment", false);
+                        startActivity(intent);
                         break;
                     case 3:
                         long startMillis = Calendar.getInstance().getTimeInMillis();
@@ -119,13 +122,6 @@ public class MatchesActivity extends ActionBarActivity implements ActionBar.TabL
                         startActivity(calendarIntent);
                         break;
                 }
-                if (fragment != null) {
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.content_frame, fragment)
-                            .commit();
-                    mDrawerLayout.closeDrawer(mDrawerList);
-                }
-
             }
         });
         mDrawerToggle = new ActionBarDrawerToggle(
@@ -137,7 +133,7 @@ public class MatchesActivity extends ActionBarActivity implements ActionBar.TabL
             /** Called when a drawer has settled in a completely closed state. */
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
-                getSupportActionBar().setTitle("Fiternity");
+                getSupportActionBar().setTitle("Matches");
             }
 
             /** Called when a drawer has settled in a completely open state. */

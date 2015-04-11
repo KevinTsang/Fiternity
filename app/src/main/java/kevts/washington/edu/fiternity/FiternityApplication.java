@@ -9,8 +9,10 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
 import com.parse.Parse;
+import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseUser;
+import com.parse.SignUpCallback;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -61,15 +63,29 @@ public class FiternityApplication extends Application {
                         try {
                             parseUser.setUsername(user.get("id").toString());
                             parseUser.setEmail(user.get("email").toString());
-                            parseUser.add("first_name", user.get("first_name").toString());
-                            parseUser.add("last_name", user.get("last_name").toString());
-//                            parseUser.saveInBackground();
+                            parseUser.put("first_name", user.get("first_name").toString());
+                            parseUser.put("last_name", user.get("last_name").toString());
                         } catch (JSONException e) {
                             Log.e(TAG, "Parsing the JSON object failed.");
                         }
+                        parseUser.signUpInBackground(new SignUpCallback() {
+                            @Override
+                            public void done(ParseException e) {
+                                Log.i(TAG, "Saved data to cloud!");
+                            }
+                        });
+                        parseUser.saveInBackground();
                     }
                 }
             }).executeAsync();
         }
+    }
+
+    public void saveProfile() {
+
+    }
+
+    public void loadProfile() {
+
     }
 }

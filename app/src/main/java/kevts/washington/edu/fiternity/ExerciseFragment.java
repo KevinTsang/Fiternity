@@ -69,7 +69,7 @@ public class ExerciseFragment extends Fragment {
         "cross-country", "pole vaulting", "long jumping", "speed skating", "roller blading",
         "tetherball", "hacky sack"};
 
-        adapter = new ArrayAdapter<String>(getActivity(), R.layout.fragment_exercise, allSports);
+        adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, allSports);
         searchBox.setAdapter(adapter);
         searchBox.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

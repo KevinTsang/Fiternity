@@ -27,6 +27,14 @@ import com.parse.ParseUser;
 public class UserProfileFragment extends Fragment {
 
     private ParseUser user = FiternityApplication.getInstance().getParseUser();
+    private View rootView;
+    private EditText userName = (EditText)rootView.findViewById(R.id.user_name);
+    private EditText userEmail = (EditText)rootView.findViewById(R.id.user_email);
+    private EditText userPhone = (EditText)rootView.findViewById(R.id.user_phone_number);
+    private EditText userZip = (EditText)rootView.findViewById(R.id.user_zip_code);
+    private NumberPicker agePicker = (NumberPicker)rootView.findViewById(R.id.user_age);
+    private Spinner genderSpinner = (Spinner)rootView.findViewById(R.id.user_gender_selector);
+    private CheckBox genderPreference = (CheckBox)rootView.findViewById(R.id.same_gender_toggle_button);
 
     public UserProfileFragment() {
         // Required empty public constructor
@@ -36,7 +44,7 @@ public class UserProfileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_profile, container, false);
+        rootView = inflater.inflate(R.layout.fragment_profile, container, false);
         setUpAgeLimitsAndGenderChoices(rootView);
         fillFieldsWithUserData(rootView);
         Button button = (Button)rootView.findViewById(R.id.toExerciseButton);
@@ -46,7 +54,18 @@ public class UserProfileFragment extends Fragment {
                 // Save profile here
                 if (validInput()) {
                     Log.d("valid input", " true");
-                    // Insert relevant text fields here
+                    String[] nameField = userName.getText().toString().split(" ");
+                    if (nameField.length == 2) {
+                        user.put("first_name", nameField[0]);
+                        user.put("last_name", nameField[1]);
+                    } else if (nameField.length == 1) {
+                        user.put("first_name", nameField[0]);
+                    }
+                    user.put("phone", userPhone.getText().toString());
+                    user.put("zip", userZip.getText().toString());
+                    user.put("age", agePicker.getValue());
+                    user.put("gender", genderSpinner.getSelectedItem().toString());
+                    user.put("genderPreference", genderPreference.isChecked());
                     user.saveInBackground();
                     getActivity().getSupportFragmentManager().beginTransaction()
                             .replace(R.id.content_frame, new ExerciseFragment())
@@ -61,29 +80,28 @@ public class UserProfileFragment extends Fragment {
     }
 
     private void fillFieldsWithUserData(View rootView) {
-        EditText userName = (EditText)rootView.findViewById(R.id.user_name);
-        EditText userEmail = (EditText)rootView.findViewById(R.id.user_email);
-        EditText userPhone = (EditText)rootView.findViewById(R.id.user_phone_number);
-        EditText userZip = (EditText)rootView.findViewById(R.id.user_zip_code);
-        NumberPicker agePicker = (NumberPicker)rootView.findViewById(R.id.user_age);
-        Spinner genderSpinner = (Spinner)rootView.findViewById(R.id.user_gender_selector);
-        CheckBox genderPreference = (CheckBox)rootView.findViewById(R.id.same_gender_toggle_button);
 
-        if (user.get("first_name") != null && user.get("last_name") != null)
-            userName.setText(user.get("first_name") + " " + user.get("last_name"));
+        if (user.getString("first_name") != null && user.getString("last_name") != null)
+            userName.setText(user.getString("first_name") + " " + user.getString("last_name"));
         if (user.getEmail() != null)
             userEmail.setText(user.getEmail());
-
-//        user.setPhoneNumber(userPhone.getText().toString());
-//        user.setZipCode(Integer.parseInt(userZip.getText().toString()));
-//        user.setAge(agePicker.getValue());
-//        user.setGender(genderSpinner.getSelectedItem().toString().charAt(0));
-//        user.setSameGenderPreference(genderPreference.isChecked());
+        if (user.getString("phone") != null)
+            userPhone.setText(user.get("phone").toString());
+        if (user.get("zip") != null)
+            userZip.setText((int)user.get("zip"));
+        if (user.get("age") != null)
+            agePicker.setValue((int)user.get("age"));
+        if (user.getString("gender") != null) {
+            if (user.getString("gender").equals("M"))
+                genderSpinner.setSelection(0);
+            else genderSpinner.setSelection(1);
+        }
+        genderPreference.setChecked(user.getBoolean("genderPreference"));
     }
 
     private void setUpAgeLimitsAndGenderChoices(View rootView) {
         NumberPicker agePicker = (NumberPicker)rootView.findViewById(R.id.user_age);
-        agePicker.setMinValue(18);
+        agePicker.setMinValue(15);
         agePicker.setMaxValue(99);
 
         Spinner genderSpinner = (Spinner)rootView.findViewById(R.id.user_gender_selector);
@@ -102,12 +120,13 @@ public class UserProfileFragment extends Fragment {
         if (userName.getText().length() == 0) {
             valid = false;
         }
-        if (userEmail.getText().length() == 0) {
-            valid = false;
-        }
-        if (userPhone.getText().length() == 0) {
-            valid = false;
-        }
+//        if (userEmail.getText().length() == 0) {
+//            valid = false;
+//        }
+//        if (userPhone.getText().length() == 0) {
+//            valid = false;
+//        }
+
         if (userZip.getText().length() == 0) {
             valid = false;
         }

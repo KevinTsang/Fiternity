@@ -34,12 +34,24 @@ public class UserProfileActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
-        if (savedInstanceState == null) {
+        if (getIntent().getBooleanExtra("loadUserProfileFragment", true)) {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.content_frame, new UserProfileFragment())
                     .commit();
+            mTitle = "Profile";
+            setTitle(mTitle);
+        } else {
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.content_frame, new ExerciseFragment())
+                    .commit();
+            mTitle = "Activities";
+            setTitle(mTitle);
         }
-        mTitle = "Menu";
+//        if (savedInstanceState == null) {
+//            getSupportFragmentManager().beginTransaction()
+//                    .add(R.id.content_frame, new UserProfileFragment())
+//                    .commit();
+//        }
         mActivityNames = new String[] {"Profile", "Matches", "Activities", "Schedule"};
         mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         mDrawerList = (ListView)findViewById(R.id.left_drawer);
@@ -85,7 +97,7 @@ public class UserProfileActivity extends ActionBarActivity {
             /** Called when a drawer has settled in a completely closed state. */
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
-                getSupportActionBar().setTitle("Fiternity");
+                getSupportActionBar().setTitle(mTitle);
             }
 
             /** Called when a drawer has settled in a completely open state. */
@@ -139,7 +151,6 @@ public class UserProfileActivity extends ActionBarActivity {
     }
     @Override
     public void setTitle(CharSequence title) {
-        mTitle = title;
-        getSupportActionBar().setTitle(mTitle);
+        getSupportActionBar().setTitle(title);
     }
 }
