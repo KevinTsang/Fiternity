@@ -26,7 +26,7 @@ import com.parse.ParseUser;
  */
 public class UserProfileFragment extends Fragment {
 
-    private ParseUser user = FiternityApplication.getInstance().getParseUser();
+    private ParseUser user;
     private View rootView;
     private EditText userName;
     private EditText userEmail;
@@ -45,6 +45,7 @@ public class UserProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_profile, container, false);
+        user = FiternityApplication.getInstance().getParseUser();
         userName = (EditText)rootView.findViewById(R.id.user_name);
         userEmail = (EditText)rootView.findViewById(R.id.user_email);
         userPhone = (EditText)rootView.findViewById(R.id.user_phone_number);

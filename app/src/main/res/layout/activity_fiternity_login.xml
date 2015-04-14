@@ -43,7 +43,9 @@
                 android:layout_height="wrap_content" android:hint="@string/prompt_email"
                 android:inputType="textEmailAddress" android:maxLines="1"
                 android:singleLine="true"
-                android:enabled="true" />
+                android:enabled="true"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp" />
 
             <EditText android:id="@+id/password" android:layout_width="match_parent"
                 android:layout_height="wrap_content" android:hint="@string/prompt_password"
@@ -51,13 +53,17 @@
                 android:imeActionLabel="@string/action_sign_in_short"
                 android:imeOptions="actionUnspecified" android:inputType="textPassword"
                 android:maxLines="1" android:singleLine="true"
-                android:enabled="true" />
+                android:enabled="true"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp" />
 
             <Button android:id="@+id/email_sign_in_button" style="?android:textAppearanceSmall"
                 android:layout_width="match_parent" android:layout_height="wrap_content"
                 android:layout_marginTop="16dp" android:text="@string/action_sign_in"
                 android:textStyle="bold"
-                android:enabled="true" />
+                android:enabled="true"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp" />
 
         </LinearLayout>
     </ScrollView>
