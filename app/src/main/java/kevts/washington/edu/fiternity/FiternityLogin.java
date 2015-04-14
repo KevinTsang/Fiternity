@@ -33,10 +33,10 @@ public class FiternityLogin extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fiternity_login);
-        if (AccessToken.getCurrentAccessToken() != null) {
-            Intent intent = new Intent(FiternityLogin.this, MatchesActivity.class);
-            startActivity(intent);
-        }
+//        if (AccessToken.getCurrentAccessToken() != null) {
+//            Intent intent = new Intent(FiternityLogin.this, MatchesActivity.class);
+//            startActivity(intent);
+//        }
         Button emailSignInButton = (Button)findViewById(R.id.email_sign_in_button);
         emailSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,27 +111,4 @@ public class FiternityLogin extends Activity {
         super.onActivityResult(requestCode, resultCode, data);
         ParseFacebookUtils.onActivityResult(requestCode, resultCode, data);
     }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_fiternity_login, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
 }
