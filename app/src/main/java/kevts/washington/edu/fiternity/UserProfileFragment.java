@@ -28,13 +28,13 @@ public class UserProfileFragment extends Fragment {
 
     private ParseUser user = FiternityApplication.getInstance().getParseUser();
     private View rootView;
-    private EditText userName = (EditText)rootView.findViewById(R.id.user_name);
-    private EditText userEmail = (EditText)rootView.findViewById(R.id.user_email);
-    private EditText userPhone = (EditText)rootView.findViewById(R.id.user_phone_number);
-    private EditText userZip = (EditText)rootView.findViewById(R.id.user_zip_code);
-    private NumberPicker agePicker = (NumberPicker)rootView.findViewById(R.id.user_age);
-    private Spinner genderSpinner = (Spinner)rootView.findViewById(R.id.user_gender_selector);
-    private CheckBox genderPreference = (CheckBox)rootView.findViewById(R.id.same_gender_toggle_button);
+    private EditText userName;
+    private EditText userEmail;
+    private EditText userPhone;
+    private EditText userZip;
+    private NumberPicker agePicker;
+    private Spinner genderSpinner;
+    private CheckBox genderPreference;
 
     public UserProfileFragment() {
         // Required empty public constructor
@@ -45,6 +45,14 @@ public class UserProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_profile, container, false);
+        userName = (EditText)rootView.findViewById(R.id.user_name);
+        userEmail = (EditText)rootView.findViewById(R.id.user_email);
+        userPhone = (EditText)rootView.findViewById(R.id.user_phone_number);
+        userZip = (EditText)rootView.findViewById(R.id.user_zip_code);
+        agePicker = (NumberPicker)rootView.findViewById(R.id.user_age);
+        genderSpinner = (Spinner)rootView.findViewById(R.id.user_gender_selector);
+        genderPreference = (CheckBox)rootView.findViewById(R.id.same_gender_toggle_button);
+
         setUpAgeLimitsAndGenderChoices(rootView);
         fillFieldsWithUserData(rootView);
         Button button = (Button)rootView.findViewById(R.id.toExerciseButton);

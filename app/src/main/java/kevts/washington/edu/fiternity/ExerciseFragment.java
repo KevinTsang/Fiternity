@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.support.v4.app.Fragment;
 import android.text.Layout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,20 +23,28 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.parse.ParseException;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
+
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashSet;
+import java.util.Set;
 
 
 public class ExerciseFragment extends Fragment {
 
     static final int CALENDAR_ACCESSED = 21;
+    private View rootView;
     private LayoutInflater layoutInflater;
     private ArrayAdapter<String> adapter;
-    private ArrayList<String> exerciseArrayList; // replace with custom exercise type later
+    private Set<Exercise> exerciseArrayList;
     private SeekBar seekTop;
     private SeekBar seekBottom;
-    int user_level = 0;
-    int partner_level = 0;
+    private Exercise currentExercise;
+    private int user_level = 0;
+    private int partner_level = 0;
 
     public ExerciseFragment() {
         // Required empty public constructor
@@ -46,7 +55,7 @@ public class ExerciseFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Initialize saved exercises here
         layoutInflater = inflater;
-        View rootView = inflater.inflate(R.layout.fragment_exercise, container, false);
+        rootView = inflater.inflate(R.layout.fragment_exercise, container, false);
         final AutoCompleteTextView searchBox = (AutoCompleteTextView)rootView.findViewById(R.id.searchBox);
         String[] allSports = new String[] {"aerobatics", "air racing", "ballooning", "hang gliding",
         "parachuting", "BASE jumping", "skydiving", "paragliding", "archery", "badminton",
@@ -70,6 +79,21 @@ public class ExerciseFragment extends Fragment {
         "tetherball", "hacky sack"};
 
         adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, allSports);
+        exerciseArrayList = FiternityApplication.getInstance().getExercises();
+        for (Exercise e : exerciseArrayList) {
+            LinearLayout ll = new LinearLayout(getActivity());
+            ll.setOrientation(LinearLayout.HORIZONTAL);
+            TextView exerciseTextView = new TextView(getActivity());
+            exerciseTextView.setText(e.getExerciseName());
+            exerciseTextView.setOnClickListener(editExerciseDialogListener(e));
+            ll.addView(exerciseTextView);
+            GridLayout exercises = (GridLayout)rootView.findViewById(R.id.exercises);
+            Button button = new Button(getActivity());
+            button.setText("X");
+            button.setOnClickListener(removeExerciseListener(e, ll, exercises));
+            ll.addView(button);
+            exercises.addView(ll);
+        }
         searchBox.setAdapter(adapter);
         searchBox.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -112,17 +136,16 @@ public class ExerciseFragment extends Fragment {
 
     private void saveExercises() {
         FiternityApplication instance = (FiternityApplication)getActivity().getApplication();
-//        User user = instance.getUser();
-//        GridLayout exercisesHolderLayout = (GridLayout)findViewById(R.id.exercises);
-        // Max, you need to modify the createDialog method below to get data from
-        // the seekbars within exp_level_setter_fragment.xml and add them to the
-        // private arraylist variable up there by creating a new exercise and
-        // saving it when the user clicks the positive dialog button
-//        user.getExercises().clear(); // clears all user exercises
-        // will come up with a way to compare diffs later, but for now this is fine
-//        for (Exercise e : exerciseArrayList) {
-//            user.addExercise(e);
-//        }
+        ParseUser user = instance.getParseUser();
+        GridLayout exercisesHolderLayout = (GridLayout)rootView.findViewById(R.id.exercises);
+        user.put("exercises", exerciseArrayList);
+        user.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                Log.i("Exercise Fragment", "Saved exercises successfully!");
+            }
+        });
+
     }
 
     private void createDialog(final String exercise) {
@@ -132,34 +155,6 @@ public class ExerciseFragment extends Fragment {
         builder.setTitle(exercise);
         View dialogLayout = layoutInflater.inflate(R.layout.fragment_exp_level_setter, null);
         builder.setView(dialogLayout);
-        builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                GridLayout exercises = (GridLayout)getActivity().findViewById(R.id.exercises);
-                LinearLayout ll = new LinearLayout(getActivity());
-                ll.setOrientation(LinearLayout.HORIZONTAL);
-//                exerciseArrayList.add(new Exercise(exercise, user_level, partner_level));
-                int exerciseIndex = exerciseArrayList.size() - 1;
-                TextView exerciseTextView = new TextView(getActivity());
-                exerciseTextView.setText(exercise);
-                exerciseTextView.setOnClickListener(createExerciseDialogListener(exercise));
-                ll.addView(exerciseTextView);
-                Button button = new Button(getActivity());
-                button.setText("X");
-                button.setOnClickListener(removeExerciseListener(exerciseIndex, ll, exercises));
-                ll.addView(button);
-                exercises.addView(ll);
-            }
-        });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        });
-
-        builder.create();
-        builder.show();
         seekTop = (SeekBar) dialogLayout.findViewById(R.id.user_exp_level);
         seekBottom = (SeekBar) dialogLayout.findViewById(R.id.partner_exp_level);
         seekTop.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -184,26 +179,114 @@ public class ExerciseFragment extends Fragment {
             @Override
             public void onStopTrackingTouch(SeekBar seekBottom) { }
         });
+        builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                GridLayout exercises = (GridLayout)rootView.findViewById(R.id.exercises);
+                LinearLayout ll = new LinearLayout(getActivity());
+                ll.setOrientation(LinearLayout.HORIZONTAL);
+                Exercise activity = new Exercise(exercise, user_level, partner_level);
+                exerciseArrayList.add(activity);
+                TextView exerciseTextView = new TextView(getActivity());
+                exerciseTextView.setText(exercise);
+                exerciseTextView.setOnClickListener(editExerciseDialogListener(activity));
+                ll.addView(exerciseTextView);
+                Button button = new Button(getActivity());
+                button.setText("X");
+                button.setOnClickListener(removeExerciseListener(activity, ll, exercises));
+                ll.addView(button);
+                exercises.addView(ll);
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        builder.create();
+        builder.show();
     }
 
+    private void editDialog(final String exercise, final Exercise activity, final View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        View dialogLayout = layoutInflater.inflate(R.layout.fragment_exp_level_setter, null);
+        seekTop = (SeekBar) dialogLayout.findViewById(R.id.user_exp_level);
+        seekBottom = (SeekBar) dialogLayout.findViewById(R.id.partner_exp_level);
+        seekTop.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekTop, int progress, boolean fromUser) {
+                user_level = progress;
+            }
 
-    private View.OnClickListener createExerciseDialogListener(final String exerciseName) {
+            @Override
+            public void onStartTrackingTouch(SeekBar seekTop) { }
+            @Override
+            public void onStopTrackingTouch(SeekBar seekTop) { }
+        });
+        seekBottom.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBottom, int progress, boolean fromUser) {
+                partner_level = progress;
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBottom) { }
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBottom) { }
+        });
+        user_level = activity.getOwnExpLevel();
+        partner_level = activity.getPrefExpLevel();
+        seekTop.setProgress(user_level);
+        seekBottom.setProgress(partner_level);
+        builder.setTitle(exercise);
+        builder.setView(dialogLayout);
+        builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                GridLayout exercises = (GridLayout)rootView.findViewById(R.id.exercises);
+                LinearLayout ll = (LinearLayout)view.getParent();
+                Exercise editedActivity = new Exercise(exercise, user_level, partner_level);
+                exerciseArrayList.add(editedActivity);
+                TextView exerciseTextView = new TextView(getActivity());
+                exerciseTextView.setText(exercise);
+                exerciseTextView.setOnClickListener(editExerciseDialogListener(editedActivity));
+                ll.addView(exerciseTextView);
+                Button button = new Button(getActivity());
+                button.setText("X");
+                button.setOnClickListener(removeExerciseListener(editedActivity, ll, exercises));
+                ll.addView(button);
+                exercises.addView(ll);
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        builder.create();
+        builder.show();
+    }
+
+    private View.OnClickListener removeExerciseListener(final Exercise activity, final LinearLayout ll, final GridLayout exercises) {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                createDialog(exerciseName);
+                exerciseArrayList.remove(activity);
+                ViewGroup parentView = (ViewGroup) v.getParent();
+                parentView.removeView(v);
+                exercises.removeView(ll);
             }
         };
     }
 
-    private View.OnClickListener removeExerciseListener(final int exerciseIndex, final LinearLayout ll, final GridLayout exercises) {
+    private View.OnClickListener editExerciseDialogListener(final Exercise activity) {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                exerciseArrayList.remove(exerciseIndex);
-                ViewGroup parentView = (ViewGroup) v.getParent();
-                parentView.removeView(v);
-                exercises.removeView(ll);
+                exerciseArrayList.remove(activity);
+                editDialog(activity.getExerciseName(), activity, v);
             }
         };
     }

@@ -33,10 +33,10 @@ public class FiternityLogin extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fiternity_login);
-//        if (AccessToken.getCurrentAccessToken() != null) {
-//            Intent intent = new Intent(FiternityLogin.this, MatchesActivity.class);
-//            startActivity(intent);
-//        }
+        if (AccessToken.getCurrentAccessToken() != null) {
+            Intent intent = new Intent(FiternityLogin.this, MatchesActivity.class);
+            startActivity(intent);
+        }
         Button emailSignInButton = (Button)findViewById(R.id.email_sign_in_button);
         emailSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,6 +83,7 @@ public class FiternityLogin extends Activity {
                                         Log.d(TAG, "User signed up and logged in through Facebook!");
                                         FiternityApplication.getInstance().setParseUser(parseUser);
                                         FiternityApplication.getInstance().signUpProcess();
+                                        FiternityApplication.getInstance().getFriends();
                                         Intent intent = new Intent(FiternityLogin.this, UserProfileActivity.class);
                                         intent.putExtra("loadUserProfileFragment", true);
                                         startActivity(intent);

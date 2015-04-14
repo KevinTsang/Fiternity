@@ -1,6 +1,10 @@
 package kevts.washington.edu.fiternity;
 
 import android.app.Application;
+import android.content.ContentUris;
+import android.content.Intent;
+import android.net.Uri;
+import android.provider.CalendarContract;
 import android.util.Log;
 
 import com.facebook.AccessToken;
@@ -14,8 +18,15 @@ import com.parse.ParseFacebookUtils;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by kevin on 3/31/15.
@@ -23,8 +34,10 @@ import org.json.JSONObject;
 public class FiternityApplication extends Application {
 
     private static final String TAG = "FiternityApplication";
-    private ParseUser parseUser;
+    private static ParseUser parseUser;
     private static FiternityApplication instance;
+    private static Set<Exercise> exerciseSet;
+    private ArrayList<Integer> friendIds;
 
     public FiternityApplication() {
         if (instance == null)
@@ -38,6 +51,8 @@ public class FiternityApplication extends Application {
         FacebookSdk.sdkInitialize(getApplicationContext());
         Parse.initialize(this);
         ParseFacebookUtils.initialize(this);
+        exerciseSet = new HashSet<>();
+        friendIds = new ArrayList<>();
     }
 
     public static FiternityApplication getInstance() {
@@ -74,18 +89,60 @@ public class FiternityApplication extends Application {
                                 Log.i(TAG, "Saved data to cloud!");
                             }
                         });
-                        parseUser.saveInBackground();
+                        try {
+                            parseUser.save();
+                        } catch (ParseException e) {
+                            Log.e(TAG, "Failed to get save parse user data.");
+                        }
                     }
                 }
             }).executeAsync();
         }
     }
 
-    public void saveProfile() {
-
+    public Set<Exercise> getExercises() {
+        return exerciseSet;
     }
 
-    public void loadProfile() {
+    public void getFriends() {
+        if (AccessToken.getCurrentAccessToken() != null) {
+            GraphRequest.newMyFriendsRequest(AccessToken.getCurrentAccessToken(),
+                    new GraphRequest.GraphJSONArrayCallback() {
+                        @Override
+                        public void onCompleted(JSONArray jsonArray, GraphResponse graphResponse) {
+                            jsonArray.toString();
+                        }
+                    }).executeAsync();
+        }
+    }
+
+    public void viewSchedule() {
+        long startMillis = Calendar.getInstance().getTimeInMillis();
+        Uri.Builder builder = CalendarContract.CONTENT_URI.buildUpon();
+        builder.appendPath("time");
+        ContentUris.appendId(builder, startMillis);
+        Intent calendarIntent = new Intent(Intent.ACTION_VIEW).setData(builder.build());
+        startActivity(calendarIntent);
+    }
+
+    public void createEvent() {
+        Calendar beginTime = Calendar.getInstance();
+//        beginTime.set(); set a time here
+        Calendar endTime = Calendar.getInstance();
+//        endTime.set();  set a time here
+        Intent createEventIntent = new Intent(Intent.ACTION_INSERT)
+                .setData(CalendarContract.Events.CONTENT_URI)
+                .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, beginTime.getTimeInMillis())
+                .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, endTime.getTimeInMillis())
+                .putExtra(CalendarContract.Events.TITLE, "Fiternity")
+                .putExtra(CalendarContract.Events.DESCRIPTION, "Insert activity here")
+                .putExtra(CalendarContract.Events.EVENT_LOCATION, "Insert location here")
+                .putExtra(CalendarContract.Events.AVAILABILITY, CalendarContract.Events.AVAILABILITY_FREE)
+                .putExtra(Intent.EXTRA_EMAIL, "email address here, another email address here");
+        startActivity(createEventIntent);
+    }
+
+    public void editEvent() {
 
     }
 }
