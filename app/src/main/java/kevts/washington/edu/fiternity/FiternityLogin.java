@@ -83,6 +83,7 @@ public class FiternityLogin extends Activity {
                                         Log.d(TAG, "User signed up and logged in through Facebook!");
                                         FiternityApplication.getInstance().setParseUser(parseUser);
                                         FiternityApplication.getInstance().signUpProcess();
+//                                        FiternityApplication.getInstance().getFacebookProfilePicture();
                                         FiternityApplication.getInstance().getFriends();
                                         Intent intent = new Intent(FiternityLogin.this, UserProfileActivity.class);
                                         intent.putExtra("loadUserProfileFragment", true);

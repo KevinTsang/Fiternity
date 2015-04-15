@@ -3,6 +3,8 @@ package kevts.washington.edu.fiternity;
 import android.app.Application;
 import android.content.ContentUris;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.CalendarContract;
 import android.util.Log;
@@ -16,13 +18,17 @@ import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.lang.reflect.Array;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
@@ -97,6 +103,26 @@ public class FiternityApplication extends Application {
                     }
                 }
             }).executeAsync();
+        }
+    }
+
+    public void getFacebookProfilePicture() {
+        if (AccessToken.getCurrentAccessToken() != null) {
+            try {
+                URL imageURL = new URL("https://graph.facebook.com/" + parseUser.getUsername() + "/picture?type=large");
+                Bitmap profilePicture = BitmapFactory.decodeStream(imageURL.openConnection().getInputStream());
+                parseUser.put("profilePicture", profilePicture);
+                parseUser.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        Log.i(TAG, "Profile picture successfully saved!");
+                    }
+                });
+            } catch (MalformedURLException e) {
+                Log.e(TAG, "ParseUser did not use Facebook to login");
+            } catch (IOException e) {
+                Log.e(TAG, "Failed to connect to Facebook to retrieve profile picture");
+            }
         }
     }
 

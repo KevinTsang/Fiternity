@@ -2,6 +2,7 @@ package kevts.washington.edu.fiternity;
 
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -12,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -19,6 +21,8 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.parse.ParseUser;
+
+import java.net.URISyntaxException;
 
 
 /**
@@ -29,6 +33,7 @@ public class UserProfileFragment extends Fragment {
     private ParseUser user;
     private View rootView;
     private EditText userName;
+    private ImageView profilePic;
     private EditText userEmail;
     private EditText userPhone;
     private EditText userZip;
@@ -47,6 +52,7 @@ public class UserProfileFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_profile, container, false);
         user = FiternityApplication.getInstance().getParseUser();
         userName = (EditText)rootView.findViewById(R.id.user_name);
+        profilePic = (ImageView)rootView.findViewById(R.id.profile_picture);
         userEmail = (EditText)rootView.findViewById(R.id.user_email);
         userPhone = (EditText)rootView.findViewById(R.id.user_phone_number);
         userZip = (EditText)rootView.findViewById(R.id.user_zip_code);
@@ -71,7 +77,7 @@ public class UserProfileFragment extends Fragment {
                         user.put("first_name", nameField[0]);
                     }
                     user.put("phone", userPhone.getText().toString());
-                    user.put("zip", userZip.getText().toString());
+                    user.put("zip", Integer.parseInt(userZip.getText().toString()));
                     user.put("age", agePicker.getValue());
                     user.put("gender", genderSpinner.getSelectedItem().toString());
                     user.put("genderPreference", genderPreference.isChecked());
@@ -96,16 +102,17 @@ public class UserProfileFragment extends Fragment {
             userEmail.setText(user.getEmail());
         if (user.getString("phone") != null)
             userPhone.setText(user.get("phone").toString());
-        if (user.get("zip") != null)
-            userZip.setText((int)user.get("zip"));
-        if (user.get("age") != null)
-            agePicker.setValue((int)user.get("age"));
+        if (user.getInt("zip") != 0)
+            userZip.setText(user.getInt("zip") + "");
+        if (user.getInt("age") != 0)
+            agePicker.setValue(user.getInt("age"));
         if (user.getString("gender") != null) {
             if (user.getString("gender").equals("M"))
                 genderSpinner.setSelection(0);
             else genderSpinner.setSelection(1);
         }
         genderPreference.setChecked(user.getBoolean("genderPreference"));
+        profilePic.setImageURI(Uri.parse("https://graph.facebook.com/" + user.getUsername() + "/picture?type=large"));
     }
 
     private void setUpAgeLimitsAndGenderChoices(View rootView) {
@@ -136,8 +143,14 @@ public class UserProfileFragment extends Fragment {
 //            valid = false;
 //        }
 
-        if (userZip.getText().length() == 0) {
+        if (userZip.getText().length() == 0)
             valid = false;
+        else {
+            try {
+                Integer.parseInt(userZip.getText().toString());
+            } catch (NumberFormatException e) {
+                valid = false;
+            }
         }
         return valid;
     }
