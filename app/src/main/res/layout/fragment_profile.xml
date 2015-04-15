@@ -27,7 +27,7 @@
             android:id="@+id/textView2"
             android:text="About Me" />
 
-        <EditText android:layout_width="fill_parent"
+        <EditText android:layout_width="match_parent"
             android:layout_height="wrap_content"
 
             android:id="@+id/user_name"
@@ -37,7 +37,8 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:id="@+id/">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -53,26 +54,27 @@
                 android:layout_above="@+id/gender_text"
                 android:id="@+id/user_age"
                 android:baselineAligned="false" />
-        </LinearLayout>
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
+            <LinearLayout
+                android:orientation="horizontal"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/age_text"
-                android:id="@+id/gender_text"
-                android:text="Gender: "/>
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical">
 
-            <Spinner android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/user_age"
-                android:layout_above="@+id/user_email"
-                android:layout_toRightOf="@id/gender_text"
-                android:id="@+id/user_gender_selector" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/age_text"
+                    android:id="@+id/gender_text"
+                    android:text="Gender: "/>
+
+                <Spinner android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/user_age"
+                    android:layout_above="@+id/user_email"
+                    android:layout_toRightOf="@id/gender_text"
+                    android:id="@+id/user_gender_selector" />
+            </LinearLayout>
         </LinearLayout>
 
         <EditText android:layout_width="fill_parent"

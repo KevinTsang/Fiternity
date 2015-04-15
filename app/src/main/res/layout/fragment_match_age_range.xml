@@ -1,0 +1,54 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/dialog_exp_view"
+    android:gravity="center_horizontal"
+    style="@style/Base.TextAppearance.AppCompat.Title">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select Age Range"
+        android:textAlignment="center"
+        android:textSize="@dimen/abc_text_size_medium_material"
+        android:textStyle="bold"
+        android:paddingLeft="24dp"
+        android:paddingTop="24dp"
+        android:paddingRight="24dp"
+        android:paddingBottom="20dp" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center">
+
+        <NumberPicker
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/minAge"
+            android:gravity="center"
+            android:orientation="vertical" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/abc_text_size_body_2_material"
+            android:text="to"
+            style="@style/Base.TextAppearance.AppCompat.Body2"
+            android:layout_gravity="center_vertical"
+            android:gravity="center"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:id="@+id/" />
+
+        <NumberPicker
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/maxAge"
+            android:gravity="center"
+            android:orientation="vertical" />
+    </LinearLayout>
+
+</LinearLayout>
