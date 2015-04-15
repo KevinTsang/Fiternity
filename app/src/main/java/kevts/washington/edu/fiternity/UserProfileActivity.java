@@ -24,6 +24,8 @@ import java.util.Calendar;
 public class UserProfileActivity extends ActionBarActivity {
 
     private static final String TAG = "UserProfileActivity";
+    private static final int calendarRequestCode = 17;
+    private FiternityApplication instance;
     private String[] mActivityNames;
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
@@ -34,6 +36,7 @@ public class UserProfileActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
+        instance = FiternityApplication.getInstance();
         if (getIntent().getBooleanExtra("loadUserProfileFragment", true)) {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.content_frame, new UserProfileFragment())
@@ -52,7 +55,7 @@ public class UserProfileActivity extends ActionBarActivity {
 //                    .add(R.id.content_frame, new UserProfileFragment())
 //                    .commit();
 //        }
-        mActivityNames = new String[] {"Profile", "Matches", "Activities", "Schedule"};
+        mActivityNames = new String[] {"Profile", "Matches", "Activities", "View Schedule", "Schedule Exercise", "Log out"};
         mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         mDrawerList = (ListView)findViewById(R.id.left_drawer);
 
@@ -76,7 +79,15 @@ public class UserProfileActivity extends ActionBarActivity {
                         builder.appendPath("time");
                         ContentUris.appendId(builder, startMillis);
                         Intent calendarIntent = new Intent(Intent.ACTION_VIEW).setData(builder.build());
-                        startActivity(calendarIntent);
+                        startActivityForResult(calendarIntent, calendarRequestCode);
+                        break;
+                    case 4:
+                        instance.createEvent();
+                        break;
+                    case 5:
+                        instance.getParseUser().logOutInBackground();
+                        Intent logoutIntent = new Intent(UserProfileActivity.this, FiternityLogin.class);
+                        startActivity(logoutIntent);
                         break;
                 }
                 if (fragment != null) {
@@ -135,6 +146,15 @@ public class UserProfileActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == calendarRequestCode) {
+            if (resultCode == RESULT_CANCELED) {
+                instance.readEvents();
+            }
+        }
     }
 
     @Override

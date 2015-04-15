@@ -3,6 +3,7 @@ package kevts.washington.edu.fiternity;
 import android.app.Application;
 import android.content.ContentUris;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -31,6 +32,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -136,7 +138,16 @@ public class FiternityApplication extends Application {
                     new GraphRequest.GraphJSONArrayCallback() {
                         @Override
                         public void onCompleted(JSONArray jsonArray, GraphResponse graphResponse) {
-                            jsonArray.toString();
+                            try {
+                                jsonArray.toString();  // use this to get the ID then use it for querying times
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject personAndId = jsonArray.getJSONObject(i);
+                                    personAndId.getString("name");
+                                    personAndId.getString("id");
+                                }
+                            } catch (JSONException jsone) {
+                                Log.e(TAG, "JSON did not parse correctly when getting the name and ID from Facebook");
+                            }
                         }
                     }).executeAsync();
         }
@@ -158,8 +169,8 @@ public class FiternityApplication extends Application {
 //        endTime.set();  set a time here
         Intent createEventIntent = new Intent(Intent.ACTION_INSERT)
                 .setData(CalendarContract.Events.CONTENT_URI)
-                .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, beginTime.getTimeInMillis())
-                .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, endTime.getTimeInMillis())
+//                .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, beginTime.getTimeInMillis())
+//                .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, endTime.getTimeInMillis())
                 .putExtra(CalendarContract.Events.TITLE, "Fiternity")
                 .putExtra(CalendarContract.Events.DESCRIPTION, "Insert activity here")
                 .putExtra(CalendarContract.Events.EVENT_LOCATION, "Insert location here")
@@ -170,5 +181,37 @@ public class FiternityApplication extends Application {
 
     public void editEvent() {
 
+    }
+
+    public ArrayList<FreeEvent> readEvents() {
+        Cursor cursor = getApplicationContext().getContentResolver()
+                .query(
+                        Uri.parse("content://com.android.calendar/events"),
+                        new String[] { "calendar_id", "title", "description",
+                                "dtstart", "dtend", "eventLocation" }, "title=?",
+                        new String[] {"Fiternity"}, null);
+
+        // explanation: first String[] is the columns to return
+        // second argument (String) is filter by a column name
+        // third is what values they're supposed to have
+        // fourth is the order by clause
+        cursor.moveToFirst();
+        // fetching calendars name
+        String CNames[] = new String[cursor.getCount()];
+
+        // fetching calendars id
+        ArrayList<FreeEvent> eventsList = new ArrayList<FreeEvent>();
+        for (int i = 0; i < CNames.length; i++) {
+            long startMillis = Long.parseLong(cursor.getString(3));
+            long endMillis = Long.parseLong(cursor.getString(4));
+            Date startDate = new Date(startMillis);
+            Date endDate = new Date(endMillis);
+            FreeEvent freeEvent = new FreeEvent(startDate, endDate);
+            freeEvent.setDescription(cursor.getString(2));
+            CNames[i] = cursor.getString(1);
+            cursor.moveToNext();
+            eventsList.add(freeEvent);
+        }
+        return eventsList;
     }
 }

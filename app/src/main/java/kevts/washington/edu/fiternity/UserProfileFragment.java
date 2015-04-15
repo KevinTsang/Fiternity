@@ -1,6 +1,8 @@
 package kevts.washington.edu.fiternity;
 
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -31,6 +33,7 @@ import java.net.URISyntaxException;
 public class UserProfileFragment extends Fragment {
 
     private ParseUser user;
+    private LayoutInflater layoutInflater;
     private View rootView;
     private EditText userName;
     private ImageView profilePic;
@@ -49,7 +52,8 @@ public class UserProfileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_profile, container, false);
+        layoutInflater = inflater;
+        rootView = layoutInflater.inflate(R.layout.fragment_profile, container, false);
         user = FiternityApplication.getInstance().getParseUser();
         userName = (EditText)rootView.findViewById(R.id.user_name);
         profilePic = (ImageView)rootView.findViewById(R.id.profile_picture);
@@ -92,6 +96,29 @@ public class UserProfileFragment extends Fragment {
             }
         });
         return rootView;
+    }
+
+    private void setUpAgeRange() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        View dialogLayout = layoutInflater.inflate(R.layout.fragment_match_age_range, null);
+        builder.setTitle("Please pick a preferred age range.");
+        // set the values of the numberpickers here from saved data
+        builder.setView(dialogLayout);
+        builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                user.put("minAge", minAgePicker.getValue());
+                user.put("maxAge", maxAgePicker.getValue());
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        builder.create();
+        builder.show();
     }
 
     private void fillFieldsWithUserData(View rootView) {

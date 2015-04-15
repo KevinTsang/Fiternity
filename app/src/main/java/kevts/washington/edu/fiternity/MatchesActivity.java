@@ -47,6 +47,8 @@ public class MatchesActivity extends ActionBarActivity implements ActionBar.TabL
      */
     ViewPager mViewPager;
     private static final String TAG = "MatchesActivity";
+    private static final int calendarRequestCode = 17;
+    private static FiternityApplication instance;
     private String[] mActivityNames;
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
@@ -57,6 +59,7 @@ public class MatchesActivity extends ActionBarActivity implements ActionBar.TabL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_matches);
+        instance = FiternityApplication.getInstance();
         setTitle("Matches");
 
         // Set up the action bar.
@@ -119,7 +122,15 @@ public class MatchesActivity extends ActionBarActivity implements ActionBar.TabL
                         builder.appendPath("time");
                         ContentUris.appendId(builder, startMillis);
                         Intent calendarIntent = new Intent(Intent.ACTION_VIEW).setData(builder.build());
-                        startActivity(calendarIntent);
+                        startActivityForResult(calendarIntent, calendarRequestCode);
+                        break;
+                    case 4:
+                        instance.createEvent();
+                        break;
+                    case 5:
+                        instance.getParseUser().logOutInBackground();
+                        Intent logoutIntent = new Intent(MatchesActivity.this, FiternityLogin.class);
+                        startActivity(intent);
                         break;
                 }
             }
