@@ -41,7 +41,7 @@
             android:gravity="center"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
-            android:id="@+id/" />
+            android:id="@+id/between_age_pickers" />
 
         <NumberPicker
             android:layout_width="wrap_content"

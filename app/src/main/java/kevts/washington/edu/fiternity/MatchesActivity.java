@@ -95,7 +95,7 @@ public class MatchesActivity extends ActionBarActivity implements ActionBar.TabL
                             .setText(mSectionsPagerAdapter.getPageTitle(i))
                             .setTabListener(this));
         }
-        mActivityNames = new String[] {"Profile", "Matches", "Activities", "Schedule"};
+        mActivityNames = new String[] {"Profile", "Matches", "Activities", "View Schedule", "Schedule Exercise", "Log out"};
         mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         mDrawerList = (ListView)findViewById(R.id.left_drawer);
 
@@ -117,12 +117,7 @@ public class MatchesActivity extends ActionBarActivity implements ActionBar.TabL
                         startActivity(intent);
                         break;
                     case 3:
-                        long startMillis = Calendar.getInstance().getTimeInMillis();
-                        Uri.Builder builder = CalendarContract.CONTENT_URI.buildUpon();
-                        builder.appendPath("time");
-                        ContentUris.appendId(builder, startMillis);
-                        Intent calendarIntent = new Intent(Intent.ACTION_VIEW).setData(builder.build());
-                        startActivityForResult(calendarIntent, calendarRequestCode);
+                        instance.viewSchedule();
                         break;
                     case 4:
                         instance.createEvent();
@@ -130,7 +125,7 @@ public class MatchesActivity extends ActionBarActivity implements ActionBar.TabL
                     case 5:
                         instance.getParseUser().logOutInBackground();
                         Intent logoutIntent = new Intent(MatchesActivity.this, FiternityLogin.class);
-                        startActivity(intent);
+                        startActivity(logoutIntent);
                         break;
                 }
             }

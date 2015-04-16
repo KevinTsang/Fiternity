@@ -43,6 +43,8 @@ public class UserProfileFragment extends Fragment {
     private NumberPicker agePicker;
     private Spinner genderSpinner;
     private CheckBox genderPreference;
+    private int minAge;
+    private int maxAge;
 
     public UserProfileFragment() {
         // Required empty public constructor
@@ -66,6 +68,13 @@ public class UserProfileFragment extends Fragment {
 
         setUpAgeLimitsAndGenderChoices(rootView);
         fillFieldsWithUserData(rootView);
+        Button ageRangeButton = (Button)rootView.findViewById(R.id.age_range_button);
+        ageRangeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setUpAgeRange();
+            }
+        });
         Button button = (Button)rootView.findViewById(R.id.toExerciseButton);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,6 +94,8 @@ public class UserProfileFragment extends Fragment {
                     user.put("age", agePicker.getValue());
                     user.put("gender", genderSpinner.getSelectedItem().toString());
                     user.put("genderPreference", genderPreference.isChecked());
+                    user.put("minAge", minAge);
+                    user.put("maxAge", maxAge);
                     user.saveInBackground();
                     getActivity().getSupportFragmentManager().beginTransaction()
                             .replace(R.id.content_frame, new ExerciseFragment())
@@ -104,11 +115,23 @@ public class UserProfileFragment extends Fragment {
         builder.setTitle("Please pick a preferred age range.");
         // set the values of the numberpickers here from saved data
         builder.setView(dialogLayout);
+        final NumberPicker minAgePicker = (NumberPicker)dialogLayout.findViewById(R.id.minAge);
+        final NumberPicker maxAgePicker = (NumberPicker)dialogLayout.findViewById(R.id.maxAge);
+        minAgePicker.setMinValue(15);
+        minAgePicker.setMaxValue(99);
+        maxAgePicker.setMinValue(15);
+        maxAgePicker.setMaxValue(99);
+        if (user.getInt("minAge") != 0) {
+            minAgePicker.setValue(user.getInt("minAge"));
+        }
+        if (user.getInt("maxAge") != 0) {
+            maxAgePicker.setValue(user.getInt("maxAge"));
+        }
         builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                user.put("minAge", minAgePicker.getValue());
-                user.put("maxAge", maxAgePicker.getValue());
+                minAge = minAgePicker.getValue();
+                maxAge = maxAgePicker.getValue();
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -169,7 +192,6 @@ public class UserProfileFragment extends Fragment {
 //        if (userPhone.getText().length() == 0) {
 //            valid = false;
 //        }
-
         if (userZip.getText().length() == 0)
             valid = false;
         else {
@@ -178,6 +200,9 @@ public class UserProfileFragment extends Fragment {
             } catch (NumberFormatException e) {
                 valid = false;
             }
+        }
+        if (minAge > maxAge) {
+            valid = false;
         }
         return valid;
     }

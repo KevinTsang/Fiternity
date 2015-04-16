@@ -39,13 +39,13 @@ public class UserProfileActivity extends ActionBarActivity {
         instance = FiternityApplication.getInstance();
         if (getIntent().getBooleanExtra("loadUserProfileFragment", true)) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.content_frame, new UserProfileFragment())
+                    .replace(R.id.content_frame, new UserProfileFragment())
                     .commit();
             mTitle = "Profile";
             setTitle(mTitle);
         } else {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.content_frame, new ExerciseFragment())
+                    .replace(R.id.content_frame, new ExerciseFragment())
                     .commit();
             mTitle = "Activities";
             setTitle(mTitle);
@@ -74,12 +74,7 @@ public class UserProfileActivity extends ActionBarActivity {
                     case 2: fragment = new ExerciseFragment();
                         break;
                     case 3:
-                        long startMillis = Calendar.getInstance().getTimeInMillis();
-                        Uri.Builder builder = CalendarContract.CONTENT_URI.buildUpon();
-                        builder.appendPath("time");
-                        ContentUris.appendId(builder, startMillis);
-                        Intent calendarIntent = new Intent(Intent.ACTION_VIEW).setData(builder.build());
-                        startActivityForResult(calendarIntent, calendarRequestCode);
+                        instance.viewSchedule();
                         break;
                     case 4:
                         instance.createEvent();
