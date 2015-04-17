@@ -2,11 +2,13 @@ package kevts.washington.edu.fiternity;
 
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.Set;
 
 import android.content.ContentUris;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
+import android.nfc.Tag;
 import android.provider.CalendarContract;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
@@ -18,6 +20,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -28,6 +31,11 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.parse.Parse;
+import com.parse.ParseException;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 
 public class MatchesActivity extends ActionBarActivity implements ActionBar.TabListener {
@@ -117,10 +125,28 @@ public class MatchesActivity extends ActionBarActivity implements ActionBar.TabL
                         startActivity(intent);
                         break;
                     case 3:
-                        instance.viewSchedule();
+                        long startMillis = Calendar.getInstance().getTimeInMillis();
+                        Uri.Builder builder = CalendarContract.CONTENT_URI.buildUpon();
+                        builder.appendPath("time");
+                        ContentUris.appendId(builder, startMillis);
+                        Intent calendarIntent = new Intent(Intent.ACTION_VIEW).setData(builder.build());
+                        startActivityForResult(calendarIntent, calendarRequestCode);
                         break;
                     case 4:
-                        instance.createEvent();
+                        Calendar beginTime = Calendar.getInstance();
+//        beginTime.set(); set a time here
+                        Calendar endTime = Calendar.getInstance();
+//        endTime.set();  set a time here
+                        Intent createEventIntent = new Intent(Intent.ACTION_INSERT)
+                                .setData(CalendarContract.Events.CONTENT_URI)
+//                .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, beginTime.getTimeInMillis())
+//                .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, endTime.getTimeInMillis())
+                                .putExtra(CalendarContract.Events.TITLE, "Fiternity")
+                                .putExtra(CalendarContract.Events.DESCRIPTION, "Insert activity here")
+                                .putExtra(CalendarContract.Events.EVENT_LOCATION, "Insert location here")
+                                .putExtra(CalendarContract.Events.AVAILABILITY, CalendarContract.Events.AVAILABILITY_FREE);
+//                                .putExtra(Intent.EXTRA_EMAIL, "email address here, another email address here");
+                        startActivityForResult(createEventIntent, calendarRequestCode);
                         break;
                     case 5:
                         instance.getParseUser().logOutInBackground();
@@ -153,6 +179,22 @@ public class MatchesActivity extends ActionBarActivity implements ActionBar.TabL
         getSupportActionBar().setHomeButtonEnabled(true);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == calendarRequestCode) {
+            if (resultCode == RESULT_CANCELED) {
+                Set<FreeEvent> userEvents = instance.readEvents();
+                ParseUser user = instance.getParseUser();
+                user.addAllUnique("events", userEvents);
+                user.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        Log.i(TAG, "Successfully saved events to the cloud!");
+                    }
+                });
+            }
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

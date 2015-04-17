@@ -18,7 +18,12 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.parse.ParseException;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
+
 import java.util.Calendar;
+import java.util.Set;
 
 
 public class UserProfileActivity extends ActionBarActivity {
@@ -74,10 +79,28 @@ public class UserProfileActivity extends ActionBarActivity {
                     case 2: fragment = new ExerciseFragment();
                         break;
                     case 3:
-                        instance.viewSchedule();
+                        long startMillis = Calendar.getInstance().getTimeInMillis();
+                        Uri.Builder builder = CalendarContract.CONTENT_URI.buildUpon();
+                        builder.appendPath("time");
+                        ContentUris.appendId(builder, startMillis);
+                        Intent calendarIntent = new Intent(Intent.ACTION_VIEW).setData(builder.build());
+                        startActivity(calendarIntent);
                         break;
                     case 4:
-                        instance.createEvent();
+                        Calendar beginTime = Calendar.getInstance();
+//        beginTime.set(); set a time here
+                        Calendar endTime = Calendar.getInstance();
+//        endTime.set();  set a time here
+                        Intent createEventIntent = new Intent(Intent.ACTION_INSERT)
+                                .setData(CalendarContract.Events.CONTENT_URI)
+//                .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, beginTime.getTimeInMillis())
+//                .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, endTime.getTimeInMillis())
+                                .putExtra(CalendarContract.Events.TITLE, "Fiternity")
+                                .putExtra(CalendarContract.Events.DESCRIPTION, "Insert activity here")
+                                .putExtra(CalendarContract.Events.EVENT_LOCATION, "Insert location here")
+                                .putExtra(CalendarContract.Events.AVAILABILITY, CalendarContract.Events.AVAILABILITY_FREE);
+//                                .putExtra(Intent.EXTRA_EMAIL, "email address here, another email address here");
+                        startActivity(createEventIntent);
                         break;
                     case 5:
                         instance.getParseUser().logOutInBackground();
@@ -147,7 +170,17 @@ public class UserProfileActivity extends ActionBarActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == calendarRequestCode) {
             if (resultCode == RESULT_CANCELED) {
-                instance.readEvents();
+                Set<FreeEvent> userEvents = instance.readEvents();
+                ParseUser user = instance.getParseUser();
+                for (FreeEvent fe : userEvents) {
+                    user.add("events", fe);
+                }
+                user.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        Log.i(TAG, "Successfully saved events to the cloud!");
+                    }
+                });
             }
         }
     }

@@ -19,6 +19,7 @@ import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
 
 import java.util.ArrayList;
@@ -42,7 +43,7 @@ public class FiternityLogin extends Activity {
         emailSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ParseUser user = new ParseUser();
+                final ParseUser user = new ParseUser();
                 String email = ((AutoCompleteTextView)findViewById(R.id.email)).getText().toString();
                 String password = ((EditText)findViewById(R.id.password)).getText().toString();
 //                String username = "";
@@ -55,6 +56,11 @@ public class FiternityLogin extends Activity {
 
                     }
                 });
+                try {
+                    user.save();
+                } catch (ParseException pe) {
+                    Log.e(TAG, "Saving email and password from non-Facebook login failed");
+                }
                 FiternityApplication.getInstance().setParseUser(user);
                 Intent intent = new Intent(FiternityLogin.this, UserProfileActivity.class);
                 startActivity(intent);

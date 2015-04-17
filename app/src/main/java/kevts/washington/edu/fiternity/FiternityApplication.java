@@ -183,7 +183,7 @@ public class FiternityApplication extends Application {
 
     }
 
-    public ArrayList<FreeEvent> readEvents() {
+    public Set<FreeEvent> readEvents() {
         Cursor cursor = getApplicationContext().getContentResolver()
                 .query(
                         Uri.parse("content://com.android.calendar/events"),
@@ -200,7 +200,7 @@ public class FiternityApplication extends Application {
         String CNames[] = new String[cursor.getCount()];
 
         // fetching calendars id
-        ArrayList<FreeEvent> eventsList = new ArrayList<FreeEvent>();
+        HashSet<FreeEvent> eventsList = new HashSet<>();
         for (int i = 0; i < CNames.length; i++) {
             long startMillis = Long.parseLong(cursor.getString(3));
             long endMillis = Long.parseLong(cursor.getString(4));

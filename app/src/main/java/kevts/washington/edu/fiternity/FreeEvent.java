@@ -1,5 +1,6 @@
 package kevts.washington.edu.fiternity;
 
+import com.parse.ParseObject;
 import com.parse.ParseUser;
 
 import java.io.Serializable;
@@ -9,7 +10,7 @@ import java.util.Date;
 /**
  * Created by kevin on 4/15/15.
  */
-public class FreeEvent implements Serializable {
+public class FreeEvent extends ParseObject implements Serializable {
     private FiternityApplication instance;
     private ArrayList<ParseUser> users;
     private Date startTime;
