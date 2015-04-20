@@ -19,6 +19,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
@@ -170,17 +171,7 @@ public class UserProfileActivity extends ActionBarActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == calendarRequestCode) {
             if (resultCode == RESULT_CANCELED) {
-                Set<FreeEvent> userEvents = instance.readEvents();
-                ParseUser user = instance.getParseUser();
-                for (FreeEvent fe : userEvents) {
-                    user.add("events", fe);
-                }
-                user.saveInBackground(new SaveCallback() {
-                    @Override
-                    public void done(ParseException e) {
-                        Log.i(TAG, "Successfully saved events to the cloud!");
-                    }
-                });
+                instance.readEvents();
             }
         }
     }

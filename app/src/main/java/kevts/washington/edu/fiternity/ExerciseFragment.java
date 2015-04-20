@@ -148,7 +148,7 @@ public class ExerciseFragment extends Fragment {
 
     }
 
-    private void createDialog(final String exercise) {
+    private void createDialog(String exercise) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         user_level = 0;
         partner_level = 0;
@@ -180,6 +180,8 @@ public class ExerciseFragment extends Fragment {
             public void onStopTrackingTouch(SeekBar seekBottom) { }
         });
         builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+            private String exercise;
+
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 GridLayout exercises = (GridLayout)rootView.findViewById(R.id.exercises);
@@ -197,7 +199,12 @@ public class ExerciseFragment extends Fragment {
                 ll.addView(button);
                 exercises.addView(ll);
             }
-        });
+
+            private DialogInterface.OnClickListener init(String exercise) {
+                this.exercise = exercise;
+                return this;
+            }
+        }.init(exercise));
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -208,7 +215,7 @@ public class ExerciseFragment extends Fragment {
         builder.show();
     }
 
-    private void editDialog(final String exercise, final Exercise activity, final View view) {
+    private void editDialog(String exercise, Exercise activity, View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         View dialogLayout = layoutInflater.inflate(R.layout.fragment_exp_level_setter, null);
         seekTop = (SeekBar) dialogLayout.findViewById(R.id.user_exp_level);
@@ -242,6 +249,9 @@ public class ExerciseFragment extends Fragment {
         builder.setTitle(exercise);
         builder.setView(dialogLayout);
         builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+            private View view;
+            private String exercise;
+
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 GridLayout exercises = (GridLayout)rootView.findViewById(R.id.exercises);
@@ -258,7 +268,13 @@ public class ExerciseFragment extends Fragment {
                 ll.addView(button);
                 exercises.addView(ll);
             }
-        });
+
+            private DialogInterface.OnClickListener init(View view, String exercise) {
+                this.view = view;
+                this.exercise = exercise;
+                return this;
+            }
+        }.init(view, exercise));
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -269,8 +285,12 @@ public class ExerciseFragment extends Fragment {
         builder.show();
     }
 
-    private View.OnClickListener removeExerciseListener(final Exercise activity, final LinearLayout ll, final GridLayout exercises) {
+    private View.OnClickListener removeExerciseListener(Exercise activity, LinearLayout ll, GridLayout exercises) {
         return new View.OnClickListener() {
+            private Exercise activity;
+            private LinearLayout ll;
+            private GridLayout exercises;
+
             @Override
             public void onClick(View v) {
                 exerciseArrayList.remove(activity);
@@ -278,16 +298,29 @@ public class ExerciseFragment extends Fragment {
                 parentView.removeView(v);
                 exercises.removeView(ll);
             }
-        };
+            private View.OnClickListener init(Exercise activity, LinearLayout ll, GridLayout exercises) {
+                this.activity = activity;
+                this.ll = ll;
+                this.exercises = exercises;
+                return this;
+            }
+        }.init(activity, ll, exercises);
     }
 
-    private View.OnClickListener editExerciseDialogListener(final Exercise activity) {
+    private View.OnClickListener editExerciseDialogListener(Exercise activity) {
         return new View.OnClickListener() {
+            private Exercise activity;
+
             @Override
             public void onClick(View v) {
                 exerciseArrayList.remove(activity);
                 editDialog(activity.getExerciseName(), activity, v);
             }
-        };
+
+            private View.OnClickListener init(Exercise activity) {
+                this.activity = activity;
+                return this;
+            }
+        }.init(activity);
     }
 }

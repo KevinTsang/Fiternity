@@ -15,9 +15,12 @@ import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
+import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
@@ -34,6 +37,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -45,7 +49,7 @@ public class FiternityApplication extends Application {
     private static ParseUser parseUser;
     private static FiternityApplication instance;
     private static Set<Exercise> exerciseSet;
-    private ArrayList<Integer> friendIds;
+    private ArrayList<Long> friendIds;
 
     public FiternityApplication() {
         if (instance == null)
@@ -91,13 +95,8 @@ public class FiternityApplication extends Application {
                         } catch (JSONException e) {
                             Log.e(TAG, "Parsing the JSON object failed.");
                         }
-                        parseUser.signUpInBackground(new SignUpCallback() {
-                            @Override
-                            public void done(ParseException e) {
-                                Log.i(TAG, "Saved data to cloud!");
-                            }
-                        });
                         try {
+                            parseUser.signUp();
                             parseUser.save();
                         } catch (ParseException e) {
                             Log.e(TAG, "Failed to get save parse user data.");
@@ -132,24 +131,31 @@ public class FiternityApplication extends Application {
         return exerciseSet;
     }
 
-    public void getFriends() {
+    public void saveFriends() {
         if (AccessToken.getCurrentAccessToken() != null) {
             GraphRequest.newMyFriendsRequest(AccessToken.getCurrentAccessToken(),
                     new GraphRequest.GraphJSONArrayCallback() {
                         @Override
                         public void onCompleted(JSONArray jsonArray, GraphResponse graphResponse) {
-                            try {
-                                jsonArray.toString();  // use this to get the ID then use it for querying times
+                            try {  // use this to get the ID then use it for querying times
                                 for (int i = 0; i < jsonArray.length(); i++) {
                                     JSONObject personAndId = jsonArray.getJSONObject(i);
-                                    personAndId.getString("name");
-                                    personAndId.getString("id");
+                                    ParseObject friendsList = new ParseObject("FriendsList");
+                                    friendsList.put("name", personAndId.getString("name"));
+                                    friendsList.put("friendId", personAndId.getString("id"));
+                                    parseUser.addUnique("FriendsList", friendsList);
                                 }
                             } catch (JSONException jsone) {
                                 Log.e(TAG, "JSON did not parse correctly when getting the name and ID from Facebook");
                             }
                         }
                     }).executeAsync();
+            parseUser.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    Log.i(TAG, "Saved friend IDs successfully!");
+                }
+            });
         }
     }
 
@@ -183,7 +189,7 @@ public class FiternityApplication extends Application {
 
     }
 
-    public Set<FreeEvent> readEvents() {
+    public void readEvents() {
         Cursor cursor = getApplicationContext().getContentResolver()
                 .query(
                         Uri.parse("content://com.android.calendar/events"),
@@ -200,18 +206,99 @@ public class FiternityApplication extends Application {
         String CNames[] = new String[cursor.getCount()];
 
         // fetching calendars id
-        HashSet<FreeEvent> eventsList = new HashSet<>();
+
         for (int i = 0; i < CNames.length; i++) {
             long startMillis = Long.parseLong(cursor.getString(3));
             long endMillis = Long.parseLong(cursor.getString(4));
-            Date startDate = new Date(startMillis);
-            Date endDate = new Date(endMillis);
-            FreeEvent freeEvent = new FreeEvent(startDate, endDate);
-            freeEvent.setDescription(cursor.getString(2));
-            CNames[i] = cursor.getString(1);
+//            Date startDate = new Date(startMillis);
+//            Date endDate = new Date(endMillis);
+            ParseObject freeEvent = new ParseObject("FreeEvent");
+            freeEvent.put("startDate", startMillis);
+            freeEvent.put("endDate", endMillis);
+            try {
+                freeEvent.put("exercises", cursor.getString(2));
+                CNames[i] = cursor.getString(1);
+            } catch (IllegalStateException ise) {
+                Log.i(TAG, "Location or description/exercises not specified");
+            }
             cursor.moveToNext();
-            eventsList.add(freeEvent);
+            parseUser.addUnique("event", freeEvent);
         }
-        return eventsList;
+
+        parseUser.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                Log.i(TAG, "Saved events to cloud successfully.");
+            }
+        });
+    }
+
+// Goes through every friend with this person and checks if they have an overlapping schedule
+    public void getFriendEvents() {
+        List<ParseObject> friendsList = parseUser.getList("FriendsList");
+        for (final ParseObject friendId : friendsList) {
+            ParseQuery<ParseObject> friendQuery = ParseQuery.getQuery("ParseUser");
+            // NEED TO CHANGE THIS FOR NON-FACEBOOK USERS
+            friendQuery.whereEqualTo("username", friendId.get("id"));
+            friendQuery.findInBackground(new FindCallback<ParseObject>() {
+                @Override
+                public void done(List<ParseObject> parseObjects, ParseException e) {
+                    for (ParseObject friend : parseObjects) {
+                        List<ParseObject> friendEvents = friend.getList("event");
+                        List<ParseObject> events = getMatchingSchedule(friendEvents);
+                        if (events.size() > 0) {
+                            friendIds.add(Long.parseLong(friendId.get("id").toString()));
+                        }
+                    }
+                }
+            });
+        }
+    }
+
+// Given 2 users' schedules compare them and return a matching schedule here
+    public List<ParseObject> getMatchingSchedule(List<ParseObject> otherSchedule) {
+        List<ParseObject> commonSchedule = new ArrayList<>();
+        List<ParseObject> userSchedule = parseUser.getList("event");
+
+        int userScheduleIndex = 0;
+        int otherScheduleIndex = 0;
+        while (userScheduleIndex < userSchedule.size() || otherScheduleIndex < otherSchedule.size()) {
+            ParseObject userEvent = userSchedule.get(userScheduleIndex);
+            ParseObject otherUserEvent = otherSchedule.get(otherScheduleIndex);
+            ParseObject event = getSmallerEvent(userEvent, otherUserEvent);
+            if (event == null) {
+                if (userEvent.getLong("endDate") < otherUserEvent.getLong("startDate")) {
+                    userScheduleIndex++;
+                } else {
+                    otherScheduleIndex++;
+                }
+            } else {
+                commonSchedule.add(event);
+            }
+        }
+
+        return commonSchedule;
+    }
+
+// Takes two events and returns the smaller match between the two, null if there's no overlap
+    public ParseObject getSmallerEvent(ParseObject userEvent, ParseObject otherEvent) {
+        ParseObject event = new ParseObject("FreeEvent");
+        long userEventStartDate = userEvent.getLong("startDate");
+        long userEventEndDate = userEvent.getLong("endDate");
+        long otherEventStartDate = otherEvent.getLong("startDate");
+        long otherEventEndDate = otherEvent.getLong("endDate");
+
+        if (userEventEndDate > otherEventStartDate && userEventEndDate <= otherEventEndDate) {
+            if (userEventStartDate < otherEventStartDate)
+                event.put("startDate", otherEventStartDate);
+            else event.put("startDate", userEventStartDate);
+            event.put("endDate", userEventEndDate);
+        } else if (otherEventEndDate > userEventStartDate && otherEventEndDate <= userEventEndDate) {
+            if (otherEventStartDate < userEventStartDate)
+                event.put("startDate", userEventStartDate);
+            else event.put("startDate", otherEventStartDate);
+            event.put("endDate", otherEventEndDate);
+        } else return null;
+        return event;
     }
 }

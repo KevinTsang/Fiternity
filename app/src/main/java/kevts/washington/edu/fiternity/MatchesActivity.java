@@ -34,6 +34,7 @@ import android.widget.TextView;
 
 import com.parse.Parse;
 import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
@@ -183,15 +184,7 @@ public class MatchesActivity extends ActionBarActivity implements ActionBar.TabL
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == calendarRequestCode) {
             if (resultCode == RESULT_CANCELED) {
-                Set<FreeEvent> userEvents = instance.readEvents();
-                ParseUser user = instance.getParseUser();
-                user.addAllUnique("events", userEvents);
-                user.saveInBackground(new SaveCallback() {
-                    @Override
-                    public void done(ParseException e) {
-                        Log.i(TAG, "Successfully saved events to the cloud!");
-                    }
-                });
+                instance.readEvents();
             }
         }
     }
