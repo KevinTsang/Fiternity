@@ -76,7 +76,10 @@ public class ExerciseFragment extends Fragment {
         "kayaking", "rafting", "rowing", "swimming", "weightlifting", "lifting", "demolition derby",
         "racing", "drag racing", "off-road racing", "monster truck", "motocross", "boat racing",
         "cross-country", "pole vaulting", "long jumping", "speed skating", "roller blading",
-        "tetherball", "hacky sack"};
+        "tetherball", "hacky sack", "jogging", "sandboarding", "pole dancing", "abseiling", "aquathlon",
+        "arm wrestling", "artistic billiards", "autocross", "bagatelle", "ballroom dancing", "beach volleyball", 
+        "biathlon", "bowling", "camping", "darts", "diving", "flag football", "foosball", "quad biking", "river rafting",
+        "scuba diving", "shuffleboard", "snooker", "triathlon", "tug of war", "water skiing", "wind surfing", "yoga"};
 
         adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, allSports);
         exerciseArrayList = FiternityApplication.getInstance().getExercises();
