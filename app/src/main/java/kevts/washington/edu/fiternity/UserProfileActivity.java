@@ -74,6 +74,7 @@ public class UserProfileActivity extends ActionBarActivity {
                     case 0: fragment = new UserProfileFragment();
                         break;
                     case 1:
+                        instance.getFriendEvents();
                         Intent matchesIntent = new Intent(UserProfileActivity.this, MatchesActivity.class);
                         startActivity(matchesIntent);
                         break;

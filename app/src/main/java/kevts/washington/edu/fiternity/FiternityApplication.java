@@ -88,7 +88,6 @@ public class FiternityApplication extends Application {
                 public void onCompleted(JSONObject user, GraphResponse graphResponse) {
                     if (user != null) {
                         try {
-                            parseUser.setUsername(user.get("id").toString());
                             parseUser.setEmail(user.get("email").toString());
                             parseUser.put("first_name", user.get("first_name").toString());
                             parseUser.put("last_name", user.get("last_name").toString());
@@ -96,7 +95,6 @@ public class FiternityApplication extends Application {
                             Log.e(TAG, "Parsing the JSON object failed.");
                         }
                         try {
-                            parseUser.signUp();
                             parseUser.save();
                         } catch (ParseException e) {
                             Log.e(TAG, "Failed to get save parse user data.");
@@ -140,22 +138,19 @@ public class FiternityApplication extends Application {
                             try {  // use this to get the ID then use it for querying times
                                 for (int i = 0; i < jsonArray.length(); i++) {
                                     JSONObject personAndId = jsonArray.getJSONObject(i);
-                                    ParseObject friendsList = new ParseObject("FriendsList");
-                                    friendsList.put("name", personAndId.getString("name"));
-                                    friendsList.put("friendId", personAndId.getString("id"));
-                                    parseUser.addUnique("FriendsList", friendsList);
+                                    parseUser.addUnique("FriendsList", personAndId.getString("id"));
                                 }
                             } catch (JSONException jsone) {
                                 Log.e(TAG, "JSON did not parse correctly when getting the name and ID from Facebook");
                             }
+                            parseUser.saveInBackground(new SaveCallback() {
+                                @Override
+                                public void done(ParseException e) {
+                                    Log.i(TAG, "Saved friend IDs successfully!");
+                                }
+                            });
                         }
                     }).executeAsync();
-            parseUser.saveInBackground(new SaveCallback() {
-                @Override
-                public void done(ParseException e) {
-                    Log.i(TAG, "Saved friend IDs successfully!");
-                }
-            });
         }
     }
 
@@ -235,19 +230,19 @@ public class FiternityApplication extends Application {
 
 // Goes through every friend with this person and checks if they have an overlapping schedule
     public void getFriendEvents() {
-        List<ParseObject> friendsList = parseUser.getList("FriendsList");
-        for (final ParseObject friendId : friendsList) {
-            ParseQuery<ParseObject> friendQuery = ParseQuery.getQuery("ParseUser");
+        List<String> friendsList = parseUser.getList("FriendsList");
+        for (final String friendId : friendsList) {
+            ParseQuery<ParseUser> friendQuery = ParseUser.getQuery();
             // NEED TO CHANGE THIS FOR NON-FACEBOOK USERS
-            friendQuery.whereEqualTo("username", friendId.get("id"));
-            friendQuery.findInBackground(new FindCallback<ParseObject>() {
+            friendQuery.whereEqualTo("username", friendId);
+            friendQuery.findInBackground(new FindCallback<ParseUser>() {
                 @Override
-                public void done(List<ParseObject> parseObjects, ParseException e) {
-                    for (ParseObject friend : parseObjects) {
+                public void done(List<ParseUser> parseUsers, ParseException e) {
+                    for (ParseObject friend : parseUsers) {
                         List<ParseObject> friendEvents = friend.getList("event");
                         List<ParseObject> events = getMatchingSchedule(friendEvents);
                         if (events.size() > 0) {
-                            friendIds.add(Long.parseLong(friendId.get("id").toString()));
+                            friendIds.add(Long.parseLong(friendId));
                         }
                     }
                 }
@@ -262,18 +257,20 @@ public class FiternityApplication extends Application {
 
         int userScheduleIndex = 0;
         int otherScheduleIndex = 0;
-        while (userScheduleIndex < userSchedule.size() || otherScheduleIndex < otherSchedule.size()) {
-            ParseObject userEvent = userSchedule.get(userScheduleIndex);
-            ParseObject otherUserEvent = otherSchedule.get(otherScheduleIndex);
-            ParseObject event = getSmallerEvent(userEvent, otherUserEvent);
-            if (event == null) {
-                if (userEvent.getLong("endDate") < otherUserEvent.getLong("startDate")) {
-                    userScheduleIndex++;
+        if (userSchedule != null && otherSchedule != null) {
+            while (userScheduleIndex < userSchedule.size() || otherScheduleIndex < otherSchedule.size()) {
+                ParseObject userEvent = userSchedule.get(userScheduleIndex);
+                ParseObject otherUserEvent = otherSchedule.get(otherScheduleIndex);
+                ParseObject event = getSmallerEvent(userEvent, otherUserEvent);
+                if (event == null) {
+                    if (userEvent.getLong("endDate") < otherUserEvent.getLong("startDate")) {
+                        userScheduleIndex++;
+                    } else {
+                        otherScheduleIndex++;
+                    }
                 } else {
-                    otherScheduleIndex++;
+                    commonSchedule.add(event);
                 }
-            } else {
-                commonSchedule.add(event);
             }
         }
 
@@ -300,5 +297,9 @@ public class FiternityApplication extends Application {
             event.put("endDate", otherEventEndDate);
         } else return null;
         return event;
+    }
+
+    public List<Long> getFriendIds() {
+        return friendIds;
     }
 }

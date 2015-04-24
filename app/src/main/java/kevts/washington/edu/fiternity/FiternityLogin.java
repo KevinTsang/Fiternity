@@ -36,6 +36,7 @@ public class FiternityLogin extends Activity {
         setContentView(R.layout.activity_fiternity_login);
         if (AccessToken.getCurrentAccessToken() != null) {
             FiternityApplication.getInstance().setParseUser(ParseUser.getCurrentUser());
+            FiternityApplication.getInstance().getFriendEvents();
             Intent intent = new Intent(FiternityLogin.this, MatchesActivity.class);
             startActivity(intent);
         }
