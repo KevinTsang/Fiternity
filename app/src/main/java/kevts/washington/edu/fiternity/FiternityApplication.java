@@ -36,6 +36,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -49,7 +50,7 @@ public class FiternityApplication extends Application {
     private static ParseUser parseUser;
     private static FiternityApplication instance;
     private static Set<Exercise> exerciseSet;
-    private ArrayList<Long> friendIds;
+    private ArrayList<String> friendIds;
 
     public FiternityApplication() {
         if (instance == null)
@@ -88,9 +89,9 @@ public class FiternityApplication extends Application {
                 public void onCompleted(JSONObject user, GraphResponse graphResponse) {
                     if (user != null) {
                         try {
+                            parseUser.put("facebookId", user.get("id").toString());
                             parseUser.setEmail(user.get("email").toString());
-                            parseUser.put("first_name", user.get("first_name").toString());
-                            parseUser.put("last_name", user.get("last_name").toString());
+                            parseUser.put("name", user.get("name").toString());
                         } catch (JSONException e) {
                             Log.e(TAG, "Parsing the JSON object failed.");
                         }
@@ -213,8 +214,11 @@ public class FiternityApplication extends Application {
             try {
                 freeEvent.put("exercises", cursor.getString(2));
                 CNames[i] = cursor.getString(1);
+                freeEvent.save();
             } catch (IllegalStateException ise) {
                 Log.i(TAG, "Location or description/exercises not specified");
+            } catch (ParseException pe) {
+                Log.e(TAG, "Event did not save properly.");
             }
             cursor.moveToNext();
             parseUser.addUnique("event", freeEvent);
@@ -234,19 +238,19 @@ public class FiternityApplication extends Application {
         for (final String friendId : friendsList) {
             ParseQuery<ParseUser> friendQuery = ParseUser.getQuery();
             // NEED TO CHANGE THIS FOR NON-FACEBOOK USERS
-            friendQuery.whereEqualTo("username", friendId);
-            friendQuery.findInBackground(new FindCallback<ParseUser>() {
-                @Override
-                public void done(List<ParseUser> parseUsers, ParseException e) {
-                    for (ParseObject friend : parseUsers) {
-                        List<ParseObject> friendEvents = friend.getList("event");
-                        List<ParseObject> events = getMatchingSchedule(friendEvents);
-                        if (events.size() > 0) {
-                            friendIds.add(Long.parseLong(friendId));
-                        }
+            friendQuery.whereEqualTo("facebookId", friendId);
+            try {
+                List<ParseUser> parseUsers = friendQuery.find();
+                for (ParseObject friend : parseUsers) {
+                    List<ParseObject> friendEvents = friend.getList("event");
+                    List<ParseObject> events = getMatchingSchedule(friendEvents);
+                    if (events.size() > 0) {
+                        friendIds.add(friendId);
                     }
                 }
-            });
+            } catch (ParseException pe) {
+                Log.e(TAG, "Failed to add friends to local friend list");
+            }
         }
     }
 
@@ -299,7 +303,7 @@ public class FiternityApplication extends Application {
         return event;
     }
 
-    public List<Long> getFriendIds() {
+    public List<String> getFriendIds() {
         return friendIds;
     }
 }

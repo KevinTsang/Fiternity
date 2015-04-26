@@ -82,13 +82,7 @@ public class UserProfileFragment extends Fragment {
                 // Save profile here
                 if (validInput()) {
                     Log.d("valid input", " true");
-                    String[] nameField = userName.getText().toString().split(" ");
-                    if (nameField.length == 2) {
-                        user.put("first_name", nameField[0]);
-                        user.put("last_name", nameField[1]);
-                    } else if (nameField.length == 1) {
-                        user.put("first_name", nameField[0]);
-                    }
+                    user.put("name", userName.getText().toString());
                     user.put("phone", userPhone.getText().toString());
                     user.put("zip", Integer.parseInt(userZip.getText().toString()));
                     user.put("age", agePicker.getValue());
@@ -147,7 +141,7 @@ public class UserProfileFragment extends Fragment {
     private void fillFieldsWithUserData(View rootView) {
 
         if (user.getString("first_name") != null && user.getString("last_name") != null)
-            userName.setText(user.getString("first_name") + " " + user.getString("last_name"));
+            userName.setText(user.getString("name"));
         if (user.getEmail() != null)
             userEmail.setText(user.getEmail());
         if (user.getString("phone") != null)
@@ -162,7 +156,7 @@ public class UserProfileFragment extends Fragment {
             else genderSpinner.setSelection(1);
         }
         genderPreference.setChecked(user.getBoolean("genderPreference"));
-        profilePic.setImageURI(Uri.parse("https://graph.facebook.com/" + user.getUsername() + "/picture?type=large"));
+//        profilePic.setImageURI(Uri.parse("https://graph.facebook.com/" + user.getUsername() + "/picture?type=large"));
     }
 
     private void setUpAgeLimitsAndGenderChoices(View rootView) {
