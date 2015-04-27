@@ -45,7 +45,7 @@ public class MatchesFragment extends ListFragment {
         matches = new ArrayList<ParseUser>();
         for (String id : instance.getFriendIds()) {
             ParseQuery<ParseUser> matchesQuery = ParseUser.getQuery();
-            matchesQuery.whereEqualTo("authData", id + "");
+            matchesQuery.whereEqualTo("facebookId", id);
             try {
                 matches.add(matchesQuery.find().get(0));
             } catch (ParseException e) {
@@ -59,7 +59,9 @@ public class MatchesFragment extends ListFragment {
         matchesView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.pager, new MatchProfileFragment())
+                        .commit();
             }
         });
         return rootView;

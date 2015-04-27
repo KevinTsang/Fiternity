@@ -227,7 +227,7 @@ public class FiternityApplication extends Application {
         parseUser.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
-                Log.i(TAG, "Saved events to cloud successfully.");
+            Log.i(TAG, "Saved events to cloud successfully.");
             }
         });
     }
