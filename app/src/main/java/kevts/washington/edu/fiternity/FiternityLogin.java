@@ -45,16 +45,18 @@ public class FiternityLogin extends Activity {
             @Override
             public void onClick(View v) {
                 final ParseUser user = new ParseUser();
-                String email = ((AutoCompleteTextView)findViewById(R.id.email)).getText().toString();
+                String username = ((AutoCompleteTextView)findViewById(R.id.user_name_login)).getText().toString();
                 String password = ((EditText)findViewById(R.id.password)).getText().toString();
-//                String username = "";
-//                user.setUsername(email);
+                user.setUsername(username);
                 user.setPassword(password);
-                user.setEmail(email);
-                user.signUpInBackground(new SignUpCallback() {
+                user.logInInBackground(username, password, new LogInCallback() {
                     @Override
-                    public void done(ParseException e) {
-
+                    public void done(ParseUser pu, ParseException e) {
+                        FiternityApplication.getInstance().setParseUser(pu);
+                        Log.i(TAG, "Logged in via non Facebook!");
+//                        FiternityApplication.getInstance().getFriendEvents();
+                        Intent intent = new Intent(FiternityLogin.this, MatchesActivity.class);
+                        startActivity(intent);
                     }
                 });
                 try {
@@ -109,6 +111,14 @@ public class FiternityLogin extends Activity {
                     ParseUser user = FiternityApplication.getInstance().getParseUser();
                     user.logOutInBackground();
                 }
+            }
+        });
+        Button registerButton = (Button)findViewById(R.id.register_button);
+        registerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(FiternityLogin.this, EmailSignUpActivity.class);
+                startActivity(intent);
             }
         });
     }
