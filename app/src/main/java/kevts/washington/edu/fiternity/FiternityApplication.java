@@ -206,22 +206,29 @@ public class FiternityApplication extends Application {
         for (int i = 0; i < CNames.length; i++) {
             long startMillis = Long.parseLong(cursor.getString(3));
             long endMillis = Long.parseLong(cursor.getString(4));
-//            Date startDate = new Date(startMillis);
-//            Date endDate = new Date(endMillis);
-            ParseObject freeEvent = new ParseObject("FreeEvent");
-            freeEvent.put("startDate", startMillis);
-            freeEvent.put("endDate", endMillis);
-            try {
-                freeEvent.put("exercises", cursor.getString(2));
-                CNames[i] = cursor.getString(1);
-                freeEvent.save();
-            } catch (IllegalStateException ise) {
-                Log.i(TAG, "Location or description/exercises not specified");
-            } catch (ParseException pe) {
-                Log.e(TAG, "Event did not save properly.");
+            List<ParseObject> existingEvents = parseUser.getList("event");
+            boolean eventExists = false;
+            for (ParseObject event : existingEvents) {
+                if (event.getLong("startDate") == startMillis && event.getLong("endDate") == endMillis) {
+                    eventExists = true;
+                }
             }
-            cursor.moveToNext();
-            parseUser.addUnique("event", freeEvent);
+            if (!eventExists) {
+                ParseObject freeEvent = new ParseObject("FreeEvent");
+                freeEvent.put("startDate", startMillis);
+                freeEvent.put("endDate", endMillis);
+                try {
+                    freeEvent.put("exercises", cursor.getString(2));
+                    CNames[i] = cursor.getString(1);
+                    freeEvent.save();
+                } catch (IllegalStateException ise) {
+                    Log.i(TAG, "Location or description/exercises not specified");
+                } catch (ParseException pe) {
+                    Log.e(TAG, "Event did not save properly.");
+                }
+                cursor.moveToNext();
+                parseUser.addUnique("event", freeEvent);
+            }
         }
 
         parseUser.saveInBackground(new SaveCallback() {
