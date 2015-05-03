@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent" android:layout_height="match_parent"
     android:id="@+id/drawer_list_item"
     android:textColor="#ffffffff"
-    android:textSize="@dimen/abc_text_size_body_2_material"
-    android:paddingTop="8dp"
-    android:paddingBottom="8dp"
+    android:textSize="16dp"
+    android:textStyle="normal"
+    android:paddingTop="16dp"
+    android:paddingBottom="20dp"
     android:paddingLeft="16dp"
     android:alpha=".87"
     android:textIsSelectable="false">
 
 </TextView>
+
