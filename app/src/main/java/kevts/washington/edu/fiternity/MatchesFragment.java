@@ -29,12 +29,12 @@ public class MatchesFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static MatchesFragment newInstance() {
-        MatchesFragment fragment = new MatchesFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
-    }
+//    public static MatchesFragment newInstance() {
+//        MatchesFragment fragment = new MatchesFragment();
+//        Bundle args = new Bundle();
+//        fragment.setArguments(args);
+//        return fragment;
+//    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

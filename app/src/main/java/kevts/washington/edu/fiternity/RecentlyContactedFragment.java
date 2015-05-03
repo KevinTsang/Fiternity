@@ -18,12 +18,12 @@ public class RecentlyContactedFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static RecentlyContactedFragment newInstance() {
-        RecentlyContactedFragment fragment = new RecentlyContactedFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
-    }
+//    public static RecentlyContactedFragment newInstance() {
+//        RecentlyContactedFragment fragment = new RecentlyContactedFragment();
+//        Bundle args = new Bundle();
+//        fragment.setArguments(args);
+//        return fragment;
+//    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

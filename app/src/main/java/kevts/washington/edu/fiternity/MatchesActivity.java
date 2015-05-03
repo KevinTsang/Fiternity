@@ -263,9 +263,11 @@ public class MatchesActivity extends ActionBarActivity implements ActionBar.TabL
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
             if (position == 0) {
-                return MatchesFragment.newInstance();
+                return new MatchesFragment();
+//                return MatchesFragment.newInstance();
             } else {
-                return RecentlyContactedFragment.newInstance();
+                return new RecentlyContactedFragment();
+//                return RecentlyContactedFragment.newInstance();
             }
         }
 

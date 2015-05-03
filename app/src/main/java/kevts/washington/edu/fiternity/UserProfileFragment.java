@@ -140,7 +140,7 @@ public class UserProfileFragment extends Fragment {
 
     private void fillFieldsWithUserData(View rootView) {
 
-        if (user.getString("first_name") != null && user.getString("last_name") != null)
+        if (user.getString("name") != null)
             userName.setText(user.getString("name"));
         if (user.getEmail() != null)
             userEmail.setText(user.getEmail());

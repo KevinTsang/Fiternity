@@ -50,7 +50,7 @@ public class FiternityApplication extends Application {
     private ParseUser parseUser;
     private static FiternityApplication instance;
     private static Set<Exercise> exerciseSet;
-    private ArrayList<String> friendIds;
+    private HashSet<String> friendIds;
 
     public FiternityApplication() {
         if (instance == null)
@@ -65,7 +65,7 @@ public class FiternityApplication extends Application {
         Parse.initialize(this);
         ParseFacebookUtils.initialize(this);
         exerciseSet = new HashSet<>();
-        friendIds = new ArrayList<>();
+        friendIds = new HashSet<>();
     }
 
     public static FiternityApplication getInstance() {
@@ -292,7 +292,7 @@ public class FiternityApplication extends Application {
         return event;
     }
 
-    public List<String> getFriendIds() {
+    public HashSet<String> getFriendIds() {
         return friendIds;
     }
 
