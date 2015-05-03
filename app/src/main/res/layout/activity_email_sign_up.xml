@@ -12,6 +12,7 @@
 
     <ImageView
         android:id="@+id/ic_launcher"
+        android:paddingTop="40dp"
         android:layout_width="165dp"
         android:layout_height="200dp"
         android:layout_gravity="center"
@@ -43,6 +44,8 @@
     <EditText android:id="@+id/new_password" android:layout_width="match_parent"
         android:layout_height="wrap_content" android:hint="@string/prompt_password"
         android:inputType="textPassword"
+        android:fontFamily="sans-serif"
+        android:textStyle="normal"
         android:maxLines="1" android:singleLine="true"
         android:enabled="true"
         android:layout_marginLeft="50dp"
@@ -52,6 +55,8 @@
         android:id="@+id/confirm_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="sans-serif"
+        android:textStyle="normal"
         android:hint="@string/confirm_password"
         android:inputType="textPassword"
         android:layout_marginLeft="50dp"
@@ -60,7 +65,11 @@
         android:maxLines="1"/>
 
     <Button android:id="@+id/register_button"
-        style="?android:textAppearanceSmall"
+        style="?android:attr/borderlessButtonStyle"
+        android:fontFamily="sans-serif-medium"
+        android:textStyle="normal"
+        android:textColor="@color/colorAccent"
+
         android:text="Register"
         android:enabled="true"
         android:layout_marginLeft="50dp"
