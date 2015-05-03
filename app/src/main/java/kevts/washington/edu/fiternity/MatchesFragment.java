@@ -3,7 +3,6 @@ package kevts.washington.edu.fiternity;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class MatchesFragment extends ListFragment {
+public class MatchesFragment extends Fragment {
 
     private FiternityApplication instance;
     private List<ParseUser> matches;
@@ -52,9 +51,11 @@ public class MatchesFragment extends ListFragment {
                 Log.e("MatchesFragment", "Failed to add user to match list");
             }
         }
-        ArrayAdapter<ParseUser> matchAdapter = new ArrayAdapter<ParseUser>(getActivity(),
-                R.layout.match_row, matches);
-        ListView matchesView = (ListView)rootView.findViewById(android.R.id.list);
+        MatchesArrayAdapter matchAdapter = new MatchesArrayAdapter(getActivity(),
+                R.layout.match_row, android.R.id.text1,
+                /*replace this with proper material design text view,*/ matches);
+
+        ListView matchesView = (ListView)rootView.findViewById(R.id.matches_list);
         matchesView.setAdapter(matchAdapter);
         matchesView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

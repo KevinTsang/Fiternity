@@ -221,7 +221,11 @@ public class FiternityApplication extends Application {
             try {
                 List<ParseUser> parseUsers = friendQuery.find();
                 for (ParseObject friend : parseUsers) {
-                    List<ParseObject> friendEvents = friend.getList("event");
+                    List<ParseObject> friendPointerEvents = friend.getList("event");
+                    List<ParseObject> friendEvents = new ArrayList<>();
+                    for (ParseObject pointerEvent : friendPointerEvents) {
+                        friendEvents.add(convertPointerToObjectEvent(pointerEvent));
+                    }
                     List<ParseObject> events = getMatchingSchedule(friendEvents);
                     if (events.size() > 0) {
                         friendIds.add(friendId);
@@ -237,7 +241,11 @@ public class FiternityApplication extends Application {
     public List<ParseObject> getMatchingSchedule(List<ParseObject> otherSchedule) {
         List<ParseObject> commonSchedule = new ArrayList<>();
         List<ParseObject> userSchedule = parseUser.getList("event");
-
+        for (int i = 0; i < userSchedule.size(); i++) {
+            ParseObject pointer = userSchedule.get(i);
+            userSchedule.remove(i);
+            userSchedule.add(i, convertPointerToObjectEvent(pointer));
+        }
         int userScheduleIndex = 0;
         int otherScheduleIndex = 0;
         if (userSchedule != null && otherSchedule != null) {
@@ -252,6 +260,8 @@ public class FiternityApplication extends Application {
                         otherScheduleIndex++;
                     }
                 } else {
+                    userScheduleIndex++;
+                    otherScheduleIndex++;
                     commonSchedule.add(event);
                 }
             }
@@ -284,5 +294,16 @@ public class FiternityApplication extends Application {
 
     public List<String> getFriendIds() {
         return friendIds;
+    }
+
+    public ParseObject convertPointerToObjectEvent(ParseObject pointer) {
+        ParseQuery<ParseObject> pointerQuery = ParseQuery.getQuery("FreeEvent");
+        try {
+            ParseObject obj = pointerQuery.get(pointer.getObjectId());
+            return obj;
+        } catch(ParseException pe) {
+            Log.e(TAG, "Not a valid objectID");
+        }
+        return null;
     }
 }
