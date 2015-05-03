@@ -47,7 +47,7 @@ import java.util.Set;
 public class FiternityApplication extends Application {
 
     private static final String TAG = "FiternityApplication";
-    private static ParseUser parseUser;
+    private ParseUser parseUser;
     private static FiternityApplication instance;
     private static Set<Exercise> exerciseSet;
     private ArrayList<String> friendIds;
@@ -155,36 +155,6 @@ public class FiternityApplication extends Application {
         }
     }
 
-    public void viewSchedule() {
-        long startMillis = Calendar.getInstance().getTimeInMillis();
-        Uri.Builder builder = CalendarContract.CONTENT_URI.buildUpon();
-        builder.appendPath("time");
-        ContentUris.appendId(builder, startMillis);
-        Intent calendarIntent = new Intent(Intent.ACTION_VIEW).setData(builder.build());
-        startActivity(calendarIntent);
-    }
-
-    public void createEvent() {
-        Calendar beginTime = Calendar.getInstance();
-//        beginTime.set(); set a time here
-        Calendar endTime = Calendar.getInstance();
-//        endTime.set();  set a time here
-        Intent createEventIntent = new Intent(Intent.ACTION_INSERT)
-                .setData(CalendarContract.Events.CONTENT_URI)
-//                .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, beginTime.getTimeInMillis())
-//                .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, endTime.getTimeInMillis())
-                .putExtra(CalendarContract.Events.TITLE, "Fiternity")
-                .putExtra(CalendarContract.Events.DESCRIPTION, "Insert activity here")
-                .putExtra(CalendarContract.Events.EVENT_LOCATION, "Insert location here")
-                .putExtra(CalendarContract.Events.AVAILABILITY, CalendarContract.Events.AVAILABILITY_FREE)
-                .putExtra(Intent.EXTRA_EMAIL, "email address here, another email address here");
-        startActivity(createEventIntent);
-    }
-
-    public void editEvent() {
-
-    }
-
     public void readEvents() {
         Cursor cursor = getApplicationContext().getContentResolver()
                 .query(
@@ -208,9 +178,11 @@ public class FiternityApplication extends Application {
             long endMillis = Long.parseLong(cursor.getString(4));
             List<ParseObject> existingEvents = parseUser.getList("event");
             boolean eventExists = false;
-            for (ParseObject event : existingEvents) {
-                if (event.getLong("startDate") == startMillis && event.getLong("endDate") == endMillis) {
-                    eventExists = true;
+            if (existingEvents != null) {
+                for (ParseObject event : existingEvents) {
+                    if (event.getLong("startDate") == startMillis && event.getLong("endDate") == endMillis) {
+                        eventExists = true;
+                    }
                 }
             }
             if (!eventExists) {
@@ -234,7 +206,7 @@ public class FiternityApplication extends Application {
         parseUser.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
-            Log.i(TAG, "Saved events to cloud successfully.");
+                Log.i(TAG, "Saved events to cloud successfully.");
             }
         });
     }
