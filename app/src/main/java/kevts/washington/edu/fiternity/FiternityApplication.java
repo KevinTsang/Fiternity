@@ -49,7 +49,7 @@ public class FiternityApplication extends Application {
     private static final String TAG = "FiternityApplication";
     private ParseUser parseUser;
     private static FiternityApplication instance;
-    private static Set<Exercise> exerciseSet;
+    private static Set<ParseObject> exerciseSet;
     private HashSet<String> friendIds;
 
     public FiternityApplication() {
@@ -126,7 +126,14 @@ public class FiternityApplication extends Application {
         }
     }
 
-    public Set<Exercise> getExercises() {
+    public Set<ParseObject> getExercises() {
+        List<ParseObject> exercisesPointers = parseUser.getList("exercise");
+        if (exercisesPointers != null) {
+            for (ParseObject exercisePointer : exercisesPointers) {
+                ParseObject converter = convertPointerToObjectEvent(exercisePointer);
+                exerciseSet.add(converter);
+            }
+        }
         return exerciseSet;
     }
 
