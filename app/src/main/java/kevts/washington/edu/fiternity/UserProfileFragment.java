@@ -4,6 +4,8 @@ package kevts.washington.edu.fiternity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -22,9 +24,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.facebook.Profile;
+import com.facebook.login.widget.ProfilePictureView;
 import com.parse.ParseUser;
 
 import java.net.URISyntaxException;
+import java.net.URL;
 
 
 /**
@@ -36,7 +41,8 @@ public class UserProfileFragment extends Fragment {
     private LayoutInflater layoutInflater;
     private View rootView;
     private EditText userName;
-    private ImageView profilePic;
+//    private ImageView profilePic;
+    private ProfilePictureView profilePic;
     private EditText userEmail;
     private EditText userPhone;
     private EditText userZip;
@@ -58,7 +64,8 @@ public class UserProfileFragment extends Fragment {
         rootView = layoutInflater.inflate(R.layout.fragment_profile, container, false);
         user = FiternityApplication.getInstance().getParseUser();
         userName = (EditText)rootView.findViewById(R.id.user_name);
-        profilePic = (ImageView)rootView.findViewById(R.id.profile_picture);
+//        profilePic = (ImageView)rootView.findViewById(R.id.profile_picture);
+        profilePic = (ProfilePictureView)rootView.findViewById(R.id.profile_picture);
         userEmail = (EditText)rootView.findViewById(R.id.user_email);
         userPhone = (EditText)rootView.findViewById(R.id.user_phone_number);
         userZip = (EditText)rootView.findViewById(R.id.user_zip_code);
@@ -156,8 +163,19 @@ public class UserProfileFragment extends Fragment {
             else genderSpinner.setSelection(1);
         }
         genderPreference.setChecked(user.getBoolean("genderPreference"));
+
+
+
+        profilePic.setProfileId(user.getString("facebookId"));
+
+
+//        profilePic.setImageURI(fbProfile.getProfilePictureUri(150, 150));
 //        profilePic.setImageURI(Uri.parse("https://graph.facebook.com/" + user.getUsername() + "/picture?type=large"));
+
+
     }
+
+
 
     private void setUpAgeLimitsAndGenderChoices(View rootView) {
         NumberPicker agePicker = (NumberPicker)rootView.findViewById(R.id.user_age);

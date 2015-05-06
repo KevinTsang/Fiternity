@@ -256,7 +256,7 @@ public class FiternityApplication extends Application {
         int userScheduleIndex = 0;
         int otherScheduleIndex = 0;
         if (userSchedule != null && otherSchedule != null) {
-            while (userScheduleIndex < userSchedule.size() || otherScheduleIndex < otherSchedule.size()) {
+            while (userScheduleIndex < userSchedule.size() && otherScheduleIndex < otherSchedule.size()) {
                 ParseObject userEvent = userSchedule.get(userScheduleIndex);
                 ParseObject otherUserEvent = otherSchedule.get(otherScheduleIndex);
                 ParseObject event = getSmallerEvent(userEvent, otherUserEvent);
