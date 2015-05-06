@@ -1,6 +1,8 @@
 package kevts.washington.edu.fiternity;
 
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -60,13 +62,11 @@ public class MatchesFragment extends Fragment {
         matchesView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.pager, new MatchProfileFragment())
-                        .commit();
+                Intent intent = new Intent(getActivity(), MatchProfileActivity.class);
+                intent.putExtra("facebookId", matches.get(position).getString("facebookId"));
+                startActivity(intent);
             }
         });
         return rootView;
     }
-
-
 }

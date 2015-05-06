@@ -25,10 +25,8 @@
 
     <string name="title_activity_report">ReportActivity</string>
     <string name="title_activity_feedback">FeedbackActivity</string>
-    <string name="hello_world">Hello world!</string>
 
-<!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_feedback_negative">FeedbackNegativeActivity</string>
     <string name="title_activity_email_sign_up">EmailSignUpActivity</string>
+    <string name="title_activity_match_profile">MatchProfileActivity</string>
 </resources>
