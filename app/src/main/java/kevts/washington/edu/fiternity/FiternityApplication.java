@@ -19,7 +19,9 @@ import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
+import com.parse.ParseInstallation;
 import com.parse.ParseObject;
+import com.parse.ParsePush;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -64,6 +66,17 @@ public class FiternityApplication extends Application {
         FacebookSdk.sdkInitialize(getApplicationContext());
         Parse.initialize(this);
         ParseFacebookUtils.initialize(this);
+        ParseInstallation.getCurrentInstallation().saveInBackground();
+        ParsePush.subscribeInBackground("", new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    Log.d(TAG, "Successfully subscribed to the broadcast channel.");
+                } else {
+                    Log.e(TAG, "Failed to subscribe for push notifications.");
+                }
+            }
+        });
         exerciseSet = new HashSet<>();
         friendIds = new HashSet<>();
     }
@@ -90,6 +103,8 @@ public class FiternityApplication extends Application {
                     if (user != null) {
                         try {
                             parseUser.put("facebookId", user.get("id").toString());
+                            ParseInstallation.getCurrentInstallation().put("facebookId", user.get("id"));
+                            ParseInstallation.getCurrentInstallation().saveInBackground();
                             parseUser.setEmail(user.get("email").toString());
                             parseUser.put("name", user.get("name").toString());
                         } catch (JSONException e) {
@@ -103,26 +118,6 @@ public class FiternityApplication extends Application {
                     }
                 }
             }).executeAsync();
-        }
-    }
-
-    public void getFacebookProfilePicture() {
-        if (AccessToken.getCurrentAccessToken() != null) {
-            try {
-                URL imageURL = new URL("https://graph.facebook.com/" + parseUser.getUsername() + "/picture?type=large");
-                Bitmap profilePicture = BitmapFactory.decodeStream(imageURL.openConnection().getInputStream());
-                parseUser.put("profilePicture", profilePicture);
-                parseUser.saveInBackground(new SaveCallback() {
-                    @Override
-                    public void done(ParseException e) {
-                        Log.i(TAG, "Profile picture successfully saved!");
-                    }
-                });
-            } catch (MalformedURLException e) {
-                Log.e(TAG, "ParseUser did not use Facebook to login");
-            } catch (IOException e) {
-                Log.e(TAG, "Failed to connect to Facebook to retrieve profile picture");
-            }
         }
     }
 
@@ -154,7 +149,7 @@ public class FiternityApplication extends Application {
                             parseUser.saveInBackground(new SaveCallback() {
                                 @Override
                                 public void done(ParseException e) {
-                                    Log.i(TAG, "Saved friend IDs successfully!");
+                                Log.i(TAG, "Saved friend IDs successfully!");
                                 }
                             });
                         }

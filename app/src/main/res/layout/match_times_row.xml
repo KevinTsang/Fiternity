@@ -36,7 +36,7 @@
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
         android:text="Request"
-        android:id="@+id/requestButton" />
+        android:id="@+id/request_button" />
 
 
 </LinearLayout>

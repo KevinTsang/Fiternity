@@ -1,0 +1,14 @@
+{
+  "global": {
+    "parseVersion": "1.4.2"
+  },
+  "applications": {
+    "Fiternity": {
+      "applicationId": "vdyKL0gcEtfovrPj4WIoLZFaIHa3PLlND8wTblJ6",
+      "masterKey": "MQWc2XjLvsrXitBWdlVTHHiD2CNG5hPiUrZ50em7"
+    },
+    "_default": {
+      "link": "Fiternity"
+    }
+  }
+}

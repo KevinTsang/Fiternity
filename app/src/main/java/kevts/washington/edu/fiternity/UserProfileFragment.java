@@ -41,7 +41,6 @@ public class UserProfileFragment extends Fragment {
     private LayoutInflater layoutInflater;
     private View rootView;
     private EditText userName;
-//    private ImageView profilePic;
     private ProfilePictureView profilePic;
     private EditText userEmail;
     private EditText userPhone;
@@ -64,7 +63,6 @@ public class UserProfileFragment extends Fragment {
         rootView = layoutInflater.inflate(R.layout.fragment_profile, container, false);
         user = FiternityApplication.getInstance().getParseUser();
         userName = (EditText)rootView.findViewById(R.id.user_name);
-//        profilePic = (ImageView)rootView.findViewById(R.id.profile_picture);
         profilePic = (ProfilePictureView)rootView.findViewById(R.id.profile_picture);
         userEmail = (EditText)rootView.findViewById(R.id.user_email);
         userPhone = (EditText)rootView.findViewById(R.id.user_phone_number);
@@ -163,16 +161,7 @@ public class UserProfileFragment extends Fragment {
             else genderSpinner.setSelection(1);
         }
         genderPreference.setChecked(user.getBoolean("genderPreference"));
-
-
-
         profilePic.setProfileId(user.getString("facebookId"));
-
-
-//        profilePic.setImageURI(fbProfile.getProfilePictureUri(150, 150));
-//        profilePic.setImageURI(Uri.parse("https://graph.facebook.com/" + user.getUsername() + "/picture?type=large"));
-
-
     }
 
 

@@ -9,9 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.facebook.login.widget.ProfilePictureView;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -39,6 +41,7 @@ public class MatchProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_match_profile, container, false);
         instance = FiternityApplication.getInstance();
+        ProfilePictureView matchProfilePic = (ProfilePictureView)rootView.findViewById(R.id.match_profile_picture);
         TextView matchProfileName = (TextView)rootView.findViewById(R.id.match_profile_name);
         TextView matchProfileGender = (TextView)rootView.findViewById(R.id.match_profile_gender);
         TextView matchProfileAge = (TextView)rootView.findViewById(R.id.match_profile_age);
@@ -49,6 +52,7 @@ public class MatchProfileFragment extends Fragment {
         try {
             List<ParseUser> matchUsers = parseQuery.find();
             ParseUser matchUser = matchUsers.get(0);
+            matchProfilePic.setProfileId(matchUser.getString("facebookId"));
             matchProfileName.setText(matchUser.getString("name"));
             matchProfileGender.setText(matchUser.getString("gender"));
             matchProfileAge.setText(matchUser.getInt("age") + "");
@@ -61,10 +65,11 @@ public class MatchProfileFragment extends Fragment {
             List<ParseObject> matchEvents = instance.getMatchingSchedule(otherUserSchedule);
             matchProfileTimes.setAdapter(new MatchTimesArrayAdapter(getActivity(),
                     R.layout.match_times_row, android.R.id.text1,
-                    /*replace the above text1 with proper material design*/ matchEvents));
+                    /*replace the above text1 with proper material design*/ matchEvents, matchId));
         } catch (ParseException pe) {
             Log.e("MatchProfileFragment", "Either user isn't in Facebook or doesn't exist");
         }
+
         return rootView;
     }
 

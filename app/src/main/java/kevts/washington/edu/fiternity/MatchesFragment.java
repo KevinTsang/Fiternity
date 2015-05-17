@@ -31,13 +31,6 @@ public class MatchesFragment extends Fragment {
         // Required empty public constructor
     }
 
-//    public static MatchesFragment newInstance() {
-//        MatchesFragment fragment = new MatchesFragment();
-//        Bundle args = new Bundle();
-//        fragment.setArguments(args);
-//        return fragment;
-//    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -48,7 +41,7 @@ public class MatchesFragment extends Fragment {
             ParseQuery<ParseUser> matchesQuery = ParseUser.getQuery();
             matchesQuery.whereEqualTo("facebookId", id);
             try {
-                matches.add(matchesQuery.find().get(0));
+                matches.add(matchesQuery.getFirst());
             } catch (ParseException e) {
                 Log.e("MatchesFragment", "Failed to add user to match list");
             }

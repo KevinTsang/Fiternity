@@ -121,7 +121,20 @@ public class ExerciseFragment extends Fragment {
                 builder.appendPath("time");
                 ContentUris.appendId(builder, startMillis);
                 saveExercises();
-                Intent intent = new Intent(Intent.ACTION_VIEW).setData(builder.build());
+                Calendar beginTime = Calendar.getInstance();
+//        beginTime.set(); set a time here
+                Calendar endTime = Calendar.getInstance();
+//        endTime.set();  set a time here
+                Intent createEventIntent = new Intent(Intent.ACTION_INSERT)
+                        .setData(CalendarContract.Events.CONTENT_URI)
+//                .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, beginTime.getTimeInMillis())
+//                .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, endTime.getTimeInMillis())
+                        .putExtra(CalendarContract.Events.TITLE, "Fiternity")
+                        .putExtra(CalendarContract.Events.DESCRIPTION, "Insert activity here")
+                        .putExtra(CalendarContract.Events.EVENT_LOCATION, "Insert location here")
+                        .putExtra(CalendarContract.Events.AVAILABILITY, CalendarContract.Events.AVAILABILITY_FREE);
+//                                .putExtra(Intent.EXTRA_EMAIL, "email address here, another email address here");
+                Intent intent = new Intent(Intent.ACTION_INSERT).setData(builder.build());
                 startActivityForResult(intent, CALENDAR_ACCESSED);
             }
         });

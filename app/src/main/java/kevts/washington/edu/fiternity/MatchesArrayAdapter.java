@@ -2,16 +2,31 @@ package kevts.washington.edu.fiternity;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.facebook.login.widget.ProfilePictureView;
+import com.parse.FunctionCallback;
+import com.parse.ParseCloud;
+import com.parse.ParseException;
+import com.parse.ParseInstallation;
 import com.parse.ParseObject;
+import com.parse.ParsePush;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SendCallback;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -38,6 +53,7 @@ public class MatchesArrayAdapter extends ArrayAdapter<ParseUser> {
             LayoutInflater inflater = ((Activity)context).getLayoutInflater();
             row = inflater.inflate(resource, parent, false);
             holder = new MatchHolder();
+            holder.matchRowProfilePic = (ProfilePictureView)row.findViewById(R.id.match_icon);
             holder.name = (TextView)row.findViewById(R.id.match_name);
             holder.exercise = (TextView)row.findViewById(R.id.match_exercise);
             holder.startDate = (TextView)row.findViewById(R.id.match_start_time);
@@ -48,11 +64,14 @@ public class MatchesArrayAdapter extends ArrayAdapter<ParseUser> {
             holder = (MatchHolder)row.getTag();
         }
 
-        ParseUser matchUser = parseUserList.get(position);
+        final ParseUser matchUser = parseUserList.get(position);
+        holder.matchRowProfilePic.setProfileId(matchUser.getString("facebookId"));
         holder.name.setText(matchUser.getString("name"));
-//        holder.exercise.setText(matchUser.getString("exercise"));
+        if (matchUser.getString("exercise") != null) {
+            holder.exercise.setText(matchUser.getString("exercise"));
+        }
         List<ParseObject> eventList = matchUser.getList("event");
-        ParseObject event = FiternityApplication.getInstance().convertPointerToObjectEvent(eventList.get(0));
+        final ParseObject event = FiternityApplication.getInstance().convertPointerToObjectEvent(eventList.get(0));
         holder.startDate.setText(new Date(event.getLong("startDate")).toString());
         holder.endDate.setText(new Date(event.getLong("endDate")).toString());
 
@@ -63,6 +82,7 @@ public class MatchesArrayAdapter extends ArrayAdapter<ParseUser> {
         TextView exercise;
         TextView startDate;
         TextView endDate;
+        ProfilePictureView matchRowProfilePic;
     }
 }
 
