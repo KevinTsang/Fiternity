@@ -94,7 +94,6 @@ public class FiternityApplication extends Application {
     }
 
     public void signUpProcess() {
-        // TODO Implement grabbing data from the Facebook login and filling it in here
         if (AccessToken.getCurrentAccessToken() != null) {
             GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(),
                     new GraphRequest.GraphJSONObjectCallback() {
@@ -224,13 +223,15 @@ public class FiternityApplication extends Application {
                 List<ParseUser> parseUsers = friendQuery.find();
                 for (ParseObject friend : parseUsers) {
                     List<ParseObject> friendPointerEvents = friend.getList("event");
-                    List<ParseObject> friendEvents = new ArrayList<>();
-                    for (ParseObject pointerEvent : friendPointerEvents) {
-                        friendEvents.add(convertPointerToObjectEvent(pointerEvent));
-                    }
-                    List<ParseObject> events = getMatchingSchedule(friendEvents);
-                    if (events.size() > 0) {
-                        friendIds.add(friendId);
+                    if (friendPointerEvents != null) {
+                        List<ParseObject> friendEvents = new ArrayList<>();
+                        for (ParseObject pointerEvent : friendPointerEvents) {
+                            friendEvents.add(convertPointerToObjectEvent(pointerEvent));
+                        }
+                        List<ParseObject> events = getMatchingSchedule(friendEvents);
+                        if (events.size() > 0) {
+                            friendIds.add(friendId);
+                        }
                     }
                 }
             } catch (ParseException pe) {

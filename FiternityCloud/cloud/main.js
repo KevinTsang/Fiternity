@@ -9,7 +9,7 @@ Parse.Cloud.define("validatePush", function(request, response) {
   var endDate = request.params.endDate;
   var message = senderName + "would like to work out with you from " + startDate + " to " + endDate + ".";
 
-  if (senderUser.get("friendsList").indexOf(recipientUserId) === -1) {
+  if (senderUser.get("FriendsList").indexOf(recipientUserId) === -1) {
   	response.error("The recipient is not the sender's friend, cannot send push");
   }
   var recipientUser = new Parse.User();

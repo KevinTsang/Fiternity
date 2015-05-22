@@ -2,6 +2,7 @@ package kevts.washington.edu.fiternity;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,14 +69,17 @@ public class MatchTimesArrayAdapter extends ArrayAdapter {
             public void onClick(View v) {
                 ParseQuery<ParseUser> parseQuery = ParseUser.getQuery();
                 parseQuery.whereEqualTo("facebookId", userId);
-                Task<ParseUser> matchUserSearch = parseQuery.getFirstInBackground();
-                ParseUser matchUser = matchUserSearch.getResult();
                 HashMap<String, Object> params = new HashMap<String, Object>();
-                params.put("name", matchUser.getString("name"));
-                params.put("recipientId", matchUser.getObjectId());
-                params.put("facebookId", matchUser.getString("facebookId"));
-                params.put("startDate", new Date(matchEvent.getLong("startDate")).toString());
-                params.put("endDate", new Date(matchEvent.getLong("endDate")).toString());
+                try {
+                    ParseUser matchUser = parseQuery.getFirst();
+                    params.put("name", matchUser.getString("name"));
+                    params.put("recipientId", matchUser.getObjectId());
+                    params.put("facebookId", matchUser.getString("facebookId"));
+                    params.put("startDate", new Date(matchEvent.getLong("startDate")).toString());
+                    params.put("endDate", new Date(matchEvent.getLong("endDate")).toString());
+                } catch (ParseException pe) {
+                    Log.e("MatchTimesArrayAdapter", "The match user is null");
+                }
                 ParseCloud.callFunctionInBackground("validatePush", params, new FunctionCallback<String>() {
                     @Override
                     public void done(String s, ParseException e) {

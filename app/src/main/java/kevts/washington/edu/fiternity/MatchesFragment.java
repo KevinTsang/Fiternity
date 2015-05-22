@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.parse.Parse;
 import com.parse.ParseException;
@@ -45,6 +46,9 @@ public class MatchesFragment extends Fragment {
             } catch (ParseException e) {
                 Log.e("MatchesFragment", "Failed to add user to match list");
             }
+        }
+        if (matches.size() == 0) {
+            Toast.makeText(getActivity(), "You have no matches.", Toast.LENGTH_LONG);
         }
         MatchesArrayAdapter matchAdapter = new MatchesArrayAdapter(getActivity(),
                 R.layout.match_row, android.R.id.text1,
