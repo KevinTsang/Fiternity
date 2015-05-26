@@ -14,13 +14,21 @@
         android:id="@+id/searchBox"
         android:layout_below="@+id/exercise_directions"/>
 
-    <GridLayout
-        android:layout_width="match_parent"
-        android:layout_height="fill_parent"
-        android:id="@+id/exercises"
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/exercices"
         android:layout_below="@+id/searchBox"
-        android:layout_above="@+id/toCalendarButton"
-        android:columnCount="1"></GridLayout>
+        android:layout_above="@+id/toCalendarButton">
+
+        <ListView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/exercise_list"
+            android:padding="0dp"/>
+
+    </LinearLayout>
 
     <Button
         android:layout_width="wrap_content"
