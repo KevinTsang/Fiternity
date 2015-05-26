@@ -120,6 +120,7 @@ public class MatchesActivity extends ActionBarActivity implements ActionBar.TabL
                         startActivity(intent);
                         break;
                     case 1:
+                        instance.getFriendEvents();
                         break;
                     case 2:
                         intent.putExtra("loadUserProfileFragment", false);

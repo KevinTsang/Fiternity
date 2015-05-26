@@ -103,6 +103,7 @@ public class FiternityApplication extends Application {
                         try {
                             parseUser.put("facebookId", user.get("id").toString());
                             ParseInstallation.getCurrentInstallation().put("facebookId", user.get("id"));
+                            ParseInstallation.getCurrentInstallation().put("user", parseUser.getObjectId());
                             ParseInstallation.getCurrentInstallation().saveInBackground();
                             parseUser.setEmail(user.get("email").toString());
                             parseUser.put("name", user.get("name").toString());
@@ -160,9 +161,9 @@ public class FiternityApplication extends Application {
         Cursor cursor = getApplicationContext().getContentResolver()
                 .query(
                         Uri.parse("content://com.android.calendar/events"),
-                        new String[] { "calendar_id", "title", "description",
-                                "dtstart", "dtend", "eventLocation" }, "title=?",
-                        new String[] {"Fiternity"}, null);
+                        new String[]{"calendar_id", "title", "description",
+                                "dtstart", "dtend", "eventLocation"}, "title=?",
+                        new String[]{"Fiternity"}, null);
 
         // explanation: first String[] is the columns to return
         // second argument (String) is filter by a column name
@@ -244,32 +245,33 @@ public class FiternityApplication extends Application {
     public List<ParseObject> getMatchingSchedule(List<ParseObject> otherSchedule) {
         List<ParseObject> commonSchedule = new ArrayList<>();
         List<ParseObject> userSchedule = parseUser.getList("event");
-        for (int i = 0; i < userSchedule.size(); i++) {
-            ParseObject pointer = userSchedule.get(i);
-            userSchedule.remove(i);
-            userSchedule.add(i, convertPointerToObjectEvent(pointer));
-        }
-        int userScheduleIndex = 0;
-        int otherScheduleIndex = 0;
-        if (userSchedule != null && otherSchedule != null) {
-            while (userScheduleIndex < userSchedule.size() && otherScheduleIndex < otherSchedule.size()) {
-                ParseObject userEvent = userSchedule.get(userScheduleIndex);
-                ParseObject otherUserEvent = otherSchedule.get(otherScheduleIndex);
-                ParseObject event = getSmallerEvent(userEvent, otherUserEvent);
-                if (event == null) {
-                    if (userEvent.getLong("endDate") < otherUserEvent.getLong("startDate")) {
-                        userScheduleIndex++;
+        if (userSchedule != null) {
+            for (int i = 0; i < userSchedule.size(); i++) {
+                ParseObject pointer = userSchedule.get(i);
+                userSchedule.remove(i);
+                userSchedule.add(i, convertPointerToObjectEvent(pointer));
+            }
+            int userScheduleIndex = 0;
+            int otherScheduleIndex = 0;
+            if (otherSchedule != null) {
+                while (userScheduleIndex < userSchedule.size() && otherScheduleIndex < otherSchedule.size()) {
+                    ParseObject userEvent = userSchedule.get(userScheduleIndex);
+                    ParseObject otherUserEvent = otherSchedule.get(otherScheduleIndex);
+                    ParseObject event = getSmallerEvent(userEvent, otherUserEvent);
+                    if (event == null) {
+                        if (userEvent.getLong("endDate") < otherUserEvent.getLong("startDate")) {
+                            userScheduleIndex++;
+                        } else {
+                            otherScheduleIndex++;
+                        }
                     } else {
+                        userScheduleIndex++;
                         otherScheduleIndex++;
+                        commonSchedule.add(event);
                     }
-                } else {
-                    userScheduleIndex++;
-                    otherScheduleIndex++;
-                    commonSchedule.add(event);
                 }
             }
         }
-
         return commonSchedule;
     }
 
@@ -281,15 +283,21 @@ public class FiternityApplication extends Application {
         long otherEventStartDate = otherEvent.getLong("startDate");
         long otherEventEndDate = otherEvent.getLong("endDate");
 
-        if (userEventEndDate > otherEventStartDate && userEventEndDate <= otherEventEndDate) {
-            if (userEventStartDate < otherEventStartDate)
-                event.put("startDate", otherEventStartDate);
-            else event.put("startDate", userEventStartDate);
+        if (otherEventStartDate <= userEventStartDate &&
+                otherEventEndDate >= userEventEndDate) {
+            event.put("startDate", userEventStartDate);
             event.put("endDate", userEventEndDate);
-        } else if (otherEventEndDate > userEventStartDate && otherEventEndDate <= userEventEndDate) {
-            if (otherEventStartDate < userEventStartDate)
-                event.put("startDate", userEventStartDate);
-            else event.put("startDate", otherEventStartDate);
+        } else if (userEventStartDate <= otherEventStartDate &&
+                userEventEndDate >= otherEventEndDate) {
+            event.put("startDate", otherEventStartDate);
+            event.put("endDate", otherEventEndDate);
+        } else if (userEventStartDate <= otherEventStartDate &&
+                userEventEndDate > otherEventStartDate) {
+            event.put("startDate", otherEventStartDate);
+            event.put("endDate", userEventEndDate);
+        } else if (otherEventStartDate <= userEventStartDate &&
+                otherEventEndDate < userEventStartDate) {
+            event.put("startDate", userEventStartDate);
             event.put("endDate", otherEventEndDate);
         } else return null;
         return event;
