@@ -122,10 +122,10 @@ public class FiternityApplication extends Application {
     }
 
     public Set<ParseObject> getExercises() {
-        List<ParseObject> exercisesPointers = parseUser.getList("exercise");
+        List<ParseObject> exercisesPointers = parseUser.getList("Exercise");
         if (exercisesPointers != null) {
             for (ParseObject exercisePointer : exercisesPointers) {
-                ParseObject converter = convertPointerToObjectEvent(exercisePointer);
+                ParseObject converter = convertPointerToObjectExercise(exercisePointer);
                 exerciseSet.add(converter);
             }
         }
@@ -309,6 +309,16 @@ public class FiternityApplication extends Application {
 
     public ParseObject convertPointerToObjectEvent(ParseObject pointer) {
         ParseQuery<ParseObject> pointerQuery = ParseQuery.getQuery("FreeEvent");
+        try {
+            ParseObject obj = pointerQuery.get(pointer.getObjectId());
+            return obj;
+        } catch(ParseException pe) {
+            Log.e(TAG, "Not a valid objectID");
+        }
+        return null;
+    }
+    public ParseObject convertPointerToObjectExercise(ParseObject pointer) {
+        ParseQuery<ParseObject> pointerQuery = ParseQuery.getQuery("Exercise");
         try {
             ParseObject obj = pointerQuery.get(pointer.getObjectId());
             return obj;
