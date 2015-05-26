@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.SearchView;
 import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,6 +21,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -48,6 +50,7 @@ public class ExerciseFragment extends Fragment {
     private SeekBar seekBottom;
     private int user_level = 0;
     private int partner_level = 0;
+    private List<ParseObject> sport;
 
     public ExerciseFragment() {
         // Required empty public constructor
@@ -87,21 +90,33 @@ public class ExerciseFragment extends Fragment {
         adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, allSports);
         if (FiternityApplication.getInstance().getExercises() == null)
             exerciseArrayList = new HashSet<>();
+
         exerciseArrayList = FiternityApplication.getInstance().getExercises();
-        for (ParseObject parseObject : exerciseArrayList) {
-            LinearLayout ll = new LinearLayout(getActivity());
-            ll.setOrientation(LinearLayout.HORIZONTAL);
-            TextView exerciseTextView = new TextView(getActivity());
-            exerciseTextView.setText(parseObject.getString("name"));
-            exerciseTextView.setOnClickListener(editExerciseDialogListener(parseObject));
-            ll.addView(exerciseTextView);
-            GridLayout exercises = (GridLayout)rootView.findViewById(R.id.exercises);
-            Button button = new Button(getActivity());
-            button.setText("X");
-            button.setOnClickListener(removeExerciseListener(parseObject, ll, exercises));
-            ll.addView(button);
-            exercises.addView(ll);
-        }
+        sport = new ArrayList<ParseObject>();
+        sport.addAll(exerciseArrayList);
+        
+        ExerciseArrayAdapter exerciseAdapter = new ExerciseArrayAdapter(getActivity(),
+                R.layout.exercise_row, android.R.id.text1, sport);
+        ListView exerciseView = (ListView)rootView.findViewById(R.id.exercise_list);
+        exerciseView.setAdapter(exerciseAdapter);
+
+//        TODO: Set OnItemClickListener for exercises
+//        exerciseView.setOnitemClickListener(editExerciseDialogListener(parseObject));
+
+//        for (ParseObject parseObject : exerciseArrayList) {
+//            LinearLayout ll = new LinearLayout(getActivity());
+//            ll.setOrientation(LinearLayout.HORIZONTAL);
+//            TextView exerciseTextView = new TextView(getActivity());
+//            exerciseTextView.setText(parseObject.getString("name"));
+//            exerciseTextView.setOnClickListener(editExerciseDialogListener(parseObject));
+//            ll.addView(exerciseTextView);
+//            GridLayout exercises = (GridLayout)rootView.findViewById(R.id.exercises);
+//            Button button = new Button(getActivity());
+//            button.setText("X");
+//            button.setOnClickListener(removeExerciseListener(parseObject, ll, exercises));
+//            ll.addView(button);
+//            exercises.addView(ll);
+//        }
         searchBox.setAdapter(adapter);
         searchBox.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -206,23 +221,24 @@ public class ExerciseFragment extends Fragment {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                GridLayout exercises = (GridLayout)rootView.findViewById(R.id.exercises);
-                LinearLayout ll = new LinearLayout(getActivity());
-                ll.setOrientation(LinearLayout.HORIZONTAL);
+//                GridLayout exercises = (GridLayout)rootView.findViewById(R.id.exercises);
+//                LinearLayout ll = new LinearLayout(getActivity());
+//                ll.setOrientation(LinearLayout.HORIZONTAL);
                 ParseObject activity = new ParseObject("Exercise");
                 activity.put("name", exercise);
                 activity.put("userExpLevel", user_level);
                 activity.put("partnerExpLevel", partner_level);
                 exerciseArrayList.add(activity);
-                TextView exerciseTextView = new TextView(getActivity());
-                exerciseTextView.setText(exercise);
-                exerciseTextView.setOnClickListener(editExerciseDialogListener(activity));
-                ll.addView(exerciseTextView);
-                Button button = new Button(getActivity());
-                button.setText("X");
-                button.setOnClickListener(removeExerciseListener(activity, ll, exercises));
-                ll.addView(button);
-                exercises.addView(ll);
+
+//                TextView exerciseTextView = new TextView(getActivity());
+//                exerciseTextView.setText(exercise);
+//                exerciseTextView.setOnClickListener(editExerciseDialogListener(activity));
+//                ll.addView(exerciseTextView);
+//                Button button = new Button(getActivity());
+//                button.setText("X");
+//                button.setOnClickListener(removeExerciseListener(activity, ll, exercises));
+//                ll.addView(button);
+//                exercises.addView(ll);
             }
 
             private DialogInterface.OnClickListener init(String exercise) {
@@ -279,22 +295,22 @@ public class ExerciseFragment extends Fragment {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                GridLayout exercises = (GridLayout)rootView.findViewById(R.id.exercises);
-                LinearLayout ll = (LinearLayout)view.getParent();
+//                GridLayout exercises = (GridLayout)rootView.findViewById(R.id.exercises);
+//                LinearLayout ll = (LinearLayout)view.getParent();
                 ParseObject editedActivity = new ParseObject("Exercise");
                 editedActivity.put("name", exercise);
                 editedActivity.put("userExpLevel", user_level);
                 editedActivity.put("partnerExpLevel", partner_level);
                 exerciseArrayList.add(editedActivity);
-                TextView exerciseTextView = new TextView(getActivity());
-                exerciseTextView.setText(exercise);
-                exerciseTextView.setOnClickListener(editExerciseDialogListener(editedActivity));
-                ll.addView(exerciseTextView);
-                Button button = new Button(getActivity());
-                button.setText("X");
-                button.setOnClickListener(removeExerciseListener(editedActivity, ll, exercises));
-                ll.addView(button);
-                exercises.addView(ll);
+//                TextView exerciseTextView = new TextView(getActivity());
+//                exerciseTextView.setText(exercise);
+//                exerciseTextView.setOnClickListener(editExerciseDialogListener(editedActivity));
+//                ll.addView(exerciseTextView);
+//                Button button = new Button(getActivity());
+//                button.setText("X");
+//                button.setOnClickListener(removeExerciseListener(editedActivity, ll, exercises));
+//                ll.addView(button);
+//                exercises.addView(ll);
             }
 
             private DialogInterface.OnClickListener init(View view, String exercise) {
