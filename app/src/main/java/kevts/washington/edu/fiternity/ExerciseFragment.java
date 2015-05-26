@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.SearchView;
 import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -89,9 +90,10 @@ public class ExerciseFragment extends Fragment {
         adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, allSports);
         if (FiternityApplication.getInstance().getExercises() == null)
             exerciseArrayList = new HashSet<>();
-        exerciseArrayList = FiternityApplication.getInstance().getExercises();
 
-//        sport.addAll(exerciseArrayList);
+        exerciseArrayList = FiternityApplication.getInstance().getExercises();
+        sport = new ArrayList<ParseObject>();
+        sport.addAll(exerciseArrayList);
         
         ExerciseArrayAdapter exerciseAdapter = new ExerciseArrayAdapter(getActivity(),
                 R.layout.exercise_row, android.R.id.text1, sport);
