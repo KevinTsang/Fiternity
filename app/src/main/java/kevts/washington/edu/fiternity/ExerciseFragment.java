@@ -45,6 +45,7 @@ public class ExerciseFragment extends Fragment {
     private View rootView;
     private LayoutInflater layoutInflater;
     private ArrayAdapter<String> adapter;
+    private ExerciseArrayAdapter exerciseAdapter;
     private Set<ParseObject> exerciseArrayList;
     private SeekBar seekTop;
     private SeekBar seekBottom;
@@ -95,7 +96,7 @@ public class ExerciseFragment extends Fragment {
         sport = new ArrayList<ParseObject>();
         sport.addAll(exerciseArrayList);
         
-        ExerciseArrayAdapter exerciseAdapter = new ExerciseArrayAdapter(getActivity(),
+        exerciseAdapter = new ExerciseArrayAdapter(getActivity(),
                 R.layout.exercise_row, android.R.id.text1, sport);
         ListView exerciseView = (ListView)rootView.findViewById(R.id.exercise_list);
         exerciseView.setAdapter(exerciseAdapter);
@@ -171,9 +172,10 @@ public class ExerciseFragment extends Fragment {
     }
 
     private void saveExercises() {
-        FiternityApplication instance = (FiternityApplication)getActivity().getApplication();
+        FiternityApplication instance = FiternityApplication.getInstance();
         ParseUser user = instance.getParseUser();
-        for (ParseObject exercise : exerciseArrayList) {
+        HashSet<ParseObject> filter = new HashSet(sport);
+        for (ParseObject exercise : filter) {
             user.add("Exercise", exercise);
         }
         user.saveInBackground(new SaveCallback() {
@@ -228,8 +230,8 @@ public class ExerciseFragment extends Fragment {
                 activity.put("name", exercise);
                 activity.put("userExpLevel", user_level);
                 activity.put("partnerExpLevel", partner_level);
-                exerciseArrayList.add(activity);
-
+                sport.add(activity);
+                exerciseAdapter.notifyDataSetChanged();
 //                TextView exerciseTextView = new TextView(getActivity());
 //                exerciseTextView.setText(exercise);
 //                exerciseTextView.setOnClickListener(editExerciseDialogListener(activity));
@@ -327,44 +329,5 @@ public class ExerciseFragment extends Fragment {
         });
         builder.create();
         builder.show();
-    }
-
-    private View.OnClickListener removeExerciseListener(ParseObject activity, LinearLayout ll, GridLayout exercises) {
-        return new View.OnClickListener() {
-            private ParseObject activity;
-            private LinearLayout ll;
-            private GridLayout exercises;
-
-            @Override
-            public void onClick(View v) {
-                exerciseArrayList.remove(activity);
-                ViewGroup parentView = (ViewGroup) v.getParent();
-                parentView.removeView(v);
-                exercises.removeView(ll);
-            }
-            private View.OnClickListener init(ParseObject activity, LinearLayout ll, GridLayout exercises) {
-                this.activity = activity;
-                this.ll = ll;
-                this.exercises = exercises;
-                return this;
-            }
-        }.init(activity, ll, exercises);
-    }
-
-    private View.OnClickListener editExerciseDialogListener(ParseObject activity) {
-        return new View.OnClickListener() {
-            private ParseObject activity;
-
-            @Override
-            public void onClick(View v) {
-                exerciseArrayList.remove(activity);
-                editDialog(activity.getString("name"), activity, v);
-            }
-
-            private View.OnClickListener init(ParseObject activity) {
-                this.activity = activity;
-                return this;
-            }
-        }.init(activity);
     }
 }

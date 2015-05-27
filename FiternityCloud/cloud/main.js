@@ -15,8 +15,8 @@ Parse.Cloud.define("validatePush", function(request, response) {
   }
   var recipientUser = new Parse.User();
   recipientUser.id = recipientId;
-  var pushQuery = new Parse.Query(Parse.Installation);
-  pushQuery.equalTo("user", recipientUser);
+  var pushQuery = new Parse.Query(Parse.User);
+  pushQuery.equalTo("id", recipientUser);
 
   Parse.Push.send({
   	where: pushQuery,
