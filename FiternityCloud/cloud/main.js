@@ -4,7 +4,6 @@
 Parse.Cloud.define("validatePush", function(request, response) {
   var senderUser = request.user;
   var senderName = request.params.name;
-  var recipientId = request.params.recipientId;
   var recipientUserId = request.params.facebookId;
   var startDate = request.params.startDate;
   var endDate = request.params.endDate;
@@ -13,10 +12,10 @@ Parse.Cloud.define("validatePush", function(request, response) {
   if (senderUser.get("FriendsList").indexOf(recipientUserId) === -1) {
   	response.error("The recipient is not the sender's friend, cannot send push");
   }
-  var recipientUser = new Parse.User();
-  recipientUser.id = recipientId;
-  var pushQuery = new Parse.Query(Parse.User);
-  pushQuery.equalTo("id", recipientUser);
+  // var recipientUser = new Parse.User();
+  // recipientUser.id = recipientId;
+  var pushQuery = new Parse.Query(Parse.Installation);
+  pushQuery.equalTo("facebookId", recipientUserId);
 
   Parse.Push.send({
   	where: pushQuery,

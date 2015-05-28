@@ -75,7 +75,6 @@ public class MatchTimesArrayAdapter extends ArrayAdapter {
                 try {
                     ParseUser matchUser = parseQuery.getFirst();
                     params.put("name", matchUser.getString("name"));
-                    params.put("recipientId", matchUser.getObjectId());
                     params.put("facebookId", matchUser.getString("facebookId"));
                     params.put("startDate", new Date(matchEvent.getLong("startDate")).toString());
                     params.put("endDate", new Date(matchEvent.getLong("endDate")).toString());

@@ -53,6 +53,7 @@ public class FiternityApplication extends Application {
     private static FiternityApplication instance;
     private static Set<ParseObject> exerciseSet;
     private HashSet<String> friendIds;
+    private ArrayList<Long> eventIds;
 
     public FiternityApplication() {
         if (instance == null)
@@ -103,7 +104,7 @@ public class FiternityApplication extends Application {
                         try {
                             parseUser.put("facebookId", user.get("id").toString());
                             ParseInstallation.getCurrentInstallation().put("facebookId", user.get("id"));
-                            ParseInstallation.getCurrentInstallation().put("user", parseUser.getObjectId());
+                            ParseInstallation.getCurrentInstallation().put("user", parseUser);
                             ParseInstallation.getCurrentInstallation().saveInBackground();
                             parseUser.setEmail(user.get("email").toString());
                             parseUser.put("name", user.get("name").toString());
@@ -176,6 +177,7 @@ public class FiternityApplication extends Application {
         // fetching calendars id
 
         for (int i = 0; i < CNames.length; i++) {
+            long eventId = cursor.getLong(0);
             long startMillis = Long.parseLong(cursor.getString(3));
             long endMillis = Long.parseLong(cursor.getString(4));
             List<ParseObject> existingEvents = parseUser.getList("event");
@@ -188,6 +190,7 @@ public class FiternityApplication extends Application {
                 }
             }
             if (!eventExists) {
+//                eventIds.add(eventId);
                 ParseObject freeEvent = new ParseObject("FreeEvent");
                 freeEvent.put("startDate", startMillis);
                 freeEvent.put("endDate", endMillis);
@@ -221,18 +224,16 @@ public class FiternityApplication extends Application {
             // NEED TO CHANGE THIS FOR NON-FACEBOOK USERS
             friendQuery.whereEqualTo("facebookId", friendId);
             try {
-                List<ParseUser> parseUsers = friendQuery.find();
-                for (ParseObject friend : parseUsers) {
-                    List<ParseObject> friendPointerEvents = friend.getList("event");
-                    if (friendPointerEvents != null) {
-                        List<ParseObject> friendEvents = new ArrayList<>();
-                        for (ParseObject pointerEvent : friendPointerEvents) {
-                            friendEvents.add(convertPointerToObjectEvent(pointerEvent));
-                        }
-                        List<ParseObject> events = getMatchingSchedule(friendEvents);
-                        if (events.size() > 0) {
-                            friendIds.add(friendId);
-                        }
+                ParseUser friend = friendQuery.getFirst();
+                List<ParseObject> friendPointerEvents = friend.getList("event");
+                if (friendPointerEvents != null) {
+                    List<ParseObject> friendEvents = new ArrayList<>();
+                    for (ParseObject pointerEvent : friendPointerEvents) {
+                        friendEvents.add(convertPointerToObjectEvent(pointerEvent));
+                    }
+                    List<ParseObject> events = getMatchingSchedule(friendEvents);
+                    if (events.size() > 0) {
+                        friendIds.add(friendId);
                     }
                 }
             } catch (ParseException pe) {
@@ -244,6 +245,7 @@ public class FiternityApplication extends Application {
 // Given 2 users' schedules compare them and return a matching schedule here
     public List<ParseObject> getMatchingSchedule(List<ParseObject> otherSchedule) {
         List<ParseObject> commonSchedule = new ArrayList<>();
+        try { parseUser.fetch(); } catch (ParseException e) { }
         List<ParseObject> userSchedule = parseUser.getList("event");
         if (userSchedule != null) {
             for (int i = 0; i < userSchedule.size(); i++) {

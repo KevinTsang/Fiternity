@@ -29,14 +29,20 @@ public class FiternityLogin extends Activity {
 
     private LoginButton loginButton;
     private static final String TAG = "FiternityLogin";
+    private FiternityApplication instance = FiternityApplication.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fiternity_login);
         if (AccessToken.getCurrentAccessToken() != null) {
-            FiternityApplication.getInstance().setParseUser(ParseUser.getCurrentUser());
-            FiternityApplication.getInstance().getFriendEvents();
+            instance.setParseUser(ParseUser.getCurrentUser());
+            try {
+                ParseUser.getCurrentUser().fetchIfNeeded();
+            } catch (ParseException pe) {
+                Log.e(TAG, "Failed to update user from cloud.");
+            }
+            instance.getFriendEvents();
             Intent intent = new Intent(FiternityLogin.this, MatchesActivity.class);
             startActivity(intent);
         }
