@@ -76,8 +76,8 @@ public class MatchTimesArrayAdapter extends ArrayAdapter {
                     ParseUser matchUser = parseQuery.getFirst();
                     params.put("name", matchUser.getString("name"));
                     params.put("facebookId", matchUser.getString("facebookId"));
-                    params.put("startDate", new Date(matchEvent.getLong("startDate")).toString());
-                    params.put("endDate", new Date(matchEvent.getLong("endDate")).toString());
+                    params.put("startDate", matchEvent.getLong("startDate"));
+                    params.put("endDate", matchEvent.getLong("endDate"));
                 } catch (ParseException pe) {
                     Log.e("MatchTimesArrayAdapter", "The match user is null");
                 }

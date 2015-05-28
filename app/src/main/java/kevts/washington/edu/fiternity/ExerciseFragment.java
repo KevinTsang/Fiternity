@@ -100,24 +100,6 @@ public class ExerciseFragment extends Fragment {
                 R.layout.exercise_row, android.R.id.text1, sport);
         ListView exerciseView = (ListView)rootView.findViewById(R.id.exercise_list);
         exerciseView.setAdapter(exerciseAdapter);
-
-//        TODO: Set OnItemClickListener for exercises
-//        exerciseView.setOnitemClickListener(editExerciseDialogListener(parseObject));
-
-//        for (ParseObject parseObject : exerciseArrayList) {
-//            LinearLayout ll = new LinearLayout(getActivity());
-//            ll.setOrientation(LinearLayout.HORIZONTAL);
-//            TextView exerciseTextView = new TextView(getActivity());
-//            exerciseTextView.setText(parseObject.getString("name"));
-//            exerciseTextView.setOnClickListener(editExerciseDialogListener(parseObject));
-//            ll.addView(exerciseTextView);
-//            GridLayout exercises = (GridLayout)rootView.findViewById(R.id.exercises);
-//            Button button = new Button(getActivity());
-//            button.setText("X");
-//            button.setOnClickListener(removeExerciseListener(parseObject, ll, exercises));
-//            ll.addView(button);
-//            exercises.addView(ll);
-//        }
         searchBox.setAdapter(adapter);
         searchBox.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -223,24 +205,12 @@ public class ExerciseFragment extends Fragment {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-//                GridLayout exercises = (GridLayout)rootView.findViewById(R.id.exercises);
-//                LinearLayout ll = new LinearLayout(getActivity());
-//                ll.setOrientation(LinearLayout.HORIZONTAL);
                 ParseObject activity = new ParseObject("Exercise");
                 activity.put("name", exercise);
                 activity.put("userExpLevel", user_level);
                 activity.put("partnerExpLevel", partner_level);
                 sport.add(activity);
                 exerciseAdapter.notifyDataSetChanged();
-//                TextView exerciseTextView = new TextView(getActivity());
-//                exerciseTextView.setText(exercise);
-//                exerciseTextView.setOnClickListener(editExerciseDialogListener(activity));
-//                ll.addView(exerciseTextView);
-//                Button button = new Button(getActivity());
-//                button.setText("X");
-//                button.setOnClickListener(removeExerciseListener(activity, ll, exercises));
-//                ll.addView(button);
-//                exercises.addView(ll);
             }
 
             private DialogInterface.OnClickListener init(String exercise) {
@@ -248,79 +218,6 @@ public class ExerciseFragment extends Fragment {
                 return this;
             }
         }.init(exercise));
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        });
-        builder.create();
-        builder.show();
-    }
-
-    private void editDialog(String exercise, ParseObject activity, View view) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        View dialogLayout = layoutInflater.inflate(R.layout.fragment_exp_level_setter, null);
-        seekTop = (SeekBar) dialogLayout.findViewById(R.id.user_exp_level);
-        seekBottom = (SeekBar) dialogLayout.findViewById(R.id.partner_exp_level);
-        seekTop.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekTop, int progress, boolean fromUser) {
-                user_level = progress;
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekTop) { }
-            @Override
-            public void onStopTrackingTouch(SeekBar seekTop) { }
-        });
-        seekBottom.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBottom, int progress, boolean fromUser) {
-                partner_level = progress;
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBottom) { }
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBottom) { }
-        });
-        user_level = activity.getInt("userExpLevel");
-        partner_level = activity.getInt("partnerExpLevel");
-        seekTop.setProgress(user_level);
-        seekBottom.setProgress(partner_level);
-        builder.setTitle(exercise);
-        builder.setView(dialogLayout);
-        builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
-            private View view;
-            private String exercise;
-
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-//                GridLayout exercises = (GridLayout)rootView.findViewById(R.id.exercises);
-//                LinearLayout ll = (LinearLayout)view.getParent();
-                ParseObject editedActivity = new ParseObject("Exercise");
-                editedActivity.put("name", exercise);
-                editedActivity.put("userExpLevel", user_level);
-                editedActivity.put("partnerExpLevel", partner_level);
-                exerciseArrayList.add(editedActivity);
-//                TextView exerciseTextView = new TextView(getActivity());
-//                exerciseTextView.setText(exercise);
-//                exerciseTextView.setOnClickListener(editExerciseDialogListener(editedActivity));
-//                ll.addView(exerciseTextView);
-//                Button button = new Button(getActivity());
-//                button.setText("X");
-//                button.setOnClickListener(removeExerciseListener(editedActivity, ll, exercises));
-//                ll.addView(button);
-//                exercises.addView(ll);
-            }
-
-            private DialogInterface.OnClickListener init(View view, String exercise) {
-                this.view = view;
-                this.exercise = exercise;
-                return this;
-            }
-        }.init(view, exercise));
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
