@@ -132,8 +132,7 @@ public class ExerciseFragment extends Fragment {
                         .putExtra(CalendarContract.Events.EVENT_LOCATION, "Insert location here")
                         .putExtra(CalendarContract.Events.AVAILABILITY, CalendarContract.Events.AVAILABILITY_FREE);
 //                                .putExtra(Intent.EXTRA_EMAIL, "email address here, another email address here");
-                Intent intent = new Intent(Intent.ACTION_INSERT).setData(builder.build());
-                startActivityForResult(intent, CALENDAR_ACCESSED);
+                startActivityForResult(createEventIntent, CALENDAR_ACCESSED);
             }
         });
 
@@ -148,7 +147,7 @@ public class ExerciseFragment extends Fragment {
 //                FiternityApplication instance = (FiternityApplication)getApplication();
 //                ArrayList<FreeEvent> events = instance.getEvents(this, instance.getUser());
 //                instance.getUser().setFreeTimes(events);
-//                startActivity(new Intent(this, Matches.class));
+//                startActivity(new Intent(getActivity(), Matches.class));
 //            }
         }
     }

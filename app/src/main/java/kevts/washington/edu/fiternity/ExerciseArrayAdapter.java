@@ -92,9 +92,12 @@ public class ExerciseArrayAdapter extends ArrayAdapter<ParseObject> {
                     }
 
                     @Override
-                    public void onStartTrackingTouch(SeekBar seekBottom) { }
+                    public void onStartTrackingTouch(SeekBar seekBottom) {
+                    }
+
                     @Override
-                    public void onStopTrackingTouch(SeekBar seekBottom) { }
+                    public void onStopTrackingTouch(SeekBar seekBottom) {
+                    }
                 }.init(partner_level));
                 seekTop.setProgress(user_level);
                 seekBottom.setProgress(partner_level);
@@ -112,6 +115,8 @@ public class ExerciseArrayAdapter extends ArrayAdapter<ParseObject> {
                         editedActivity.put("userExpLevel", seekTop.getProgress());
                         editedActivity.put("partnerExpLevel", seekBottom.getProgress());
                         exerciseList.add(editedActivity);
+                        exerciseList.remove(parseObject);
+                        ExerciseArrayAdapter.this.notifyDataSetChanged();
                     }
 
                     private DialogInterface.OnClickListener init(View view, SeekBar seekTop, SeekBar seekBottom) {
