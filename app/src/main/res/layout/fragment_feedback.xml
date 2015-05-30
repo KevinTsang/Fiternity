@@ -12,6 +12,12 @@
         android:layout_height="fill_parent"
         android:weightSum="1">
 
+        <com.facebook.login.widget.ProfilePictureView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/feedback_profile_picture"
+            android:layout_gravity="center_horizontal" />
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -27,27 +33,30 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.5">
 
-            <ImageButton
+            <Button style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/feedback_negative_btn"
-                android:minHeight="150dp"
-                android:minWidth="150dp"
-                android:src="@drawable/sad_face"
-                android:layout_alignTop="@+id/feedback_positive_btn"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
-
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:text="Good"
+                android:textColor="@color/feedbackGreen"
                 android:id="@+id/feedback_positive_btn"
-                android:minHeight="150dp"
-                android:minWidth="150dp"
-                android:src="@drawable/happy_face"
                 android:layout_alignParentTop="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true" />
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginLeft="49dp"
+                android:layout_marginStart="49dp" />
+
+            <Button style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Bad"
+                android:textColor="@color/feedbackRed"
+                android:id="@+id/feedback_negative_btn"
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@+id/feedback_positive_btn"
+                android:layout_toEndOf="@+id/feedback_positive_btn"
+                android:layout_marginLeft="38dp"
+                android:layout_marginStart="38dp" />
+
         </RelativeLayout>
 
     </LinearLayout>

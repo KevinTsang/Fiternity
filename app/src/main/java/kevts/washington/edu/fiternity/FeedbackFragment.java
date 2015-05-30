@@ -8,6 +8,7 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -23,8 +24,9 @@ public class FeedbackFragment extends android.support.v4.app.Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_feedback, container, false);ImageButton positiveBtn = (ImageButton) rootView.findViewById(R.id.feedback_positive_btn);
-        ImageButton negativeBtn = (ImageButton) rootView.findViewById(R.id.feedback_negative_btn);
+        View rootView = inflater.inflate(R.layout.fragment_feedback, container, false);
+        Button positiveBtn = (Button) rootView.findViewById(R.id.feedback_positive_btn);
+        Button negativeBtn = (Button) rootView.findViewById(R.id.feedback_negative_btn);
         TextView questionText = (TextView) rootView.findViewById(R.id.feedback_question);
 
         //setQuestion(questionText);
