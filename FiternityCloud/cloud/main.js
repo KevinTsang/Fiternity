@@ -21,12 +21,37 @@ Parse.Cloud.define("validatePush", function(request, response) {
   	where: pushQuery,
   	data: {
   		alert: message,
-      requestStartDate: startDate,
+      facebookId: recipientUserId,
       requestEndDate: endDate
   	}
   }).then(function() {
   	response.success("Request was sent successfully.");
   }), function(error) {
   	response.error("Push failed to send with error: " + error.message);
+  };
+});
+
+Parse.Cloud.define("pushResponse", function(request, response) {
+  var senderUser = request.user;
+  var senderName = request.params.name;
+  var recipientUserId = request.params.facebookId;
+  var message = senderName + " has confirmed to exercise with you!"
+
+  if (senderUser.get("FriendsList").indexOf(recipientUserId) === -1) {
+    response.error("The recipient is not the sender's friend, cannot send push");
+  }
+
+  var pushQuery = new Parse.Query(Parse.Installation);
+  pushQuery.equalTo("facebookId", recipientUserId);
+
+  Parse.Push.send({
+    where: pushQuery,
+    data: {
+      alert: message
+    }
+  }).then(function() {
+    response.success("Confirmation was sent successfully!");
+  }), function(error) {
+    response.error("Push failed to send with error: " + error.message);
   };
 });
