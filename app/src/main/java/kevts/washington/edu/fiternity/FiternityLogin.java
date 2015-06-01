@@ -46,35 +46,35 @@ public class FiternityLogin extends Activity {
             Intent intent = new Intent(FiternityLogin.this, MatchesActivity.class);
             startActivity(intent);
         }
-//        Button emailSignInButton = (Button)findViewById(R.id.email_sign_in_button);
-//        emailSignInButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                final ParseUser user = new ParseUser();
-//                String username = ((AutoCompleteTextView)findViewById(R.id.user_name_login)).getText().toString();
-//                String password = ((EditText)findViewById(R.id.password)).getText().toString();
-//                user.setUsername(username);
-//                user.setPassword(password);
-//                user.logInInBackground(username, password, new LogInCallback() {
-//                    @Override
-//                    public void done(ParseUser pu, ParseException e) {
-//                        FiternityApplication.getInstance().setParseUser(pu);
-//                        Log.i(TAG, "Logged in via non Facebook!");
-////                        FiternityApplication.getInstance().getFriendEvents();
-//                        Intent intent = new Intent(FiternityLogin.this, MatchesActivity.class);
-//                        startActivity(intent);
-//                    }
-//                });
-//                try {
-//                    user.save();
-//                } catch (ParseException pe) {
-//                    Log.e(TAG, "Saving email and password from non-Facebook login failed");
-//                }
-//                FiternityApplication.getInstance().setParseUser(user);
-//                Intent intent = new Intent(FiternityLogin.this, UserProfileActivity.class);
-//                startActivity(intent);
-//            }
-//        });
+        Button emailSignInButton = (Button)findViewById(R.id.email_sign_in_button);
+        emailSignInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final ParseUser user = new ParseUser();
+                String username = ((AutoCompleteTextView)findViewById(R.id.user_name_login)).getText().toString();
+                String password = ((EditText)findViewById(R.id.password)).getText().toString();
+                user.setUsername(username);
+                user.setPassword(password);
+                user.logInInBackground(username, password, new LogInCallback() {
+                    @Override
+                    public void done(ParseUser pu, ParseException e) {
+                        FiternityApplication.getInstance().setParseUser(pu);
+                        Log.i(TAG, "Logged in via non Facebook!");
+//                        FiternityApplication.getInstance().getFriendEvents();
+                        Intent intent = new Intent(FiternityLogin.this, MatchesActivity.class);
+                        startActivity(intent);
+                    }
+                });
+                try {
+                    user.save();
+                } catch (ParseException pe) {
+                    Log.e(TAG, "Saving email and password from non-Facebook login failed");
+                }
+                FiternityApplication.getInstance().setParseUser(user);
+                Intent intent = new Intent(FiternityLogin.this, UserProfileActivity.class);
+                startActivity(intent);
+            }
+        });
         loginButton = (LoginButton)findViewById(R.id.login_button);
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,14 +119,14 @@ public class FiternityLogin extends Activity {
                 }
             }
         });
-//        Button registerButton = (Button)findViewById(R.id.register_button);
-//        registerButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(FiternityLogin.this, EmailSignUpActivity.class);
-//                startActivity(intent);
-//            }
-//        });
+        Button registerButton = (Button)findViewById(R.id.register_button);
+        registerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(FiternityLogin.this, EmailSignUpActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
 

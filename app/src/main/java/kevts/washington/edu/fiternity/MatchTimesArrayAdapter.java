@@ -78,6 +78,7 @@ public class MatchTimesArrayAdapter extends ArrayAdapter {
                     params.put("facebookId", matchUser.getString("facebookId"));
                     params.put("startDate", matchEvent.getLong("startDate"));
                     params.put("endDate", matchEvent.getLong("endDate"));
+//                    params.put("exercise", );
                 } catch (ParseException pe) {
                     Log.e("MatchTimesArrayAdapter", "The match user is null");
                 }

@@ -21,32 +21,32 @@ public class EmailSignUpActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_email_sign_up);
-//        Button registerButton = (Button)findViewById(R.id.register_button);
-//        registerButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                String username = ((EditText)findViewById(R.id.new_user_name)).getText().toString();
-//                String email = ((EditText)findViewById(R.id.email)).getText().toString();
-//                String password = ((EditText)findViewById(R.id.password)).getText().toString();
-//                String confirmPassword = ((EditText)findViewById(R.id.confirm_password)).getText().toString();
-//                if (username.length() > 0 && password.equals(confirmPassword)) {
-//                    ParseUser user = new ParseUser();
-//                    user.setUsername(username);
-//                    user.setEmail(email);
-//                    user.setPassword(password);
-//                    try {
-//                        user.signUp();
-//                        user.save();
-//                        Intent intent = new Intent(EmailSignUpActivity.this, UserProfileActivity.class);
-//                        startActivity(intent);
-//                    } catch (ParseException e) {
-//                        Log.e("EmailSignUpActivity", "Username already exists");
-//                        Toast.makeText(EmailSignUpActivity.this,
-//                                "Username already exists, please enter a different one.", Toast.LENGTH_LONG).show();
-//                    }
-//                }
-//            }
-//        });
+        Button registerButton = (Button)findViewById(R.id.register_button);
+        registerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String username = ((EditText)findViewById(R.id.new_user_name)).getText().toString();
+                String email = ((EditText)findViewById(R.id.email)).getText().toString();
+                String password = ((EditText)findViewById(R.id.password)).getText().toString();
+                String confirmPassword = ((EditText)findViewById(R.id.confirm_password)).getText().toString();
+                if (username.length() > 0 && password.equals(confirmPassword)) {
+                    ParseUser user = new ParseUser();
+                    user.setUsername(username);
+                    user.setEmail(email);
+                    user.setPassword(password);
+                    try {
+                        user.signUp();
+                        user.save();
+                        Intent intent = new Intent(EmailSignUpActivity.this, UserProfileActivity.class);
+                        startActivity(intent);
+                    } catch (ParseException e) {
+                        Log.e("EmailSignUpActivity", "Username already exists");
+                        Toast.makeText(EmailSignUpActivity.this,
+                                "Username already exists, please enter a different one.", Toast.LENGTH_LONG).show();
+                    }
+                }
+            }
+        });
     }
 
     @Override

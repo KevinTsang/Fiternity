@@ -35,17 +35,23 @@ public class ExerciseRequestBroadcastReceiver extends ParsePushBroadcastReceiver
         instance = FiternityApplication.getInstance();
         AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Intent feedbackIntent = new Intent(context, FeedbackActivity.class);
+        feedbackIntent.putExtra("facebookId", intent.getStringExtra("facebookId"));
         PendingIntent feedbackPendingIntent = PendingIntent.getActivity(context, 101, feedbackIntent, PendingIntent.FLAG_ONE_SHOT);
         alarmManager.set(AlarmManager.RTC, intent.getLongExtra("endDate", Calendar.getInstance().getTimeInMillis()), feedbackPendingIntent);
         HashMap<String, Object> params = new HashMap<>();
         params.put("name", instance.getParseUser().getString("name"));
-        params.put("facebookId", intent.getStringExtra("facebookId"));
+        params.put("facebookId", instance.getParseUser().getString("facebookId"));
         ParseCloud.callFunctionInBackground("pushResponse", params, new FunctionCallback<Object>() {
             @Override
             public void done(Object o, ParseException e) {
 
             }
         });
+//      TODO Modify calendar with the smaller event object here
+//      Uri uri = ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, );
+//      Intent modifyEventIntent = new Intent(Intent.ACTION_EDIT)
+//      .setData(uri)
+//      .putExtra();
     }
 
     @Override
@@ -53,31 +59,31 @@ public class ExerciseRequestBroadcastReceiver extends ParsePushBroadcastReceiver
         int notificationId = 51;
         try {
             JSONObject json = new JSONObject(intent.getExtras().getString("com.parse.Data"));
-            // replace openAppIntent with event modification
-//            Uri uri = ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, );
-//            Intent modifyEventIntent = new Intent(Intent.ACTION_EDIT)
-//                    .setData(uri)
-//                    .putExtra();
-
-
-            Intent openAppIntent = new Intent(context, getClass());
-            openAppIntent.putExtra("endDate", json.getLong("endDate"));
-            openAppIntent.putExtra("facebookId", json.getString("facebookId"));
+            Intent openAppIntent = new Intent(context, ExerciseRequestBroadcastReceiver.class);
+            openAppIntent.putExtra("endDate", json.getLong("requestEndDate"));
+            openAppIntent.putExtra("facebookId", json.getString("matchId"));
+            openAppIntent.putExtra("exercise", json.getString("exerciseName"));
             TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
             stackBuilder.addParentStack(MatchesActivity.class);
             stackBuilder.addNextIntent(openAppIntent);
+            // TODO send push notification back when event has been accepted and set alarm
             PendingIntent acceptIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent declineIntent = null;
             NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
             NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context)
                     .setSmallIcon(R.drawable.ic_login)
                     .setContentTitle("Fiternity")
                     .setStyle(new NotificationCompat.BigTextStyle().bigText(json.get("alert").toString()))
-                            // TODO Need to replace the icons for better ones below
+                    // TODO Need to replace the icons for better ones below
                     .addAction(android.R.drawable.ic_input_add, "Accept", acceptIntent)
-                    .addAction(android.R.drawable.ic_input_delete, "Decline", null);
+                    .addAction(android.R.drawable.ic_input_delete, "Decline", declineIntent);
             notificationManager.notify(notificationId, notificationBuilder.build());
         } catch (JSONException e) {
             Log.e("ReceiverIssue", "JSONException: " + e.getMessage());
         }
+    }
+
+    // Sets the alarm manager to go to the feedback activity
+    private void setAlarmManager(Context context, long endDate) {
     }
 }
