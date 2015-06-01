@@ -2,15 +2,19 @@ package kevts.washington.edu.fiternity;
 
 import android.app.Activity;
 import android.content.Context;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.facebook.internal.ImageRequest;
 import com.facebook.login.widget.ProfilePictureView;
 import com.parse.FunctionCallback;
 import com.parse.ParseCloud;
@@ -25,9 +29,12 @@ import com.parse.SendCallback;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by iguest on 5/2/15.
@@ -53,7 +60,7 @@ public class MatchesArrayAdapter extends ArrayAdapter<ParseUser> {
             LayoutInflater inflater = ((Activity)context).getLayoutInflater();
             row = inflater.inflate(resource, parent, false);
             holder = new MatchHolder();
-            holder.matchRowProfilePic = (ProfilePictureView)row.findViewById(R.id.match_icon);
+            holder.matchRowProfilePic = (ImageView)row.findViewById(R.id.match_icon);
             holder.name = (TextView)row.findViewById(R.id.match_name);
             holder.exercise = (TextView)row.findViewById(R.id.match_exercise);
             holder.startDate = (TextView)row.findViewById(R.id.match_start_time);
@@ -65,24 +72,48 @@ public class MatchesArrayAdapter extends ArrayAdapter<ParseUser> {
         }
 
         final ParseUser matchUser = parseUserList.get(position);
-        holder.matchRowProfilePic.setProfileId(matchUser.getString("facebookId"));
+//        holder.matchRowProfilePic.setProfileId(matchUser.getString("facebookId"));
+        Glide.with(context).load(ImageRequest.getProfilePictureUri(
+                matchUser.getString("facebookId"), 400, 400)).into(holder.matchRowProfilePic);
         holder.name.setText(matchUser.getString("name"));
         if (matchUser.getString("exercise") != null) {
             holder.exercise.setText(matchUser.getString("exercise"));
         }
         List<ParseObject> eventList = matchUser.getList("event");
         final ParseObject event = FiternityApplication.getInstance().convertPointerToObjectEvent(eventList.get(0));
-        holder.startDate.setText(new Date(event.getLong("startDate")).toString());
-        holder.endDate.setText(new Date(event.getLong("endDate")).toString());
+        setExerciseDates(holder, event);
+//        holder.startDate.setText(new Date(event.getLong("startDate")).toString());
+//        holder.endDate.setText(new Date(event.getLong("endDate")).toString());
+
 
         return row;
+    }
+
+    private void setExerciseDates(MatchHolder holder, ParseObject event) {
+        Date startDate = new Date(event.getLong("startDate"));
+        Date endDate = new Date(event.getLong("endDate"));
+
+        SimpleDateFormat compareDay = new SimpleDateFormat("yyyyMMdd");
+
+        SimpleDateFormat sdf = new SimpleDateFormat("EEEE, h:m a", Locale.US);
+
+        if (compareDay.format(startDate).equals(compareDay.format(endDate))) {
+            holder.startDate.setText(sdf.format(startDate)
+                    + " - "+  new SimpleDateFormat("h:m a", Locale.US).format(endDate));
+            holder.endDate.setText("");
+        } else {
+            holder.startDate.setText(sdf.format(startDate));
+            holder.endDate.setText(sdf.format(endDate));
+        }
+
+
     }
     static class MatchHolder {
         TextView name;
         TextView exercise;
         TextView startDate;
         TextView endDate;
-        ProfilePictureView matchRowProfilePic;
+        ImageView matchRowProfilePic;
     }
 }
 

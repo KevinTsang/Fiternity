@@ -3,10 +3,6 @@ package kevts.washington.edu.fiternity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -20,16 +16,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 
-import com.facebook.Profile;
-import com.facebook.login.widget.ProfilePictureView;
+import com.bumptech.glide.Glide;
+import com.facebook.internal.ImageRequest;
 import com.parse.ParseUser;
 
-import java.net.URISyntaxException;
-import java.net.URL;
 
 
 /**
@@ -40,8 +32,8 @@ public class UserProfileFragment extends Fragment {
     private ParseUser user;
     private LayoutInflater layoutInflater;
     private View rootView;
+    private ImageView profilePicture;
     private EditText userName;
-    private ProfilePictureView profilePic;
     private EditText userEmail;
     private EditText userPhone;
     private EditText userZip;
@@ -63,7 +55,7 @@ public class UserProfileFragment extends Fragment {
         rootView = layoutInflater.inflate(R.layout.fragment_profile, container, false);
         user = FiternityApplication.getInstance().getParseUser();
         userName = (EditText)rootView.findViewById(R.id.user_name);
-        profilePic = (ProfilePictureView)rootView.findViewById(R.id.profile_picture);
+        profilePicture = (ImageView)rootView.findViewById(R.id.profile_picture);
         userEmail = (EditText)rootView.findViewById(R.id.user_email);
         userPhone = (EditText)rootView.findViewById(R.id.user_phone_number);
         userZip = (EditText)rootView.findViewById(R.id.user_zip_code);
@@ -161,7 +153,9 @@ public class UserProfileFragment extends Fragment {
             else genderSpinner.setSelection(1);
         }
         genderPreference.setChecked(user.getBoolean("genderPreference"));
-        profilePic.setProfileId(user.getString("facebookId"));
+
+        Glide.with(this).load(ImageRequest.getProfilePictureUri(
+                user.getString("facebookId"), 400, 400)).into(profilePicture);
     }
 
 

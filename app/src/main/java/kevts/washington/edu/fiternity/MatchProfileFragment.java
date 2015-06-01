@@ -10,9 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.facebook.internal.ImageRequest;
 import com.facebook.login.widget.ProfilePictureView;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -41,7 +44,7 @@ public class MatchProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_match_profile, container, false);
         instance = FiternityApplication.getInstance();
-        ProfilePictureView matchProfilePic = (ProfilePictureView)rootView.findViewById(R.id.match_profile_picture);
+        ImageView matchProfilePic = (ImageView)rootView.findViewById(R.id.match_profile_picture);
         TextView matchProfileName = (TextView)rootView.findViewById(R.id.match_profile_name);
         TextView matchProfileGender = (TextView)rootView.findViewById(R.id.match_profile_gender);
         TextView matchProfileAge = (TextView)rootView.findViewById(R.id.match_profile_age);
@@ -52,7 +55,9 @@ public class MatchProfileFragment extends Fragment {
         try {
             List<ParseUser> matchUsers = parseQuery.find();
             ParseUser matchUser = matchUsers.get(0);
-            matchProfilePic.setProfileId(matchUser.getString("facebookId"));
+//            matchProfilePic.setProfileId(matchUser.getString("facebookId"));
+            Glide.with(this).load(ImageRequest.getProfilePictureUri(
+                    matchUser.getString("facebookId"), 400, 400)).into(matchProfilePic);
             matchProfileName.setText(matchUser.getString("name"));
             matchProfileGender.setText(matchUser.getString("gender"));
             matchProfileAge.setText(matchUser.getInt("age") + "");

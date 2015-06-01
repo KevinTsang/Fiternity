@@ -20,15 +20,6 @@ public class FeedbackActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feedback);
-        Button menuButton = (Button) findViewById(R.id.feedback_menu_btn);
-        menuButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent menuIntent = new Intent(FeedbackActivity.this, MatchesActivity.class);
-                startActivity(menuIntent);
-            }
-        });
-
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, new FeedbackFragment())
