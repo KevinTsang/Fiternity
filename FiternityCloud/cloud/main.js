@@ -9,7 +9,7 @@ Parse.Cloud.define("validatePush", function(request, response) {
   var endDate = new Date(request.params.endDate);
   var exercise = request.params.exercise;
   var message = senderName + " would like to exercise with you from " + startDate.toString() + " to " + endDate.toString() + ".";
-  if (exercise != null)
+  if (!exercise)
     message = senderName + " would like to do " + exercise.toString() + " with you from " + startDate.toString() + " to " + endDate.toString() + ".";
 
   if (senderUser.get("FriendsList").indexOf(recipientUserId) === -1) {
@@ -26,6 +26,7 @@ Parse.Cloud.define("validatePush", function(request, response) {
   		alert: message,
       exerciseName: exercise,
       matchId: recipientUserId,
+      requestStartDate: startDate,
       requestEndDate: endDate
   	}
   }).then(function() {

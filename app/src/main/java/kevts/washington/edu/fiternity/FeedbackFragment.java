@@ -24,6 +24,8 @@ import com.parse.ParseUser;
  */
 public class FeedbackFragment extends android.support.v4.app.Fragment {
 
+    private String matchName;
+
     public FeedbackFragment() {
     }
 
@@ -47,7 +49,8 @@ public class FeedbackFragment extends android.support.v4.app.Fragment {
         parseQuery.whereEqualTo("facebookId", facebookId);
         try {
             ParseUser matchUser = parseQuery.getFirst();
-            feedbackPartner.setText(matchUser.getString("name"));
+            matchName = matchUser.getString("name");
+            feedbackPartner.setText(matchName);
         } catch (ParseException pe) {
             Log.e("FeedbackActivity", "Failed to find user matching that ID");
         }
@@ -70,6 +73,7 @@ public class FeedbackFragment extends android.support.v4.app.Fragment {
             @Override
             public void onClick(View v) {
                 Intent negativeActivity = new Intent(getActivity(), FeedbackNegativeActivity.class);
+                negativeActivity.putExtra("matchName", matchName);
                 getActivity().startActivityForResult(negativeActivity, 2);
             }
         });

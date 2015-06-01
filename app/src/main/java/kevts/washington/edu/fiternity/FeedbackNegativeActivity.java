@@ -16,7 +16,7 @@ public class FeedbackNegativeActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feedback_negative);
-        String friendName = "insert person here"; // TODO REPLACE WITH FRIEND NAME
+        String friendName = getIntent().getStringExtra("matchName");
         TextView negativeText = (TextView) findViewById(R.id.feedback_negative_text);
         negativeText.setText("OK \n We will not match " + friendName + " \n with you anymore.");
 

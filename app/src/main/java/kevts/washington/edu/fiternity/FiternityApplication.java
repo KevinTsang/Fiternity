@@ -53,7 +53,6 @@ public class FiternityApplication extends Application {
     private static FiternityApplication instance;
     private static Set<ParseObject> exerciseSet;
     private HashSet<String> friendIds;
-    private ArrayList<Long> eventIds;
 
     public FiternityApplication() {
         if (instance == null)
@@ -172,12 +171,11 @@ public class FiternityApplication extends Application {
         // fourth is the order by clause
         cursor.moveToFirst();
         // fetching calendars name
-        String CNames[] = new String[cursor.getCount()];
+        String cNames[] = new String[cursor.getCount()];
 
         // fetching calendars id
 
-        for (int i = 0; i < CNames.length; i++) {
-            long eventId = cursor.getLong(0);
+        for (int i = 0; i < cNames.length; i++) {
             long startMillis = Long.parseLong(cursor.getString(3));
             long endMillis = Long.parseLong(cursor.getString(4));
             List<ParseObject> existingEvents = parseUser.getList("event");
@@ -190,13 +188,12 @@ public class FiternityApplication extends Application {
                 }
             }
             if (!eventExists) {
-//                eventIds.add(eventId);
                 ParseObject freeEvent = new ParseObject("FreeEvent");
                 freeEvent.put("startDate", startMillis);
                 freeEvent.put("endDate", endMillis);
                 try {
                     freeEvent.put("exercises", cursor.getString(2));
-                    CNames[i] = cursor.getString(1);
+                    cNames[i] = cursor.getString(1);
                     freeEvent.save();
                 } catch (IllegalStateException ise) {
                     Log.i(TAG, "Location or description/exercises not specified");
