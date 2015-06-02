@@ -9,8 +9,9 @@ Parse.Cloud.define("validatePush", function(request, response) {
   var endDate = new Date(request.params.endDate);
   var exercise = request.params.exercise;
   var message = senderName + " would like to exercise with you from " + startDate.toString() + " to " + endDate.toString() + ".";
-  if (!exercise)
+  if (exercise) {
     message = senderName + " would like to do " + exercise.toString() + " with you from " + startDate.toString() + " to " + endDate.toString() + ".";
+  }
 
   if (senderUser.get("FriendsList").indexOf(recipientUserId) === -1) {
   	response.error("The recipient is not the sender's friend, cannot send push");
@@ -26,8 +27,8 @@ Parse.Cloud.define("validatePush", function(request, response) {
   		alert: message,
       exerciseName: exercise,
       matchId: recipientUserId,
-      requestStartDate: startDate,
-      requestEndDate: endDate
+      requestStartDate: request.params.startDate,
+      requestEndDate: request.params.endDate
   	}
   }).then(function() {
   	response.success("Request was sent successfully.");
