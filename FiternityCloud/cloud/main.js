@@ -9,6 +9,7 @@ Parse.Cloud.define("validatePush", function(request, response) {
   var endDate = new Date(request.params.endDate);
   var exercise = request.params.exercise;
   var message = senderName + " would like to exercise with you from " + startDate.toString() + " to " + endDate.toString() + ".";
+
   if (exercise) {
     message = senderName + " would like to do " + exercise.toString() + " with you from " + startDate.toString() + " to " + endDate.toString() + ".";
   }

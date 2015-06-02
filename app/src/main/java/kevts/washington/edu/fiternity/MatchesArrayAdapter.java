@@ -95,11 +95,11 @@ public class MatchesArrayAdapter extends ArrayAdapter<ParseUser> {
 
         SimpleDateFormat compareDay = new SimpleDateFormat("yyyyMMdd");
 
-        SimpleDateFormat sdf = new SimpleDateFormat("EEEE, h:m a", Locale.US);
+        SimpleDateFormat sdf = new SimpleDateFormat("EEEE, h:mm a", Locale.US);
 
         if (compareDay.format(startDate).equals(compareDay.format(endDate))) {
             holder.startDate.setText(sdf.format(startDate)
-                    + " - "+  new SimpleDateFormat("h:m a", Locale.US).format(endDate));
+                    + " - "+  new SimpleDateFormat("h:mm a", Locale.US).format(endDate));
             holder.endDate.setText("");
         } else {
             holder.startDate.setText(sdf.format(startDate));
