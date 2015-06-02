@@ -155,6 +155,7 @@ public class ExerciseFragment extends Fragment {
     private void saveExercises() {
         FiternityApplication instance = FiternityApplication.getInstance();
         ParseUser user = instance.getParseUser();
+//        user.
         HashSet<ParseObject> filter = new HashSet(sport);
         for (ParseObject exercise : filter) {
             user.add("Exercise", exercise);

@@ -35,12 +35,14 @@ import java.io.IOException;
 import java.lang.reflect.Array;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 /**
@@ -316,6 +318,7 @@ public class FiternityApplication extends Application {
         }
         return null;
     }
+
     public ParseObject convertPointerToObjectExercise(ParseObject pointer) {
         ParseQuery<ParseObject> pointerQuery = ParseQuery.getQuery("Exercise");
         try {
@@ -326,4 +329,22 @@ public class FiternityApplication extends Application {
         }
         return null;
     }
+
+//    public void setExerciseDates(MatchHolder holder, ParseObject event) {
+//        Date startDate = new Date(event.getLong("startDate"));
+//        Date endDate = new Date(event.getLong("endDate"));
+//
+//        SimpleDateFormat compareDay = new SimpleDateFormat("yyyyMMdd");
+//
+//        SimpleDateFormat sdf = new SimpleDateFormat("EEEE, h:mm a", Locale.US);
+//
+//        if (compareDay.format(startDate).equals(compareDay.format(endDate))) {
+//            holder.startDate.setText(sdf.format(startDate)
+//                    + " - "+  new SimpleDateFormat("h:mm a", Locale.US).format(endDate));
+//            holder.endDate.setText("");
+//        } else {
+//            holder.startDate.setText(sdf.format(startDate));
+//            holder.endDate.setText(sdf.format(endDate));
+//        }
+//    }
 }
