@@ -184,7 +184,7 @@ public class MatchesActivity extends ActionBarActivity implements ActionBar.TabL
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == calendarRequestCode) {
-            if (resultCode == RESULT_CANCELED) {
+            if (resultCode == RESULT_CANCELED || resultCode == RESULT_OK) {
                 instance.readEvents();
             }
         }

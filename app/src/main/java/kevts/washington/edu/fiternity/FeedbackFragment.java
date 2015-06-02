@@ -1,6 +1,7 @@
 package kevts.washington.edu.fiternity;
 
 
+import android.app.PendingIntent;
 import android.support.v4.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
@@ -33,6 +34,8 @@ public class FeedbackFragment extends android.support.v4.app.Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_feedback, container, false);
+        PendingIntent pendingIntent = PendingIntent.getActivity(getActivity(), 101, new Intent(getActivity(), getClass()), PendingIntent.FLAG_CANCEL_CURRENT);
+        pendingIntent.cancel();
         ProfilePictureView feedbackProfilePictureView = (ProfilePictureView)rootView.findViewById(R.id.feedback_profile_picture);
         TextView feedbackExercise = (TextView)rootView.findViewById(R.id.feedback_exercise);
         TextView feedbackPartner = (TextView)rootView.findViewById(R.id.feedback_match);
@@ -62,7 +65,7 @@ public class FeedbackFragment extends android.support.v4.app.Fragment {
                 FeedbackShareFragment feedbackShareFragment = new FeedbackShareFragment();
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 fragmentManager.beginTransaction()
-                        .replace(R.id.feedback_fragment, feedbackShareFragment)
+                        .replace(R.id.container, feedbackShareFragment)
                         .addToBackStack("")
                         .commit();
             }
@@ -75,6 +78,7 @@ public class FeedbackFragment extends android.support.v4.app.Fragment {
                 Intent negativeActivity = new Intent(getActivity(), FeedbackNegativeActivity.class);
                 negativeActivity.putExtra("matchName", matchName);
                 getActivity().startActivityForResult(negativeActivity, 2);
+                getActivity().finish();
             }
         });
 

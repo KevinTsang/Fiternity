@@ -154,8 +154,10 @@ public class UserProfileFragment extends Fragment {
         }
         genderPreference.setChecked(user.getBoolean("genderPreference"));
 
-        Glide.with(this).load(ImageRequest.getProfilePictureUri(
-                user.getString("facebookId"), 400, 400)).into(profilePicture);
+        if (user.getString("facebookId") != null) {
+            Glide.with(this).load(ImageRequest.getProfilePictureUri(
+                    user.getString("facebookId"), 400, 400)).into(profilePicture);
+        }
     }
 
 

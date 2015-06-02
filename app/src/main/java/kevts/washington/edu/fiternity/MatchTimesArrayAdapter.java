@@ -74,8 +74,10 @@ public class MatchTimesArrayAdapter extends ArrayAdapter {
                 HashMap<String, Object> params = new HashMap<String, Object>();
                 try {
                     ParseUser matchUser = parseQuery.getFirst();
-                    params.put("name", matchUser.getString("name"));
+                    params.put("name", FiternityApplication.getInstance().getParseUser().getString("name"));
+                    params.put("matchName", matchUser.getString("name"));
                     params.put("facebookId", matchUser.getString("facebookId"));
+                    params.put("senderFacebookId", FiternityApplication.getInstance().getParseUser().getString("facebookId"));
                     params.put("startDate", matchEvent.getLong("startDate"));
                     params.put("endDate", matchEvent.getLong("endDate"));
 //                    params.put("exercise", );

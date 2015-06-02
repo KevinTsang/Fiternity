@@ -105,7 +105,6 @@ public class FiternityApplication extends Application {
                         try {
                             parseUser.put("facebookId", user.get("id").toString());
                             ParseInstallation.getCurrentInstallation().put("facebookId", user.get("id"));
-                            ParseInstallation.getCurrentInstallation().put("user", parseUser);
                             ParseInstallation.getCurrentInstallation().saveInBackground();
                             parseUser.setEmail(user.get("email").toString());
                             parseUser.put("name", user.get("name").toString());
@@ -184,6 +183,7 @@ public class FiternityApplication extends Application {
             boolean eventExists = false;
             if (existingEvents != null) {
                 for (ParseObject event : existingEvents) {
+                    event = convertPointerToObjectEvent(event);
                     if (event.getLong("startDate") == startMillis && event.getLong("endDate") == endMillis) {
                         eventExists = true;
                     }
@@ -202,9 +202,9 @@ public class FiternityApplication extends Application {
                 } catch (ParseException pe) {
                     Log.e(TAG, "Event did not save properly.");
                 }
-                cursor.moveToNext();
                 parseUser.addUnique("event", freeEvent);
             }
+            cursor.moveToNext();
         }
 
         parseUser.saveInBackground(new SaveCallback() {
@@ -299,7 +299,7 @@ public class FiternityApplication extends Application {
             event.put("startDate", otherEventStartDate);
             event.put("endDate", userEventEndDate);
         } else if (otherEventStartDate <= userEventStartDate &&
-                otherEventEndDate < userEventStartDate) {
+                otherEventEndDate > userEventStartDate) {
             event.put("startDate", userEventStartDate);
             event.put("endDate", otherEventEndDate);
         } else return null;

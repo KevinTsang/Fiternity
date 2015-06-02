@@ -27,7 +27,7 @@ public class FeedbackActivity extends ActionBarActivity {
         setContentView(R.layout.activity_feedback);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new FeedbackFragment())
+                    .replace(R.id.container, new FeedbackFragment())
                     .commit();
         }
     }
