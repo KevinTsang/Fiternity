@@ -89,7 +89,7 @@ public class MatchTimesArrayAdapter extends ArrayAdapter {
                             // Push sent successfully
                             Toast.makeText(context, "Request sent successfully", Toast.LENGTH_SHORT).show();
                         } else {
-                            e.printStackTrace();
+                            Log.e("MatchTimesArrayAdapter", e.getMessage());
                         }
                     }
                 });

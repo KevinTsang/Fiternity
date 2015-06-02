@@ -218,25 +218,27 @@ public class FiternityApplication extends Application {
 // Goes through every friend with this person and checks if they have an overlapping schedule
     public void getFriendEvents() {
         List<String> friendsList = parseUser.getList("FriendsList");
-        for (final String friendId : friendsList) {
-            ParseQuery<ParseUser> friendQuery = ParseUser.getQuery();
-            // NEED TO CHANGE THIS FOR NON-FACEBOOK USERS
-            friendQuery.whereEqualTo("facebookId", friendId);
-            try {
-                ParseUser friend = friendQuery.getFirst();
-                List<ParseObject> friendPointerEvents = friend.getList("event");
-                if (friendPointerEvents != null) {
-                    List<ParseObject> friendEvents = new ArrayList<>();
-                    for (ParseObject pointerEvent : friendPointerEvents) {
-                        friendEvents.add(convertPointerToObjectEvent(pointerEvent));
+        if (friendsList != null) {
+            for (final String friendId : friendsList) {
+                ParseQuery<ParseUser> friendQuery = ParseUser.getQuery();
+                // NEED TO CHANGE THIS FOR NON-FACEBOOK USERS
+                friendQuery.whereEqualTo("facebookId", friendId);
+                try {
+                    ParseUser friend = friendQuery.getFirst();
+                    List<ParseObject> friendPointerEvents = friend.getList("event");
+                    if (friendPointerEvents != null) {
+                        List<ParseObject> friendEvents = new ArrayList<>();
+                        for (ParseObject pointerEvent : friendPointerEvents) {
+                            friendEvents.add(convertPointerToObjectEvent(pointerEvent));
+                        }
+                        List<ParseObject> events = getMatchingSchedule(friendEvents);
+                        if (events.size() > 0) {
+                            friendIds.add(friendId);
+                        }
                     }
-                    List<ParseObject> events = getMatchingSchedule(friendEvents);
-                    if (events.size() > 0) {
-                        friendIds.add(friendId);
-                    }
+                } catch (ParseException pe) {
+                    Log.e(TAG, "Failed to add friends to local friend list");
                 }
-            } catch (ParseException pe) {
-                Log.e(TAG, "Failed to add friends to local friend list");
             }
         }
     }
