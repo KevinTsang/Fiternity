@@ -35,6 +35,7 @@ public class ExerciseResponseBroadcastReceiver extends BroadcastReceiver {
         this.context = context;
         // This section sets the alarm manager for the feedback activity
         long endDate = intent.getLongExtra("endDate", Calendar.getInstance().getTimeInMillis());
+        long startDate = intent.getLongExtra("startDate", Calendar.getInstance().getTimeInMillis());
         String facebookId = intent.getStringExtra("facebookId");
         AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Intent feedbackIntent = new Intent(context, FeedbackActivity.class);
@@ -46,6 +47,8 @@ public class ExerciseResponseBroadcastReceiver extends BroadcastReceiver {
         HashMap<String, Object> params = new HashMap<>();
         params.put("name", instance.getParseUser().getString("name"));
         params.put("facebookId", facebookId);
+        params.put("startDate", startDate);
+        params.put("endDate", endDate);
         ParseCloud.callFunctionInBackground("pushResponse", params, new FunctionCallback<Object>() {
             @Override
             public void done(Object o, ParseException e) {
@@ -69,7 +72,6 @@ public class ExerciseResponseBroadcastReceiver extends BroadcastReceiver {
         calendar2.set(Calendar.MILLISECOND, 0);
         long endRange = calendar2.getTimeInMillis();
 
-        long startDate = intent.getLongExtra("startDate", Calendar.getInstance().getTimeInMillis());
         Cursor cursor = context.getContentResolver()
                 .query(
                         Uri.parse("content://com.android.calendar/events"),

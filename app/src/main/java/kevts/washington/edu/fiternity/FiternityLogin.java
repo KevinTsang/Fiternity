@@ -40,6 +40,8 @@ public class FiternityLogin extends Activity {
             instance.setParseUser(ParseUser.getCurrentUser());
             try {
                 ParseUser.getCurrentUser().fetchIfNeeded();
+                ParseInstallation.getCurrentInstallation().put("facebookId", instance.getParseUser().get("facebookId"));
+                ParseInstallation.getCurrentInstallation().save();
             } catch (ParseException pe) {
                 Log.e(TAG, "Failed to update user from cloud.");
             }

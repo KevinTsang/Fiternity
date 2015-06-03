@@ -68,7 +68,6 @@ public class FiternityApplication extends Application {
         FacebookSdk.sdkInitialize(getApplicationContext());
         Parse.initialize(this);
         ParseFacebookUtils.initialize(this);
-        ParseInstallation.getCurrentInstallation().saveInBackground();
         ParsePush.subscribeInBackground("", new SaveCallback() {
             @Override
             public void done(ParseException e) {
@@ -79,6 +78,7 @@ public class FiternityApplication extends Application {
                 }
             }
         });
+        ParseInstallation.getCurrentInstallation().saveInBackground();
         exerciseSet = new HashSet<>();
         friendIds = new HashSet<>();
     }

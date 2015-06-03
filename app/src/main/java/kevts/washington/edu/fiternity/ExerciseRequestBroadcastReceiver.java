@@ -40,9 +40,15 @@ public class ExerciseRequestBroadcastReceiver extends ParsePushBroadcastReceiver
         try {
             JSONObject json = new JSONObject(intent.getExtras().getString("com.parse.Data"));
             Intent openAppIntent = new Intent(context, ExerciseResponseBroadcastReceiver.class);
-            openAppIntent.putExtra("startDate", json.getLong("requestStartDate"));
-            openAppIntent.putExtra("endDate", json.getLong("requestEndDate"));
-            openAppIntent.putExtra("facebookId", json.getString("matchId"));
+            if (json.has("requestStartDate")) {
+                openAppIntent.putExtra("startDate", json.getLong("requestStartDate"));
+            }
+            if (json.has("requestEndDate")) {
+                openAppIntent.putExtra("endDate", json.getLong("requestEndDate"));
+            }
+            if (json.has("matchId")) {
+                openAppIntent.putExtra("facebookId", json.getString("matchId"));
+            }
             if (json.has("exerciseName")) {
                 openAppIntent.putExtra("exercise", json.getString("exerciseName"));
             }
