@@ -84,18 +84,19 @@ public class ExerciseFragment extends Fragment {
         "racing", "drag racing", "off-road racing", "monster truck", "motocross", "boat racing",
         "cross-country", "pole vaulting", "long jumping", "speed skating", "roller blading",
         "tetherball", "hacky sack", "jogging", "sandboarding", "pole dancing", "abseiling", "aquathlon",
-        "arm wrestling", "artistic billiards", "autocross", "bagatelle", "ballroom dancing", "beach volleyball", 
+        "arm wrestling", "artistic billiards", "autocross", "bagatelle", "ballroom dancing", "beach volleyball",
         "biathlon", "bowling", "camping", "darts", "diving", "flag football", "foosball", "quad biking", "river rafting",
         "scuba diving", "shuffleboard", "snooker", "triathlon", "tug of war", "water skiing", "wind surfing", "yoga"};
 
         adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, allSports);
-        if (FiternityApplication.getInstance().getExercises() == null)
+        Set<ParseObject> tempExerciseList = FiternityApplication.getInstance().getExercises();
+        if (tempExerciseList == null)
             exerciseArrayList = new HashSet<>();
 
-        exerciseArrayList = FiternityApplication.getInstance().getExercises();
+        exerciseArrayList = tempExerciseList;
         sport = new ArrayList<ParseObject>();
         sport.addAll(exerciseArrayList);
-        
+
         exerciseAdapter = new ExerciseArrayAdapter(getActivity(),
                 R.layout.exercise_row, android.R.id.text1, sport);
         ListView exerciseView = (ListView)rootView.findViewById(R.id.exercise_list);

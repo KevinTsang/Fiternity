@@ -125,6 +125,7 @@ public class FiternityApplication extends Application {
     public Set<ParseObject> getExercises() {
         List<ParseObject> exercisesPointers = parseUser.getList("Exercise");
         if (exercisesPointers != null) {
+            exerciseSet.clear();
             for (ParseObject exercisePointer : exercisesPointers) {
                 ParseObject converter = convertPointerToObjectExercise(exercisePointer);
                 exerciseSet.add(converter);
