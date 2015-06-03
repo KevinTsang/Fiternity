@@ -20,9 +20,11 @@ import com.parse.ParsePush;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import bolts.Task;
 
@@ -63,8 +65,9 @@ public class MatchTimesArrayAdapter extends ArrayAdapter {
         final ParseObject matchEvent = eventsList.get(position);
 
 //        holder.exercise.setText(matchUser.getString("exercise"));
-        holder.startDate.setText(new Date(matchEvent.getLong("startDate")).toString());
-        holder.endDate.setText(new Date(matchEvent.getLong("endDate")).toString());
+        setExerciseDates(holder, matchEvent);
+//        holder.startDate.setText(new Date(matchEvent.getLong("startDate")).toString());
+//        holder.endDate.setText(new Date(matchEvent.getLong("endDate")).toString());
 
         holder.requestButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,6 +103,27 @@ public class MatchTimesArrayAdapter extends ArrayAdapter {
 
         return row;
     }
+
+    private void setExerciseDates(MatchHolder holder, ParseObject event) {
+        Date startDate = new Date(event.getLong("startDate"));
+        Date endDate = new Date(event.getLong("endDate"));
+
+        SimpleDateFormat compareDay = new SimpleDateFormat("yyyyMMdd");
+
+        SimpleDateFormat sdf = new SimpleDateFormat("EEEE, h:mm a", Locale.US);
+        SimpleDateFormat day = new SimpleDateFormat("EEEE, MMM d", Locale.US);
+        SimpleDateFormat time = new SimpleDateFormat("h:mm a", Locale.US);
+        if (compareDay.format(startDate).equals(compareDay.format(endDate))) {
+            holder.startDate.setText(day.format(startDate));
+            holder.startDate.setTextAppearance(context, R.style.Base_TextAppearance_AppCompat_Body2);
+            holder.endDate.setText(time.format(startDate) + " - " + time.format(endDate));
+        } else {
+            holder.startDate.setText(sdf.format(startDate));
+            holder.endDate.setText(sdf.format(endDate));
+        }
+
+    }
+
     static class MatchHolder {
         TextView exercise;
         TextView startDate;

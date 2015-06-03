@@ -41,7 +41,6 @@
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:autoText="false"
-                android:text="(Exercise Type)"
                 android:paddingLeft="10dp" />
         </LinearLayout>
 

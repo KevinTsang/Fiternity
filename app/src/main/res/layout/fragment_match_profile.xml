@@ -1,27 +1,52 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:orientation="vertical"
-    tools:context="kevts.washington.edu.fiternity.MatchProfileFragment">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="kevts.washington.edu.fiternity.MatchProfileFragment"
+    android:paddingTop="16dp">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/match_profile_picture"
-        android:layout_width="72dp"
-        android:layout_height="72dp"/>
+    <RelativeLayout
 
-    <TextView
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/match_profile_name" />
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/match_profile_gender" />
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/match_profile_picture"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:layout_margin="16dp" />
 
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/match_profile_age" />
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/match_profile_picture"
+            android:layout_marginTop="16dp"
+            android:layout_marginRight="16dp">
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/match_profile_name"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                android:paddingBottom="8dp" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/match_profile_gender"
+                android:paddingBottom="8dp" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/match_profile_age"
+                android:paddingBottom="8dp" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
 
     <ListView
         android:layout_width="wrap_content"
