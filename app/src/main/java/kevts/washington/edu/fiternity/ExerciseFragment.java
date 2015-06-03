@@ -142,13 +142,12 @@ public class ExerciseFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CALENDAR_ACCESSED) {
-//            if (resultCode == RESULT_CANCELED) {
-//                // read all Fiternity events here
-//                FiternityApplication instance = (FiternityApplication)getApplication();
-//                ArrayList<FreeEvent> events = instance.getEvents(this, instance.getUser());
-//                instance.getUser().setFreeTimes(events);
-//                startActivity(new Intent(getActivity(), Matches.class));
-//            }
+            if (resultCode == getActivity().RESULT_CANCELED || resultCode == getActivity().RESULT_OK) {
+                // read all Fiternity events here
+                FiternityApplication instance = FiternityApplication.getInstance();
+                instance.readEvents();
+                startActivity(new Intent(getActivity(), MatchesActivity.class));
+            }
         }
     }
 
@@ -158,10 +157,12 @@ public class ExerciseFragment extends Fragment {
         HashSet<ParseObject> filter = new HashSet(sport);
         ArrayList<ParseObject> tempList = new ArrayList<>();
         List<ParseObject> exercises = user.getList("Exercises");
-        for (ParseObject exercise : exercises) {
-            exercise = instance.convertPointerToObjectExercise(exercise);
-            tempList.add(exercise);
-            exercise.deleteInBackground();
+        if (exercises != null) {
+            for (ParseObject exercise : exercises) {
+                exercise = instance.convertPointerToObjectExercise(exercise);
+                tempList.add(exercise);
+                exercise.deleteInBackground();
+            }
         }
         user.removeAll("Exercises", tempList);
         for (ParseObject exercise : filter) {
