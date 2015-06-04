@@ -62,8 +62,8 @@ public class ExerciseRequestBroadcastReceiver extends ParsePushBroadcastReceiver
                     .setAutoCancel(true)
                     .setStyle(new NotificationCompat.BigTextStyle().bigText(json.get("alert").toString()))
                             // TODO Need to replace the icons for better ones below
-                    .addAction(android.R.drawable.ic_input_add, "Accept", acceptIntent)
-                    .addAction(android.R.drawable.ic_input_delete, "Decline", declineIntent);
+                    .addAction(R.drawable.ic_done_white_36dp, "Accept", acceptIntent)
+                    .addAction(R.drawable.ic_clear_white_36dp, "Decline", declineIntent);
             notificationManager.notify(notificationId, notificationBuilder.build());
         } catch (JSONException e) {
             Log.e("ReceiverIssue", "JSONException: " + e.getMessage());

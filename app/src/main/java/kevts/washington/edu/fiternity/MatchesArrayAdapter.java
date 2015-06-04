@@ -82,12 +82,10 @@ public class MatchesArrayAdapter extends ArrayAdapter<ParseUser> {
         List<ParseObject> eventList = matchUser.getList("event");
         final ParseObject event = FiternityApplication.getInstance().convertPointerToObjectEvent(eventList.get(0));
         setExerciseDates(holder, event);
-//        holder.startDate.setText(new Date(event.getLong("startDate")).toString());
-//        holder.endDate.setText(new Date(event.getLong("endDate")).toString());
-
 
         return row;
     }
+
 
     private void setExerciseDates(MatchHolder holder, ParseObject event) {
         Date startDate = new Date(event.getLong("startDate"));
@@ -95,19 +93,20 @@ public class MatchesArrayAdapter extends ArrayAdapter<ParseUser> {
 
         SimpleDateFormat compareDay = new SimpleDateFormat("yyyyMMdd");
 
-        SimpleDateFormat sdf = new SimpleDateFormat("EEEE, h:mm a", Locale.US);
+        SimpleDateFormat sdf = new SimpleDateFormat("EEEE, MMM d h:mm a", Locale.US);
+        SimpleDateFormat day = new SimpleDateFormat("EEEE, MMM d", Locale.US);
+        SimpleDateFormat time = new SimpleDateFormat("h:mm a", Locale.US);
 
         if (compareDay.format(startDate).equals(compareDay.format(endDate))) {
-            holder.startDate.setText(sdf.format(startDate)
-                    + " - "+  new SimpleDateFormat("h:mm a", Locale.US).format(endDate));
-            holder.endDate.setText("");
+            holder.startDate.setText(day.format(startDate));
+            holder.endDate.setText(time.format(startDate) + " - " + time.format(endDate));
         } else {
             holder.startDate.setText(sdf.format(startDate));
             holder.endDate.setText(sdf.format(endDate));
         }
 
-
     }
+
     static class MatchHolder {
         TextView name;
         TextView exercise;
